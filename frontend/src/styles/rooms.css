@@ -1,0 +1,53 @@
+.room-wrapper {
+  height: 98vh;
+  display: flex;
+  margin: 1vh 0.25vw;
+  justify-content: center;
+}
+
+.room-canvas {
+  flex-basis: 100%;
+  background-color: lightcoral;
+  position: relative;
+  overflow: hidden;
+}
+
+.room-menu-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  transition: transform 0.3s ease-in-out;
+}
+
+.room-menu-open .room-menu-btn {
+  transform: translateX(-300px);
+}
+
+.room-menu {
+  position: absolute;
+  top: 0;
+  right: -300px;
+  width: 300px;
+  min-width: 100px;
+  max-width: 400px;
+  height: 100%;
+  background-color: lightgreen;
+  transition: right 0.3s ease-in-out;
+  z-index: 2;
+}
+
+.room-menu-open .room-menu {
+  right: 0;
+}
+
+@media (max-height: 700px) {
+  .room-wrapper {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  
+  .room-canvas {
+    margin-bottom: 0;
+  }
+}

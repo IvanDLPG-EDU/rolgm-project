@@ -1,25 +1,16 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import { RoomContext } from './context/allContext';
+import { MenuTab } from './MenuTab';
 
 export const SideRoomMenu = () => {
-  const [activeTab, setActiveTab] = useState('chat-tab')
 
-  const handleTabClick = (tabId) => {
-    setActiveTab(tabId)
-  }
+  const {activeTab} = useContext(RoomContext)
 
   return (
     <>
       <ul className="nav nav-tabs">
-        <li className="nav-item">
-        <button className={`nav-link ${activeTab === 'chat-tab' ? 'active' : ''}`} onClick={() => handleTabClick('chat-tab')}>
-          <img src="/media/chat-icon.svg" alt="Chat Icon" width="24" height="24" />
-        </button>
-        </li>
-        <li className="nav-item">
-          <button className={`nav-link ${activeTab === 'options-tab' ? 'active' : ''}`} onClick={() => handleTabClick('options-tab')}>
-          <img src="/media/settings.svg" alt="Settings Icon" width="24" height="24" />
-          </button>
-        </li>
+        <MenuTab tabName={"chat-tab"} icon={"/media/chat-icon.svg"} />
+        <MenuTab tabName={"settings-tab"} icon={"/media/settings.svg"} />
       </ul>
 
       <div className="tab-content">
@@ -28,7 +19,7 @@ export const SideRoomMenu = () => {
           <p>Pestaña de Chat</p>
           {/* <Chat /> */}
         </div>
-        <div className={`tab-pane ${activeTab === 'options-tab' ? 'active' : ''}`} id="options-tab">
+        <div className={`tab-pane ${activeTab === 'settings-tab' ? 'active' : ''}`} id="settings-tab">
           {/* Contenido de la pestaña de opciones */}
           <p>Pestaña de Opciones</p>
         </div>

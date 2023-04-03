@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+    react-vite-base:
+        container_name: rolegm-client
+        networks:
+          main:
+            ipv4_address: 172.18.0.3
+        ports:
+            - '5173:5173'
+        volumes:
+            - './frontend/:/app'
+        build: docker/react-vite/
+
+networks:
+  main:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.1

@@ -11,7 +11,16 @@ services:
         volumes:
             - './frontend/:/app'
         build: docker/react-vite/
-
+    django-base:
+        container_name: rolegm-server
+        networks:
+          main:
+            ipv4_address: 172.18.0.2
+        ports:
+            - '8000:8000'
+        volumes:
+            - './backend/:/usr/src/app/'
+        build: docker/django/
 networks:
   main:
     driver: bridge

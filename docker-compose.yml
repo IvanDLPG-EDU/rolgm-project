@@ -3,6 +3,8 @@ version: '3.4'
 services:
     react-vite-base:
         container_name: rolegm-client
+        depends_on:
+            - django-base
         networks:
           main:
             ipv4_address: 172.18.0.3
@@ -11,8 +13,22 @@ services:
         volumes:
             - './frontend/:/app'
         build: docker/react-vite/
+    postgresql-base:
+        container_name: rolegm-database
+        networks:
+          main:
+            ipv4_address: 172.18.0.4
+        ports:
+            - '${POSTGRES_PORT}:5432'
+        environment:
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        image: postgres
     django-base:
         container_name: rolegm-server
+        depends_on:
+            - postgresql-base
         networks:
           main:
             ipv4_address: 172.18.0.2
@@ -20,6 +36,12 @@ services:
             - '8000:8000'
         volumes:
             - './backend/:/usr/src/app/'
+        environment:
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_HOST: '172.18.0.4'
+            POSTGRES_PORT: ${POSTGRES_PORT}
         build: docker/django/
 networks:
   main:

@@ -11,3 +11,13 @@ down:
 migrate:
 	docker exec -it ${PROJECT_NAME}-server python manage.py makemigrations
 	docker exec -it ${PROJECT_NAME}-server python manage.py migrate
+
+superuser:
+	docker exec -it ${PROJECT_NAME}-server python manage.py createsuperuser
+
+bash-client:
+	docker exec -it ${PROJECT_NAME}-client /bin/bash
+bash-server:
+	docker exec -it ${PROJECT_NAME}-server /bin/bash
+bash-database:
+	docker exec -it ${PROJECT_NAME}-database /bin/bash

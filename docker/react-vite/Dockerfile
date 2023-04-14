@@ -6,8 +6,8 @@ EXPOSE 	5173
 
 WORKDIR	/app
 
-COPY 	package.json .
+COPY 	. .
 
-RUN	npm i
+RUN yarn install
 
 ENTRYPOINT [ "yarn", "dev", "--host" ]

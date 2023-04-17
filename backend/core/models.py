@@ -55,7 +55,7 @@ class Room(models.Model):
     
 class Player(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='players')
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='players')
     is_gm = models.BooleanField(default=False)
     game_mode_choices = [
         ('p', 'Playing'),

@@ -1,4 +1,4 @@
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import pre_save, post_save, pre_delete, post_delete
 from django.dispatch import receiver
 from .models import Room, Directory, Player
 
@@ -24,3 +24,18 @@ def create_player(sender, instance, created, **kwargs):
             is_gm=True,
             game_mode='p',
         )
+
+@receiver(post_delete, sender=Room)
+def delete_related_objects(sender, instance, **kwargs):
+    # Delete the related Directory object
+    if instance.root_directory:
+        instance.root_directory.delete()
+
+    # Delete the related Player objects
+    Player.objects.filter(room=instance).delete()
+
+@receiver(post_delete, sender=Player)
+def delete_room_if_owner(sender, instance, **kwargs):
+    room = instance.room
+    if room.owner == instance.user:
+        room.delete()

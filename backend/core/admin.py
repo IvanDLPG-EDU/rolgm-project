@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Directory, Image, Audio, Other
+from .models import Directory, Image, Audio, Other, Room
 
 # Register your models here.
 
@@ -29,3 +29,9 @@ class OtherAdmin(admin.ModelAdmin):
     list_display = ('name', 'created_at', 'directory')
     list_filter = ('created_at', 'directory')
     search_fields = ('name', 'directory__name')
+
+@admin.register(Room)
+class RoomAdmin(admin.ModelAdmin):
+    list_display = ('name', 'created_at', 'root_directory')
+    search_fields = ('name',)
+    ordering = ('-created_at',)

@@ -20,7 +20,7 @@ class File(models.Model):
 
     name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
-    directory = models.ForeignKey(Directory, on_delete=models.CASCADE, related_name=related_name, null=True, blank=True)
+    directory = models.ForeignKey(Directory, on_delete=models.CASCADE, related_name=related_name)
 
     def __str__(self):
         return self.name
@@ -43,3 +43,11 @@ class Other(File):
 
     path = models.FileField(upload_to='media/other-files')
     
+class Room(models.Model):
+
+    name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    root_directory = models.OneToOneField(Directory, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return self.name

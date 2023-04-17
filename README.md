@@ -5,8 +5,9 @@ Este es un proyecto desarrollado por [Iván De La Poza](https://github.com/IvanD
 El proyecto consiste en un entorno que facilite los Juegos de Rol mediante el uso de herramientas creadas especificamente 
 para cubrir las necesidades de los jugadores.
 
-## Tutora de proyecto
-Gallardo Crespillo, Patricia A.
+## Tutores del proyecto
+- Fernández Hernández, Gonzalo [Tutor General]
+- Gallardo Crespillo, Patricia A. [Tutora Individual]
 
 ## Requisitos
 - Es necesario tener instalado [Docker](https://www.docker.com/)

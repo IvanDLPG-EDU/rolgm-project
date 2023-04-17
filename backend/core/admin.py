@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Directory, Image, Audio, Other, Room
+from django import forms
+from .models import Directory, Image, Audio, Other, Room, Player
 
 # Register your models here.
 
@@ -30,8 +31,22 @@ class OtherAdmin(admin.ModelAdmin):
     list_filter = ('created_at', 'directory')
     search_fields = ('name', 'directory__name')
 
+class RoomForm(forms.ModelForm):
+    class Meta:
+        model = Room
+        exclude = ('root_directory',)
+
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
-    list_display = ('name', 'created_at', 'root_directory')
+    form = RoomForm
+    list_display = ('name', 'owner','created_at', 'root_directory')
     search_fields = ('name',)
+    ordering = ('-created_at',)
+    
+
+@admin.register(Player)
+class PlayerAdmin(admin.ModelAdmin):
+    list_display = ('user', 'room', 'game_mode', 'is_gm', 'created_at')
+    list_filter = ('is_gm', 'game_mode', 'created_at')
+    search_fields = ('user__username', 'room__name')
     ordering = ('-created_at',)

@@ -6,8 +6,8 @@ El proyecto consiste en un entorno que facilite los Juegos de Rol mediante el us
 para cubrir las necesidades de los jugadores.
 
 ## Tutores del proyecto
-- Fernández Hernández, Gonzalo [Tutor General]
-- Gallardo Crespillo, Patricia A. [Tutora Individual]
+- [Fernández Hernández, Gonzalo](https://github.com/GonxFH) [Tutor General]
+- [Gallardo Crespillo, Patricia A.](https://github.com/Irtnia) [Tutora Individual]
 
 ## Requisitos
 - Es necesario tener instalado [Docker](https://www.docker.com/)
@@ -18,6 +18,9 @@ para cubrir las necesidades de los jugadores.
 1. Descarga el proyecto en [zip](https://github.com/IvanDLPG/rolgm-project/archive/refs/heads/main.zip) o clónalo con Git.
 2. Copia y modifica el fichero ".env.example" con el nombre ".env" (Está preparado para funcionar pero se recomienda personalizarlo).
 3. Usa el comando "make init" del Makefile del proyecto. Esto creará las imagenes y levantará los servidores.
+4. Usa el comando "make migrate" del Makefile del proyecto. Esto creará las tablas en la Base de Datos.
+5. Usa el comando "superuser" del Makefile del proyecto. Esto creará al Super Usuario.
+6. Usa el comando "make static" del Makefile del proyecto. Esto añadirá los ficheros estaticos de django al proyecto.
 
 ## Uso
 1. Ejecuta el comando "make up" o "make start" para levantar los contenedores mostrando o no el prompt.

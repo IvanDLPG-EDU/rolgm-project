@@ -12,6 +12,9 @@ migrate:
 	docker exec -it ${PROJECT_NAME}-server python manage.py makemigrations
 	docker exec -it ${PROJECT_NAME}-server python manage.py migrate
 
+static:
+	docker exec -it ${PROJECT_NAME}-server python manage.py collectstatic
+	
 superuser:
 	docker exec -it ${PROJECT_NAME}-server python manage.py createsuperuser
 

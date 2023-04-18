@@ -2,44 +2,42 @@ import React, { useState, useEffect } from 'react';
 import { w3cwebsocket as WebSocket } from 'websocket';
 
 const Chat = () => {
+  const [client, setClient] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [inputValue, setInputValue] = useState('');
-
-  const ws = new WebSocket('ws://172.18.0.2:8000/ws/chat/1/');
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
-    ws.onmessage = (message) => {
-      const data = JSON.parse(message.data);
-      setMessages((prevMessages) => [...prevMessages, data.message]);
+    const newClient = new WebSocket('ws://172.18.0.2:8000/ws/chat/1/');
+
+    newClient.onmessage = (message) => {
+      const messageData = JSON.parse(message.data);
+      setMessages(messages => [...messages, messageData]);
     };
 
+    setClient(newClient);
+
     return () => {
-      ws.close();
+      newClient.close();
     };
   }, []);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    ws.send(JSON.stringify({ message: inputValue }));
-    setInputValue('');
+  const sendMessage = () => {
+    client.send(JSON.stringify({ message }));
+    setMessage('');
   };
 
   return (
-    <>
-      <ul>
+    <div>
+      <div>
         {messages.map((message, index) => (
-          <li key={index}>{message}</li>
+          <p key={index}>{message.message}</p>
         ))}
-      </ul>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(event) => setInputValue(event.target.value)}
-        />
-        <button type="submit">Enviar</button>
-      </form>
-    </>
+      </div>
+      <div>
+        <input value={message} onChange={e => setMessage(e.target.value)} />
+        <button onClick={sendMessage}>Send</button>
+      </div>
+    </div>
   );
 };
 

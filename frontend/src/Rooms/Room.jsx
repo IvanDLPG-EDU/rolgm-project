@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Canvas } from './Canvas';
-import { RoomProvider } from './context/RoomProvider';
+import { RoomProvider } from '../context/RoomProvider';
 import { SideRoomMenu } from './SideRoomMenu';
-import './styles/rooms.css'
+import '../styles/rooms.css'
 
 export const Room = () => {
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);

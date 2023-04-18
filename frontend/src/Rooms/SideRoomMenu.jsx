@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { RoomContext } from './context/allContext';
+import { RoomContext } from '../context/allContext';
 import { MenuTab } from './MenuTab';
 
 export const SideRoomMenu = () => {

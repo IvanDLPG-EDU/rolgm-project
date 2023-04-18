@@ -1,9 +1,9 @@
 import React from 'react'
 import { Navigate, Route, Routes, useLocation  } from 'react-router-dom'
 import { HomePage } from './HomePage'
-import { Room } from './Room'
-import { RoomList } from './RoomList'
-import { MainNavbar } from './Navbar'
+import { RoomList } from './Rooms/RoomList'
+import { MainNavbar } from './Rooms/Navbar'
+import { Room } from './Rooms/Room'
 
 export const App = () => {
     const location = useLocation();

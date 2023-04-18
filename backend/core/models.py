@@ -53,6 +53,23 @@ class Room(models.Model):
     def __str__(self):
         return self.name
     
+class Canvas(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    active_page = models.OneToOneField('Page', on_delete=models.CASCADE, related_name='active_for', null=True, blank=True)
+    room = models.OneToOneField(Room, on_delete=models.CASCADE, related_name='canvas')
+
+    def __str__(self):
+        return f"{self.room.name}'s canvas"
+
+class Page(models.Model):
+    name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    canvas = models.ForeignKey(Canvas, on_delete=models.CASCADE, related_name='pages')
+    data = models.JSONField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
 class Player(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='players')
     room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='players')

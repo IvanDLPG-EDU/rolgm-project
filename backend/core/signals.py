@@ -38,10 +38,15 @@ def create_player(sender, instance, created, **kwargs):
             game_mode='p',
         )
 
-# @receiver(post_delete, sender=Room)
-# def delete_related_objects(sender, instance, **kwargs):
-#     instance.root_directory.delete()
-#     Player.objects.filter(room=instance).delete()
+@receiver(pre_delete, sender=Room)
+def delete_related_objects(sender, instance, **kwargs):
+    directory = instance.root_directory
+    instance.root_directory = None
+    instance.save()
+    if directory:
+        directory.delete()
+
+    
 
 @receiver(post_delete, sender=Player)
 def delete_room_if_owner(sender, instance, **kwargs):

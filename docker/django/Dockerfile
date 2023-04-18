@@ -17,4 +17,4 @@ RUN	apt-get update && \
 RUN 	pip install --upgrade pip && \
 	pip install --no-cache-dir -r requirements.txt 
 
-ENTRYPOINT ["python", "manage.py", "runserver","172.18.0.2:8000"]
+#ENTRYPOINT ["python", "manage.py", "runserver","172.18.0.2:8000"]

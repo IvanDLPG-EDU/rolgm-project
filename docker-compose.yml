@@ -38,6 +38,8 @@ services:
             DB_PORT: ${DB_PORT}
             SERVER_HOST: ${SERVER_HOST}
             CLIENT_HOST: ${CLIENT_HOST}
+            STATIC_ROOT: /usr/src/app/static/
+        command: "daphne ${PROJECT_NAME}.asgi:application -b ${SERVER_HOST} -p ${SERVER_PORT}"
         build: docker/django/
 
 

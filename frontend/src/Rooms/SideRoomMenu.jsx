@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { RoomContext } from '../context/allContext';
+import Chat from './Chat';
 import { MenuTab } from './MenuTab';
 
 export const SideRoomMenu = () => {
@@ -20,6 +21,7 @@ export const SideRoomMenu = () => {
         <div className={`tab-pane ${activeTab === 'chat-tab' ? 'active' : ''}`} id="chat-tab">
           {/* Contenido de la pestaña de chat */}
           <p>Pestaña de Chat</p>
+          <Chat/>
           {/* <Chat /> */}
         </div>
         <div className={`tab-pane ${activeTab === 'gallery-tab' ? 'active' : ''}`} id="gallery-tab">

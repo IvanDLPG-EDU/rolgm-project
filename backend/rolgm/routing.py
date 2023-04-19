@@ -6,7 +6,7 @@ from channels.auth import AuthMiddlewareStack
 from core import consumers
 
 websocket_urlpatterns = [
-    re_path(r'ws/chat/(?P<room_name>\w+)/$', consumers.ChatConsumer.as_asgi()),
+    re_path(r'ws/room/(?P<room_name>\w+)/$', consumers.RoomConsumer.as_asgi()),
 ]
 
 application = ProtocolTypeRouter({

@@ -7,7 +7,7 @@ const Chat = () => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    const newClient = new WebSocket('ws://172.18.0.2:8000/ws/chat/1/');
+    const newClient = new WebSocket('ws://172.18.0.2:8000/ws/room/1/');
 
     newClient.onmessage = (message) => {
       const messageData = JSON.parse(message.data);

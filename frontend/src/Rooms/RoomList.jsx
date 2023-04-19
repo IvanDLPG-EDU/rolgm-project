@@ -61,7 +61,7 @@ export const RoomList = () => {
               <div className="card-body">
                 <h5 className="card-title">{room.name}</h5>
                 <p className="card-text">{room.created_at}</p>
-                <p className="card-text">Jugadores: {room.players.filter(player => player.game_mode === "p").length} | Espectadores: {room.players.filter(player => player.game_mode === "s").length} </p>
+                <p className="card-text">Jugadores: {room.player_count} | Espectadores: {room.spectator_count} </p>
                 <a href={`/salas/${room.id}`} className="btn btn-primary">
                   Ver Sala
                 </a>

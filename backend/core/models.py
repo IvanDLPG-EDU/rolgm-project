@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import secrets
 import os 
 
 # Create your models here.
@@ -14,14 +15,8 @@ class Directory(models.Model):
 
 class File(models.Model):
 
-    def get_upload_path(self, filename):
-        pass
-
-    related_name = None
-
     name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
-    directory = models.ForeignKey(Directory, on_delete=models.CASCADE, related_name=related_name)
 
     def __str__(self):
         return self.name
@@ -31,17 +26,17 @@ class File(models.Model):
 
 class Image(File):
     related_name = "images"
-
+    directory = models.ForeignKey(Directory, on_delete=models.CASCADE, related_name=related_name)
     path = models.ImageField(upload_to='media/image-files')
 
 class Audio(File):
     related_name = "audios"
-
+    directory = models.ForeignKey(Directory, on_delete=models.CASCADE, related_name=related_name)
     path = models.FileField(upload_to='media/audio-files')
 
 class Other(File):
     related_name = "others"
-
+    directory = models.ForeignKey(Directory, on_delete=models.CASCADE, related_name=related_name)
     path = models.FileField(upload_to='media/other-files')
     
 class Room(models.Model):
@@ -49,9 +44,22 @@ class Room(models.Model):
     name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     root_directory = models.OneToOneField(Directory, on_delete=models.CASCADE, null=True, blank=True)
+    room_id = models.CharField(max_length=4, editable=False, null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}#{self.room_id}"
+
+    def save(self, *args, **kwargs):
+        if not self.room_id:
+            # Generate a unique 6-character ID
+            self.room_id = secrets.token_hex(2).upper()
+
+        # Check if the combination of name+id already exists
+        while Room.objects.exclude(pk=self.pk).filter(name=self.name, room_id=self.room_id).exists():
+            # Regenerate the id until it is unique for this name
+            self.room_id = secrets.token_hex(2).upper()
+
+        super().save(*args, **kwargs)
     
 class Canvas(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)

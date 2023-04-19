@@ -41,10 +41,12 @@ class OtherAdmin(admin.ModelAdmin):
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
     form = RoomForm
-    list_display = ('name', 'owner','created_at', 'root_directory')
+    list_display = ('room_name', 'owner','created_at', 'root_directory')
     search_fields = ('name',)
     ordering = ('-created_at',)
 
+    def room_name(self, obj):
+        return f"{obj.name}#{obj.room_id}"
 
 @admin.register(Canvas)
 class CanvasAdmin(admin.ModelAdmin):

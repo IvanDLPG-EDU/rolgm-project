@@ -27,17 +27,17 @@ class File(models.Model):
 class Image(File):
     related_name = "images"
     directory = models.ForeignKey(Directory, on_delete=models.CASCADE, related_name=related_name)
-    path = models.ImageField(upload_to='media/image-files')
+    path = models.ImageField(upload_to='image-files')
 
 class Audio(File):
     related_name = "audios"
     directory = models.ForeignKey(Directory, on_delete=models.CASCADE, related_name=related_name)
-    path = models.FileField(upload_to='media/audio-files')
+    path = models.FileField(upload_to='audio-files')
 
 class Other(File):
     related_name = "others"
     directory = models.ForeignKey(Directory, on_delete=models.CASCADE, related_name=related_name)
-    path = models.FileField(upload_to='media/other-files')
+    path = models.FileField(upload_to='other-files')
     
 class Room(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='rooms')

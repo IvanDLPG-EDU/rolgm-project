@@ -1,3 +1,5 @@
 .env
 data
 backend/static
+backend/media
+backend/core/migrations

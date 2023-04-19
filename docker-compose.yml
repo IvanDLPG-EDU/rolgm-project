@@ -30,6 +30,7 @@ services:
         volumes:
             - './backend/:/usr/src/app/'
         environment:
+            DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
             DB_ENGINE: ${DB_ENGINE}
             DB_NAME: ${DB_NAME}
             DB_USER: ${DB_USER}

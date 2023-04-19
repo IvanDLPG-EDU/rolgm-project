@@ -4,8 +4,15 @@ up:
 start:
 	docker compose up -d
 init:
-	docker compose up --build
-
+	docker compose up --build -d
+	echo "15s Para continuar" && sleep 15
+	docker exec -it ${PROJECT_NAME}-server python manage.py makemigrations --empty core
+	docker exec -it ${PROJECT_NAME}-server python manage.py makemigrations
+	docker exec -it ${PROJECT_NAME}-server python manage.py migrate
+	docker exec -it ${PROJECT_NAME}-server python manage.py collectstatic
+	docker exec -it ${PROJECT_NAME}-server python manage.py createsuperuser
+	docker compose down
+	docker compose up
 down:
 	docker compose down
 migrate:

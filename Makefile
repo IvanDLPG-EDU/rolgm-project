@@ -5,8 +5,7 @@ start:
 	docker compose up -d
 init:
 	docker compose up --build -d
-	echo "15s Para continuar" && sleep 15
-	docker exec -it ${PROJECT_NAME}-server python manage.py makemigrations --empty core
+	echo "15s Para continuar" && sleep 10
 	docker exec -it ${PROJECT_NAME}-server python manage.py makemigrations
 	docker exec -it ${PROJECT_NAME}-server python manage.py migrate
 	docker exec -it ${PROJECT_NAME}-server python manage.py collectstatic

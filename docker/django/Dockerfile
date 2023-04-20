@@ -12,7 +12,7 @@ WORKDIR /usr/src/app
 COPY	requirements.txt ./
 
 RUN	apt-get update && \
-	apt-get install -y python3-dev libpq-dev
+	apt-get install -y python3-dev libpq-dev graphviz
 
 RUN 	pip install --upgrade pip && \
 	pip install --no-cache-dir -r requirements.txt 

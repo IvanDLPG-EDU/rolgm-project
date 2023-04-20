@@ -12,3 +12,5 @@ python-decouple==3.7
 daphne
 channels
 Twisted[http2,tls]
+django-extensions
+pydotplus

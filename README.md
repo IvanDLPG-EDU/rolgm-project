@@ -24,4 +24,4 @@ para cubrir las necesidades de los jugadores.
 2. Accede a la aplicación por defecto desde http://172.18.0.2:8000 (Servidor) http://172.18.0.3:5173 (Cliente).
 
 ## Licencia
-Este proyecto está bajo la Licencia [?]. Consulta el archivo [?] para más información.
+Este proyecto está bajo la Licencia [CC-BY-SA](https://creativecommons.org/licenses/by-sa/3.0/es/). Consulta la web de [CreativeCommons](https://creativecommons.org/licenses/by-sa/3.0/es/) para más información.

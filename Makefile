@@ -17,6 +17,7 @@ down:
 migrate:
 	docker exec -it ${PROJECT_NAME}-server python manage.py makemigrations
 	docker exec -it ${PROJECT_NAME}-server python manage.py migrate
+	docker exec -it ${PROJECT_NAME}-server python manage.py graph_models core --arrow-shape=vee -t django2018 -o models.png
 
 static:
 	docker exec -it ${PROJECT_NAME}-server python manage.py collectstatic

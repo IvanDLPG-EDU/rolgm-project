@@ -98,3 +98,12 @@ class Player(models.Model):
 
     def __str__(self):
         return self.user.username
+
+class Chat(models.Model):
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='chat')
+
+class Message(models.Model):
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE, related_name='messages')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    message = models.CharField(max_length=255)
+    date = models.DateTimeField(auto_now_add=True)

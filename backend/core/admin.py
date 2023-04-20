@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from .models import Directory, Image, Audio, Other, Room, Player, Canvas, Page
+from .models import Directory, Image, Audio, Other, Room, Player, Canvas, Page, Chat,Message
 
 # Register your models here.
 
@@ -68,3 +68,11 @@ class PlayerAdmin(admin.ModelAdmin):
     list_filter = ('is_gm', 'game_mode', 'created_at')
     search_fields = ('user__username', 'room__name')
     ordering = ('-created_at',)
+
+@admin.register(Chat)
+class ChatAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Message)
+class MensajeAdmin(admin.ModelAdmin):
+    list_display = ('message', 'user', 'date')

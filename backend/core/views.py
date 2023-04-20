@@ -18,8 +18,8 @@ class RoomListAPIView(ListAPIView):
     
 class DetailedRoomAPIView(APIView):
 
-    def get(self, request, room_id):
-        room = get_object_or_404(Room, id=room_id)
+    def get(self, request, room_name, room_id):
+        room = get_object_or_404(Room, name=room_name, room_id=room_id)
         serializer = DetailedRoomSerializer(room)
         return Response(serializer.data)
 
@@ -30,8 +30,8 @@ class RoomSearchView(ListAPIView):
     search_fields = ['name', 'owner__username']
 
 class RoomDirectoryAPIView(APIView):
-    def get(self, request, room_id):
-        room = get_object_or_404(Room, id=room_id)
+    def get(self, request, room_name, room_id):
+        room = get_object_or_404(Room, name=room_name, room_id=room_id)
         root_directory = room.root_directory
         if root_directory is None:
             return Response({'message': 'No root directory found for this room.'}, status=status.HTTP_404_NOT_FOUND)

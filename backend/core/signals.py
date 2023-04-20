@@ -1,6 +1,6 @@
 from django.db.models.signals import pre_save, post_save, pre_delete, post_delete
 from django.dispatch import receiver
-from .models import Room, Canvas,Page, Directory, Player
+from .models import Room, Canvas,Page, Directory, Player, Chat
 
 @receiver(pre_save, sender=Room)
 def create_room(sender, instance, **kwargs):
@@ -14,6 +14,10 @@ def create_canvas(sender, instance, created, **kwargs):
     if created:
         Canvas.objects.create(room=instance)
 
+@receiver(post_save, sender=Room)
+def create_room_chat(sender, instance, created, **kwargs):
+    if created:
+        Chat.objects.create(room=instance)
 
 @receiver(post_save, sender=Canvas)
 def create_first_page(sender, instance, created, **kwargs):

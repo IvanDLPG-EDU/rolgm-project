@@ -1,25 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { w3cwebsocket as WebSocket } from 'websocket';
+import { RoomContext } from '../context/allContext';
 
 const Chat = () => {
   const [client, setClient] = useState(null);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
-
+  const {activeRoom} = useContext(RoomContext)
+  
   useEffect(() => {
-    const newClient = new WebSocket('ws://172.18.0.2:8000/ws/room/1/');
+    if (activeRoom){
+      const newClient = new WebSocket(`ws://172.18.0.2:8000/ws/room/${activeRoom.name.replace(' ', '_')}/${activeRoom.room_id}/`);
+      
+      if (messages.length === 0) {
+        setMessages(activeRoom.messages)
+      }
 
-    newClient.onmessage = (message) => {
-      const messageData = JSON.parse(message.data);
-      setMessages(messages => [...messages, messageData]);
-    };
+      newClient.onmessage = (message) => {
+        const messageData = JSON.parse(message.data);
+        setMessages(messages => [...messages, messageData]);
+      };
 
-    setClient(newClient);
+      setClient(newClient);
 
-    return () => {
-      newClient.close();
-    };
-  }, []);
+      return () => {
+        newClient.close();
+      };
+    }
+
+  }, [activeRoom]);
 
   const sendMessage = () => {
     client.send(JSON.stringify({ message }));

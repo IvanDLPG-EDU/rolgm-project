@@ -59,10 +59,10 @@ export const RoomList = () => {
           <Col xs={12} md={6} lg={4} key={room.id}>
             <div className="card mb-4">
               <div className="card-body">
-                <h5 className="card-title">{room.name}</h5>
+                <h5 className="card-title">{room.name+'#'+room.room_id}</h5>
                 <p className="card-text">{room.created_at}</p>
                 <p className="card-text">Jugadores: {room.player_count} | Espectadores: {room.spectator_count} </p>
-                <a href={`/salas/${room.id}`} className="btn btn-primary">
+                <a href={`/sala/${room.name+'/'+room.room_id}`} className="btn btn-primary">
                   Ver Sala
                 </a>
               </div>

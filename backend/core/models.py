@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 import secrets
 import os 
 
@@ -107,3 +108,45 @@ class Message(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     message = models.CharField(max_length=255)
     date = models.DateTimeField(auto_now_add=True)
+
+class CharacterTemplate(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='templates')
+
+    def _str_(self):
+        return self.name
+
+class BaseField(models.Model):
+    name = models.CharField(_('name'), max_length=255)
+    description = models.TextField(_('description'))
+    character_template = models.ForeignKey(CharacterTemplate, on_delete=models.CASCADE, related_name='%(class)s_fields')
+
+    class Meta:
+        abstract = True
+
+    def _str_(self):
+        return self.name
+
+class TextField(BaseField):
+    default_value = models.CharField(_('default value'), max_length=255, blank=True)
+
+
+class TextAreaField(BaseField):
+    default_value = models.TextField(_('default value'), blank=True)
+
+
+class NumberField(BaseField):
+    min_value = models.DecimalField(_('minimum value'), max_digits=15, decimal_places=2, null=True, blank=True)
+    max_value = models.DecimalField(_('maximum value'), max_digits=15, decimal_places=2, null=True, blank=True)
+    default_value = models.DecimalField(_('default value'), max_digits=15, decimal_places=2, null=True, blank=True)
+
+
+class ColorField(BaseField):
+    default_value = models.CharField(_('default value'), max_length=7, default='#000000')
+
+
+class FileField(BaseField):
+    allowed_types = models.CharField(_('allowed file types'), max_length=255, help_text=_('Enter one allowed file type per line.'))
+    max_file_size = models.PositiveIntegerField(_('maximum file size (in bytes)'), null=True, blank=True)
+

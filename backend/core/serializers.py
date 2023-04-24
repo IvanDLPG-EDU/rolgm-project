@@ -63,7 +63,7 @@ class DirectorySerializer(serializers.ModelSerializer):
 class MensajeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ('id', 'user', 'message', 'date')
+        fields = ('id', 'user', 'message', 'date','written_as')
 
 class ChatSerializer(serializers.ModelSerializer):
     mensajes = MensajeSerializer(many=True, read_only=True)

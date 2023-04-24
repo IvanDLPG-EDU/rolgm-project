@@ -108,6 +108,7 @@ class Message(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     message = models.CharField(max_length=255)
     date = models.DateTimeField(auto_now_add=True)
+    written_as = models.CharField(max_length=50,null=True, blank=True)
 
 class CharacterTemplate(models.Model):
     name = models.CharField(max_length=255)
@@ -150,3 +151,10 @@ class FileField(BaseField):
     allowed_types = models.CharField(_('allowed file types'), max_length=255, help_text=_('Enter one allowed file type per line.'))
     max_file_size = models.PositiveIntegerField(_('maximum file size (in bytes)'), null=True, blank=True)
 
+class Character(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='characters')
+    name = models.CharField(max_length=255)
+    data = models.JSONField()
+
+    def __str__(self):
+        return self.name

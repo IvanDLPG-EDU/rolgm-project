@@ -12,8 +12,8 @@ export const MainNavbar = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
               <Nav.Link href="/salas">Salas</Nav.Link>
-              {/* <Nav.Link href="/perfil">Mi perfil</Nav.Link>
-              <Nav.Link href="/login">Iniciar sesión</Nav.Link> */}
+              {/* <Nav.Link href="/perfil">Mi perfil</Nav.Link>*/}
+              <Nav.Link href="/login">Iniciar sesión</Nav.Link> 
             </Nav>
             <Button variant="outline-success" href="/registration">Registrarse</Button>
           </Navbar.Collapse>

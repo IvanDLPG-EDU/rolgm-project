@@ -1,18 +1,14 @@
 import React, { useState } from 'react';
 
-function RegistrationPage() {
+function LoginPage() {
   const [formData, setFormData] = useState({
     username: '',
-    email: '',
     password: '',
-    password2: ''
   });
 
   const [formErrors, setFormErrors] = useState({
     username: '',
-    email: '',
     password: '',
-    password2: ''
   });
 
   const handleChange = (event) => {
@@ -25,9 +21,7 @@ function RegistrationPage() {
   const handleErrors = (errors) => {
     let newErrors = {
       username: '',
-      email: '',
       password: '',
-      password2: ''
     };
 
     for (const [key, value] of Object.entries(errors)) {
@@ -40,7 +34,7 @@ function RegistrationPage() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    fetch('http://172.18.0.2:8000/auth/register/', {
+    fetch('http://172.18.0.2:8000/auth/login/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -68,19 +62,9 @@ function RegistrationPage() {
           {formErrors.username && <div className="invalid-feedback">{formErrors.username}</div>}
         </div>
         <div className="form-group">
-          <label htmlFor="email">Email:</label>
-          <input type="email" className={`form-control ${formErrors.email && 'is-invalid'}`} name="email" value={formData.email} onChange={handleChange} />
-          {formErrors.email && <div className="invalid-feedback">{formErrors.email}</div>}
-        </div>
-        <div className="form-group">
           <label htmlFor="password">Password:</label>
           <input type="password" className={`form-control ${formErrors.password && 'is-invalid'}`} name="password" value={formData.password} onChange={handleChange} />
           {formErrors.password && <div className="invalid-feedback">{formErrors.password}</div>}
-        </div>
-        <div className="form-group">
-          <label htmlFor="password2">Confirm Password:</label>
-          <input type="password" className={`form-control ${formErrors.password2 && 'is-invalid'}`} name="password2" value={formData.password2} onChange={handleChange} />
-          {formErrors.password2 && <div className="invalid-feedback">{formErrors.password2}</div>}
         </div>
         <button type="submit" className="btn btn-primary">Submit</button>
       </form>
@@ -88,4 +72,4 @@ function RegistrationPage() {
   );
 }
 
-export default RegistrationPage;
+export default LoginPage;

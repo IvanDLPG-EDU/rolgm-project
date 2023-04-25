@@ -9,7 +9,8 @@ from allauth.account.models import EmailConfirmationHMAC
 
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
-from .serializers import RegistrationSerializer
+from .serializers import RegistrationSerializer, LoginSerializer
+from rest_framework.exceptions import ValidationError
 
 # Create your views here.
 
@@ -25,12 +26,21 @@ def registration_view(request):
 
 class AuthenticationView(APIView):
     def post(self, request):
-        username = request.data.get('username')
-        password = request.data.get('password')
-        print(username,password)
-        user = authenticate(username=username, password=password)
-        if user:
-            token, _ = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key})
-        else:
-            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            username = serializer.validated_data['username']
+            password = serializer.validated_data['password']
+            user = authenticate(username=username, password=password)
+            if user:
+                token, _ = Token.objects.get_or_create(user=user)
+                return Response({'token': token.key})
+            else:
+                json_data = {
+                    'errors': {'password': ['invalid credentials'],'username': ['invalid credentials']},
+                    'data': None,
+                    'status': 'error',
+                }
+             
+                return Response(json_data['errors'], status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

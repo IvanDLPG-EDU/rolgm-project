@@ -3,6 +3,26 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth import password_validation
 
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True)
+    password = serializers.CharField(required=True)
+
+    def to_json(self):
+        json_data = {
+            'errors': self.errors,
+            'data': None,
+            'status': 'error' if self.errors else 'success'
+        }
+        return json_data
+
+    def validate(self, data):
+        if not data.get('username'):
+            raise serializers.ValidationError({'username': ['Este campo es requerido']})
+        if not data.get('password'):
+            raise serializers.ValidationError({'password': ['Este campo es requerido']})
+        return data
+
+
 class RegistrationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
 

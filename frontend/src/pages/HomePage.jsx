@@ -3,6 +3,27 @@ import { Container, Row, Col, Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
 export const HomePage = () => {
+
+  fetch('http://172.18.0.2:8000/auth/login/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: 'admin',
+        password: 'admin',
+      })
+    })
+      .then(response => {
+          return response.json();
+      })
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+
   return (
     <>
       

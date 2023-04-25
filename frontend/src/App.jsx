@@ -1,7 +1,7 @@
 import React from 'react'
 import { Navigate, Route, Routes, useLocation  } from 'react-router-dom'
 import { RoomProvider } from './contexts';
-import { HomePage, RoomListPage } from "./pages";
+import { HomePage, RegistrationPage, RoomListPage } from "./pages";
 import { MainNavbar, Room} from './components';
 import "./styles/rooms.css"
 
@@ -15,6 +15,7 @@ export const App = () => {
           {shouldRenderNavbar && <MainNavbar />}
           <Routes>  
             <Route path="/" element={<HomePage />} />
+            <Route path="/registration" element={<RegistrationPage />} />
             <Route path="/salas" element={<RoomListPage />} />
             <Route path="/sala-debug" element={<Room />} /> 
             <Route path="/sala/:roomName/:roomId" element={<Room />} />

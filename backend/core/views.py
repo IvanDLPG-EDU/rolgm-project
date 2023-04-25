@@ -5,6 +5,11 @@ from rest_framework import filters, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from rest_framework.decorators import api_view
+from allauth.account.models import EmailConfirmationHMAC
+from allauth.account.utils import complete_signup
+
+from .serializers import RegistrationSerializer
 from .serializers import RoomSerializer, DirectorySerializer,DetailedRoomSerializer
 from .models import Room
 
@@ -37,3 +42,16 @@ class RoomDirectoryAPIView(APIView):
             return Response({'message': 'No root directory found for this room.'}, status=status.HTTP_404_NOT_FOUND)
         root_serialized = DirectorySerializer(root_directory).data
         return Response({'root_directory': root_serialized}, status=status.HTTP_200_OK)
+    
+
+
+
+@api_view(['POST'])
+def registration_view(request):
+    serializer = RegistrationSerializer(data=request.data)
+    if serializer.is_valid():
+        user = serializer.save(request)
+        email_confirmation = EmailConfirmationHMAC(user)
+        email_confirmation.send()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

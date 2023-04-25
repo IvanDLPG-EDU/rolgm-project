@@ -15,7 +15,7 @@ export const MainNavbar = () => {
               {/* <Nav.Link href="/perfil">Mi perfil</Nav.Link>
               <Nav.Link href="/login">Iniciar sesión</Nav.Link> */}
             </Nav>
-            <Button variant="outline-success">Registrarse</Button>
+            <Button variant="outline-success" href="/registration">Registrarse</Button>
           </Navbar.Collapse>
         </Container>
       </Navbar>

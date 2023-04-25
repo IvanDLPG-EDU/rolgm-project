@@ -1,8 +1,7 @@
 import React, { useContext, useState } from 'react'
-import { RoomContext } from '../context/allContext';
-import Chat from './Chat';
+import { Chat } from '../chat';
 import { MenuTab } from './MenuTab';
-
+import { RoomContext } from '../../../contexts'
 export const SideRoomMenu = () => {
 
   const {activeTab} = useContext(RoomContext)
@@ -44,3 +43,5 @@ export const SideRoomMenu = () => {
     </>
   );
 }
+
+export default SideRoomMenu;

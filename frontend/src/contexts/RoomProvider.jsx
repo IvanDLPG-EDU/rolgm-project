@@ -16,3 +16,5 @@ export const RoomProvider = ({children}) => {
         </RoomContext.Provider>
     )
 }
+
+export default RoomProvider;

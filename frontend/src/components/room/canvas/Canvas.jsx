@@ -145,7 +145,7 @@ export const Canvas = () => {
 
 
 
-
+export default Canvas;
 
 
 

@@ -1,10 +1,9 @@
 import React from 'react'
 import { Navigate, Route, Routes, useLocation  } from 'react-router-dom'
-import { RoomProvider } from './context/RoomProvider';
-import { HomePage } from './HomePage'
-import { RoomList } from './Rooms/RoomList'
-import { MainNavbar } from './Rooms/Navbar'
-import { Room } from './Rooms/Room'
+import { RoomProvider } from './contexts';
+import { HomePage, RoomListPage } from "./pages";
+import { MainNavbar, Room} from './components';
+import "./styles/rooms.css"
 
 export const App = () => {
     const location = useLocation();
@@ -16,7 +15,7 @@ export const App = () => {
           {shouldRenderNavbar && <MainNavbar />}
           <Routes>  
             <Route path="/" element={<HomePage />} />
-            <Route path="/salas" element={<RoomList />} />
+            <Route path="/salas" element={<RoomListPage />} />
             <Route path="/sala-debug" element={<Room />} /> 
             <Route path="/sala/:roomName/:roomId" element={<Room />} />
             <Route path="/*" element={<Navigate to="/" />} />

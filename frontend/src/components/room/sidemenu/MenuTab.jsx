@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { RoomContext } from '../context/allContext'
+import { RoomContext } from '../../../contexts'
 
 export const MenuTab = ({tabName, icon, tabWidth=24, tabHeight=24}) => {
   const {activeTab, handleTabClick} = useContext(RoomContext)
@@ -11,3 +11,5 @@ export const MenuTab = ({tabName, icon, tabWidth=24, tabHeight=24}) => {
     </li>
   )
 }
+
+export default MenuTab;

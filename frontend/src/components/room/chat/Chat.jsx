@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { w3cwebsocket as WebSocket } from 'websocket';
-import { RoomContext } from '../context/allContext';
+import { RoomContext } from '../../../contexts';
 
 const Chat = () => {
   const [client, setClient] = useState(null);

@@ -22,3 +22,5 @@ export const MainNavbar = () => {
     </div>
   );
 }
+
+export default MainNavbar;

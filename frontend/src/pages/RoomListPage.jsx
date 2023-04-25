@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 
-export const RoomList = () => {
+export const RoomListPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [rooms, setRooms] = useState([]);
   const backendIP = import.meta.env.VITE_SERVER_HOST;
@@ -73,3 +73,5 @@ export const RoomList = () => {
     </Container>
   );
 };
+
+export default RoomListPage;

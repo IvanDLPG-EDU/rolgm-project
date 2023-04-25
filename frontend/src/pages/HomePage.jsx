@@ -22,7 +22,7 @@ export const HomePage = () => {
                   Explora y encuentra nuevas salas de rol para unirte y jugar con otros usuarios.
                 </Card.Text>
                 <Link to="/sala-debug" className="btn btn-primary">
-                  Sala Random
+                  Sala Debug
                 </Link>
               </Card.Body>
             </Card>
@@ -45,3 +45,5 @@ export const HomePage = () => {
     </>
   );
 };
+
+export default HomePage;

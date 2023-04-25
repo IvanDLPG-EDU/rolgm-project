@@ -25,3 +25,7 @@ para cubrir las necesidades de los jugadores.
 
 ## Licencia
 Este proyecto está bajo la Licencia [CC-BY-SA](https://creativecommons.org/licenses/by-sa/3.0/es/). Consulta la web de [CreativeCommons](https://creativecommons.org/licenses/by-sa/3.0/es/) para más información.
+
+## Esquema de BBDD
+
+![Modelos De La Base De Datos](backend/models.png)

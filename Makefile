@@ -5,8 +5,9 @@ start:
 	docker compose up -d
 init:
 	docker compose up --build -d
-	echo "10s Para continuar" && sleep 10
+	echo "5s Para continuar" && sleep 5
 	docker exec -it ${PROJECT_NAME}-server python manage.py makemigrations
+	docker exec -it ${PROJECT_NAME}-server python manage.py migrate authentication_core
 	docker exec -it ${PROJECT_NAME}-server python manage.py migrate
 	docker exec -it ${PROJECT_NAME}-server python manage.py collectstatic
 	docker exec -it ${PROJECT_NAME}-server python manage.py createsuperuser
@@ -16,6 +17,7 @@ down:
 	docker compose down
 migrate:
 	docker exec -it ${PROJECT_NAME}-server python manage.py makemigrations
+	docker exec -it ${PROJECT_NAME}-server python manage.py migrate authentication_core
 	docker exec -it ${PROJECT_NAME}-server python manage.py migrate
 	docker exec -it ${PROJECT_NAME}-server python manage.py graph_models core --arrow-shape=vee -t django2018 -o models.png
 

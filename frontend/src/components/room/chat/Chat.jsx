@@ -6,7 +6,7 @@ const Chat = () => {
   const [client, setClient] = useState(null);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
-  const {activeRoom} = useContext(RoomContext)
+  const {activeRoom, selectedName, setSelectedName, characterList} = useContext(RoomContext)
   
   const messagesEndRef = useRef(null);
 
@@ -38,17 +38,18 @@ const Chat = () => {
   }, [activeRoom]);
 
   const sendMessage = () => {
+    if (!message || /^\s*$/.test(message)) {
+      return;
+    }
+  
     const data = {
-      message: message,
+      message: message.trim(),
       written_as: selectedName
     };
     client.send(JSON.stringify({ data }));
     setMessage('');
   };
-
-  const names = ["John", "Alice", "Bob", "Emily", "David"];
-
-  const [selectedName, setSelectedName] = useState(names[0]);
+  
 
   return (
     <div className="container">
@@ -74,9 +75,9 @@ const Chat = () => {
                 className="form-select mb-3"
                 onChange={(e) => setSelectedName(e.target.value)}
               >
-                {names.map((name) => (
-                  <option key={name} value={name}>
-                    {name}
+                {characterList.map((character) => (
+                  <option key={character.id} value={character.name}>
+                    {character.name}
                   </option>
                 ))}
               </select>

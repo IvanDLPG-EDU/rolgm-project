@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 export const HomePage = () => {
   return (
     <>
-      
       <Container>
             <h1>Bienvenido a RolGM</h1>
             <p>Esta es la página principal, desde aquí puedes acceder a diferentes secciones de la aplicación.</p>

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from .models import Directory, Image, Audio, Other, Room, Player, Canvas, Page, Chat,Message
+from .models import Directory, Image, Audio, Other, Room, Player, Canvas, Page, Chat,Message, Character
 
 # Register your models here.
 
@@ -76,3 +76,7 @@ class ChatAdmin(admin.ModelAdmin):
 @admin.register(Message)
 class MensajeAdmin(admin.ModelAdmin):
     list_display = ('message', 'user', 'date')
+
+@admin.register(Character)
+class CharacterAdmin(admin.ModelAdmin):
+    list_display = ('name', 'player')

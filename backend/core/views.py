@@ -5,18 +5,26 @@ from rest_framework import filters, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .serializers import RoomSerializer, DirectorySerializer,DetailedRoomSerializer
-from .models import Room
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+
+from .serializers import RoomSerializer, DirectorySerializer,DetailedRoomSerializer, PlayerSerializer
+from .models import Room, Player
 
 # Create your views here.
 
 class RoomListAPIView(ListAPIView):
+    authentication_classes = []
+    permission_classes = []
+
     serializer_class = RoomSerializer
 
     def get_queryset(self):
         return Room.objects.all()
     
 class DetailedRoomAPIView(APIView):
+    authentication_classes = []
+    permission_classes = []
 
     def get(self, request, room_name, room_id):
         room = get_object_or_404(Room, name=room_name, room_id=room_id)
@@ -24,13 +32,19 @@ class DetailedRoomAPIView(APIView):
         return Response(serializer.data)
 
 class RoomSearchView(ListAPIView):
+    authentication_classes = []
+    permission_classes = []
+
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', 'owner__username']
 
 class RoomDirectoryAPIView(APIView):
-    def get(self, request, room_name, room_id):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, room_name, room_id):
         room = get_object_or_404(Room, name=room_name, room_id=room_id)
         root_directory = room.root_directory
         if root_directory is None:
@@ -38,3 +52,12 @@ class RoomDirectoryAPIView(APIView):
         root_serialized = DirectorySerializer(root_directory).data
         return Response({'root_directory': root_serialized}, status=status.HTTP_200_OK)
 
+class GetPlayersAndCharactersAPIView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, room_name, room_id):
+        room = get_object_or_404(Room, name=room_name, room_id=room_id)
+        players = Player.objects.filter(room=room, user=request.user)
+        serializer = PlayerSerializer(players, many=True)
+        return Response(serializer.data)

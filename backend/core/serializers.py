@@ -1,8 +1,20 @@
 from rest_framework import serializers
-from .models import Room, Player, Image, Audio, Other, Directory, Chat, Message
+from .models import Room, Player, Image, Audio, Other, Directory, Chat, Message, Player, Character
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth import password_validation
+
+class CharacterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Character
+        fields = '__all__'
+
+class PlayerSerializer(serializers.ModelSerializer):
+    characters = CharacterSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Player
+        fields = ['id', 'user', 'room', 'is_gm', 'game_mode', 'created_at', 'characters']
 
 class RegistrationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
@@ -37,11 +49,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
             password=self.validated_data['password'],
         )
         return user
-
-class PlayerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Player
-        fields = ('user', 'is_gm', 'game_mode')
 
 class RoomSerializer(serializers.ModelSerializer):
     player_count = serializers.SerializerMethodField()

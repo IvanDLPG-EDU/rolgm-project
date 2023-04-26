@@ -2,6 +2,19 @@ from rest_framework import serializers
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth import password_validation
+from rest_framework.authtoken.models import Token
+from .models import User
+
+class UserSerializer(serializers.ModelSerializer):
+    token = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ('username', 'public_name', 'email', 'bio', 'profile_picture', 'token')
+
+    def get_token(self, obj):
+        token, _ = Token.objects.get_or_create(user=obj)
+        return token.key
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(required=True)
@@ -17,9 +30,9 @@ class LoginSerializer(serializers.Serializer):
 
     def validate(self, data):
         if not data.get('username'):
-            raise serializers.ValidationError({'username': ['Este campo es requerido']})
+            raise serializers.ValidationError({'username': ['Required field']})
         if not data.get('password'):
-            raise serializers.ValidationError({'password': ['Este campo es requerido']})
+            raise serializers.ValidationError({'password': ['Required field']})
         return data
 
 
@@ -35,11 +48,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if data['password'] != data['password2']:
-            raise serializers.ValidationError({"password2": "Las contraseñas deben coincidir"})
+            raise serializers.ValidationError({"password2": "Password must concide"})
         try:
             password_validation.validate_password(data['password'])
         except ValidationError as e:
             raise serializers.ValidationError({"password": e.messages})
+        
         return data
 
     def to_json(self):

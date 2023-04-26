@@ -156,7 +156,7 @@ class FileField(BaseField):
 class Character(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='characters')
     name = models.CharField(max_length=255)
-    data = models.JSONField()
+    data = models.JSONField(null=True,blank=True)
 
     def __str__(self):
         return self.name

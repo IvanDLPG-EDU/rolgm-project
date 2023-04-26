@@ -1,9 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser
+from .models import User
 
-class CustomUserAdmin(admin.ModelAdmin):
-    model = CustomUser
+class UserAdmin(admin.ModelAdmin):
+    model = User
     list_display = ['email', 'username', 'public_name', 'is_staff']
     fieldsets = (
         (None, {'fields': ('email', 'username')}),
@@ -20,4 +20,4 @@ class CustomUserAdmin(admin.ModelAdmin):
     search_fields = ('email', 'username')
     ordering = ('email',)
 
-admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(User, UserAdmin)

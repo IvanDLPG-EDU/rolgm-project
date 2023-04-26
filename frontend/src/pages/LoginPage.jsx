@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext} from 'react';
+import { UserContext } from '../contexts';
 
 function LoginPage() {
+  const {setToken} = useContext(UserContext)
+
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -20,16 +23,21 @@ function LoginPage() {
 
   const handleErrors = (errors) => {
     let newErrors = {
-      username: '',
-      password: '',
+      username: null,
+      password: null,
     };
+  
+    console.log(errors, "AAAAAAAAAAAAAAAAAAA")
 
-    for (const [key, value] of Object.entries(errors)) {
-      newErrors[key] = value[0];
+    if (errors) {
+      for (const [key, value] of Object.entries(errors)) {
+        newErrors[key] = value[0];
+      }
     }
-
+  
     setFormErrors(newErrors);
   };
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -42,10 +50,15 @@ function LoginPage() {
       body: JSON.stringify(formData)
     })
       .then(response => {
-          return response.json();
+        return response.json();
       })
       .then(data => {
-        handleErrors(data)
+        if (data.token) {  
+          setToken(data.token);
+          handleErrors(null);
+        } else {
+          handleErrors(data);
+        }
       })
       .catch(error => {
         console.error(error);
@@ -59,7 +72,7 @@ function LoginPage() {
         <div className="form-group">
           <label htmlFor="username">Username:</label>
           <input type="text" className={`form-control ${formErrors.username && 'is-invalid'}`} name="username" value={formData.username} onChange={handleChange} />
-          {formErrors.username && <div className="invalid-feedback">{formErrors.username}</div>}
+          {formErrors.username && <div className="invalid-feedback">{formErrors.username} </div>}
         </div>
         <div className="form-group">
           <label htmlFor="password">Password:</label>

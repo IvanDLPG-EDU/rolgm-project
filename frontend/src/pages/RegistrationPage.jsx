@@ -24,14 +24,16 @@ function RegistrationPage() {
 
   const handleErrors = (errors) => {
     let newErrors = {
-      username: '',
-      email: '',
-      password: '',
-      password2: ''
+      username: null,
+      email: null,
+      password: null,
+      password2: null
     };
 
-    for (const [key, value] of Object.entries(errors)) {
-      newErrors[key] = value[0];
+    if (errors) {
+      for (const [key, value] of Object.entries(errors)) {
+        newErrors[key] = value[0];
+      }
     }
 
     setFormErrors(newErrors);
@@ -51,7 +53,12 @@ function RegistrationPage() {
           return response.json();
       })
       .then(data => {
-        handleErrors(data)
+        console.log(data)
+        if(data.username && typeof data.username === 'string' ){
+          handleErrors(null)
+        } else {
+          handleErrors(data)
+        }
       })
       .catch(error => {
         console.error(error);

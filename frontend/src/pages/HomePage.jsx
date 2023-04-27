@@ -1,10 +1,33 @@
 import React from 'react'
 import { Container, Row, Col, Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import { CarouselComponent } from '../components';
 
 export const HomePage = () => {
+  const images = [
+    {
+    src: "https://via.placeholder.com/800x500",
+    alt: "Bienvenido a RolGM",
+    title: "¡Bienvenido a RolGM!",
+    description: "Esperamos que disfrutes de tu estancia en nuestra Web.",
+    },
+    {
+    src: "https://via.placeholder.com/800x500",
+    alt: "¿No sabes por dónde empezar?",
+    title: "¿No sabes por dónde empezar?",
+    description: "Si ya estás registrado, ¿por qué no creas o te unes a una sala?",
+    },
+    {
+    src: "https://via.placeholder.com/800x500",
+    alt: "Las malas lenguas hablan",
+    title: "¡Se rumorea algo!",
+    description: "¿Escuchaste eso? Hablan sobre una actualización mayor...",
+    },
+    ];
   return (
     <>
+      <CarouselComponent images={images}/>
+
       <Container>
             <h1>Bienvenido a RolGM</h1>
             <p>Esta es la página principal, desde aquí puedes acceder a diferentes secciones de la aplicación.</p>

@@ -77,7 +77,7 @@ function LoginPage() {
           <input type="password" className={`form-control ${formErrors.password && 'is-invalid'}`} name="password" value={formData.password} onChange={handleChange} />
           {formErrors.password && <div className="invalid-feedback">{formErrors.password}</div>}
         </div>
-        <button type="submit" className="btn btn-primary">Submit</button>
+        <button type="submit" className="btn btn-primary mt-3">Submit</button>
       </form>
     </div>
   );

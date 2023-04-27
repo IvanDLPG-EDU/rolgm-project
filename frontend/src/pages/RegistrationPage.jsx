@@ -89,7 +89,7 @@ function RegistrationPage() {
           <input type="password" className={`form-control ${formErrors.password2 && 'is-invalid'}`} name="password2" value={formData.password2} onChange={handleChange} />
           {formErrors.password2 && <div className="invalid-feedback">{formErrors.password2}</div>}
         </div>
-        <button type="submit" className="btn btn-primary">Submit</button>
+        <button type="submit" className="btn btn-primary mt-3">Submit</button>
       </form>
     </div>
   );

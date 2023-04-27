@@ -6,7 +6,6 @@ const ToolBar = ({ canvas, lineWidth, setLineWidth }) => {
   const handleClearCanvas = () => {
     if (canvas) {
       canvas.clear();
-      canvas.backgroundColor = 'lightgray';
       canvas.renderAll();
     }
   };

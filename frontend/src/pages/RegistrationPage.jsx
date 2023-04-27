@@ -66,7 +66,7 @@ function RegistrationPage() {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-5" style={{ paddingTop: '20px' }}>
       <h1>Registration Page</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">

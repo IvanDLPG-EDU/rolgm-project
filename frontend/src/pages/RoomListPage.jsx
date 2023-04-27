@@ -34,7 +34,7 @@ export const RoomListPage = () => {
   };
 
   return (
-    <Container>
+    <Container className="mt-5" style={{ paddingTop: '20px' }}>  
       <h1>Buscar Salas</h1>
       <Form onSubmit={handleSearch}>
         <Row>

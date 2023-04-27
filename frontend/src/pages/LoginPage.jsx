@@ -26,8 +26,6 @@ function LoginPage() {
       username: null,
       password: null,
     };
-  
-    console.log(errors, "AAAAAAAAAAAAAAAAAAA")
 
     if (errors) {
       for (const [key, value] of Object.entries(errors)) {
@@ -66,7 +64,7 @@ function LoginPage() {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-5" style={{ paddingTop: '20px' }}>
       <h1>Registration Page</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">

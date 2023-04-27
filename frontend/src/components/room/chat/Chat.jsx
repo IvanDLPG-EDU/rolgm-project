@@ -49,28 +49,34 @@ const Chat = () => {
     client.send(JSON.stringify({ data }));
     setMessage('');
   };
-  
 
+  
   return (
     <div className="container">
-      <div className="row">
-        <div className="col" style={{ maxHeight: "70vh", overflowY: "scroll", wordBreak: "break-word", marginBottom:"20px" }} ref={messagesEndRef}>
+      {/* Mensajes */}
+      <div className="row bg-light" style={{ height: "50vh", overflowY: "auto", wordBreak: "break-word", paddingTop: "8px", paddingBottom: "1px", marginTop: "8px"}} ref={messagesEndRef}>
         {messages.map((message, index) => (
           <p key={index}>
             {message.written_as}: {message.message}
           </p>
         ))}
-        </div>
+        
       </div>
-      <div className="row p-3" style={{ height: "30vh", paddingTop: "20px" }}>
-        <div className="col" style={{ backgroundColor: "#444444", position: "absolute", bottom: 0, left: 0, right: 0, paddingTop: "10px" }}>
-          <input
-            className="form-control mb-3"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
+  
+      {/* Envío y botones */}
+      <div className="row">
+        <div className="col" style={{ backgroundColor: "#444444", paddingTop: "10px", position: "absolute", bottom: 0, left: 0, right: 0 }}>
           <div className="row">
-            <div className="col-auto">
+            <div className="w-100">
+              <input
+                className="form-control mb-3"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-8">
               <select
                 className="form-select mb-3"
                 onChange={(e) => setSelectedName(e.target.value)}
@@ -82,8 +88,8 @@ const Chat = () => {
                 ))}
               </select>
             </div>
-            <div className="col-auto text-end">
-              <button className="btn btn-primary" onClick={sendMessage}>
+            <div className="col-4">
+              <button className="btn btn-primary w-100" onClick={sendMessage}>
                 Send
               </button>
             </div>
@@ -92,6 +98,8 @@ const Chat = () => {
       </div>
     </div>
   );
+  
+ 
 };
 
 export default Chat;

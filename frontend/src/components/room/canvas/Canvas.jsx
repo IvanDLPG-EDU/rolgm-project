@@ -89,7 +89,6 @@ export const Canvas = () => {
   useEffect(() => {
     const canvasInstance = new fabric.Canvas(canvasRef.current, {
       isDrawingMode: true,
-      backgroundColor: 'lightgray',
       width: window.innerWidth,
       height: window.innerHeight,
     });

@@ -1,14 +1,7 @@
 .btn-primary {
-    transition: all 0.3s ease-in-out;
-  }
-  
+  transition: all 0.3s ease-in-out;
+}
+
 .btn-primary:hover {
-    transform: scale(1.05);
-  }
-  
-/* .carousel-text {
-    padding: 10px;
-    font-size: 1.2rem;
-    -webkit-text-stroke: 1px black;
-    }
-   */
+  transform: scale(1.05);
+}

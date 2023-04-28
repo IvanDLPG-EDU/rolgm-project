@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { fabric } from 'fabric';
+import React, { useEffect, useRef, useState } from "react";
+import { fabric } from "fabric";
 
 const ToolBar = ({ canvas, lineWidth, setLineWidth }) => {
   const fileInputRef = useRef(null);
@@ -33,17 +33,22 @@ const ToolBar = ({ canvas, lineWidth, setLineWidth }) => {
   return (
     <div
       style={{
-        position: 'absolute',
+        position: "absolute",
         top: 0,
         left: 0,
         zIndex: 1,
-        display: 'flex',
-        flexDirection: 'column'
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       <button onClick={handleClearCanvas}>Clear</button>
       <button onClick={handleExport}>Export</button>
-      <input type="file" accept=".json" ref={fileInputRef} onChange={handleImport} />
+      <input
+        type="file"
+        accept=".json"
+        ref={fileInputRef}
+        onChange={handleImport}
+      />
       <input
         type="range"
         value={lineWidth}
@@ -54,28 +59,6 @@ const ToolBar = ({ canvas, lineWidth, setLineWidth }) => {
     </div>
   );
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export const Canvas = () => {
   const DEFAULT_BRUSH_WIDTH = 1;
@@ -97,15 +80,15 @@ export const Canvas = () => {
     const handleResize = () => {
       canvasInstance.setDimensions({
         width: window.innerWidth,
-        height: window.innerHeight
+        height: window.innerHeight,
       });
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
       canvasInstance.dispose();
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -117,8 +100,8 @@ export const Canvas = () => {
 
   useEffect(() => {
     if (canvas) {
-      canvas.on('pointermove', (event) => {
-        if (event.pointerType === 'mouse') {
+      canvas.on("pointermove", (event) => {
+        if (event.pointerType === "mouse") {
           const pointer = canvas.getPointer(event.e);
           const x = pointer.x;
           const y = pointer.y;
@@ -130,36 +113,19 @@ export const Canvas = () => {
 
   return (
     <>
-      <canvas
-        ref={canvasRef}
-        style={{ width: '100%', height: '100%' }}
-      />
+      <canvas ref={canvasRef} style={{ width: "100%", height: "100%" }} />
       {canvas && (
-        <ToolBar canvas={canvas} lineWidth={lineWidth} setLineWidth={setLineWidth} />
+        <ToolBar
+          canvas={canvas}
+          lineWidth={lineWidth}
+          setLineWidth={setLineWidth}
+        />
       )}
     </>
   );
 };
 
-
-
 export default Canvas;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import React, { useState, useEffect, useRef } from 'react';
 // import { fabric } from 'fabric';

@@ -1,8 +1,9 @@
 from django.contrib import admin
 from django import forms
-from .models import Directory, Image, Audio, Other, Room, Player, Canvas, Page, Chat,Message, Character
+from .models import Directory, Image, Audio, Other, Room, Player, Canvas, Page, Chat, Message, Character
 
 # Register your models here.
+
 
 class RoomForm(forms.ModelForm):
     class Meta:
@@ -41,12 +42,13 @@ class OtherAdmin(admin.ModelAdmin):
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
     form = RoomForm
-    list_display = ('room_name', 'owner','created_at', 'root_directory')
+    list_display = ('room_name', 'owner', 'created_at', 'root_directory')
     search_fields = ('name',)
     ordering = ('-created_at',)
 
     def room_name(self, obj):
-        return f"{obj.name}#{obj.room_id}"
+        return f"{obj.name}:{obj.room_id}"
+
 
 @admin.register(Canvas)
 class CanvasAdmin(admin.ModelAdmin):
@@ -69,13 +71,16 @@ class PlayerAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'room__name')
     ordering = ('-created_at',)
 
+
 @admin.register(Chat)
 class ChatAdmin(admin.ModelAdmin):
     pass
 
+
 @admin.register(Message)
 class MensajeAdmin(admin.ModelAdmin):
     list_display = ('message', 'user', 'date')
+
 
 @admin.register(Character)
 class CharacterAdmin(admin.ModelAdmin):

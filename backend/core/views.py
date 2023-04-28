@@ -8,10 +8,13 @@ from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-from .serializers import RoomSerializer, DirectorySerializer,DetailedRoomSerializer, PlayerSerializer
+from .serializers import RoomSerializer, DirectorySerializer, DetailedRoomSerializer, PlayerSerializer
 from .models import Room, Player
 
+from django.db.models import Q
+
 # Create your views here.
+
 
 class RoomListAPIView(ListAPIView):
     authentication_classes = []
@@ -21,7 +24,8 @@ class RoomListAPIView(ListAPIView):
 
     def get_queryset(self):
         return Room.objects.all()
-    
+
+
 class DetailedRoomAPIView(APIView):
     authentication_classes = []
     permission_classes = []
@@ -31,14 +35,16 @@ class DetailedRoomAPIView(APIView):
         serializer = DetailedRoomSerializer(room)
         return Response(serializer.data)
 
+
 class RoomSearchView(ListAPIView):
     authentication_classes = []
     permission_classes = []
-
-    queryset = Room.objects.all()
     serializer_class = RoomSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['name', 'owner__username']
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name', 'room_id']
+    ordering_fields = ['name', 'room_id']
+    queryset = Room.objects.all()
+
 
 class RoomDirectoryAPIView(APIView):
     authentication_classes = []
@@ -51,6 +57,7 @@ class RoomDirectoryAPIView(APIView):
             return Response({'message': 'No root directory found for this room.'}, status=status.HTTP_404_NOT_FOUND)
         root_serialized = DirectorySerializer(root_directory).data
         return Response({'root_directory': root_serialized}, status=status.HTTP_200_OK)
+
 
 class GetPlayersAndCharactersAPIView(APIView):
     authentication_classes = [TokenAuthentication]

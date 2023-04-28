@@ -1,31 +1,35 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
-import { w3cwebsocket as WebSocket } from 'websocket';
-import { RoomContext } from '../../../contexts';
+import React, { useState, useEffect, useContext, useRef } from "react";
+import { w3cwebsocket as WebSocket } from "websocket";
+import { RoomContext } from "../../../contexts";
 
 const Chat = () => {
   const [client, setClient] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [message, setMessage] = useState('');
-  const {activeRoom, selectedName, setSelectedName, characterList} = useContext(RoomContext)
-  
+  const [message, setMessage] = useState("");
+  const { activeRoom, selectedName, setSelectedName, characterList } =
+    useContext(RoomContext);
+
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
   }, [messages]);
 
-
   useEffect(() => {
-    if (activeRoom){
-      const newClient = new WebSocket(`ws://172.18.0.2:8000/ws/room/${activeRoom.name.replace(' ', '_')}/${activeRoom.room_id}/`);
-      
+    if (activeRoom) {
+      const newClient = new WebSocket(
+        `ws://172.18.0.2:8000/ws/room/${activeRoom.name.replace(" ", "_")}/${
+          activeRoom.room_id
+        }/`
+      );
+
       if (messages.length === 0) {
-        setMessages(activeRoom.messages)
+        setMessages(activeRoom.messages);
       }
 
       newClient.onmessage = (message) => {
         const messageData = JSON.parse(message.data);
-        setMessages(messages => [...messages, messageData]);
+        setMessages((messages) => [...messages, messageData]);
       };
 
       setClient(newClient);
@@ -34,38 +38,56 @@ const Chat = () => {
         newClient.close();
       };
     }
-
   }, [activeRoom]);
 
   const sendMessage = () => {
     if (!message || /^\s*$/.test(message)) {
       return;
     }
-  
+
     const data = {
       message: message.trim(),
-      written_as: selectedName
+      written_as: selectedName,
     };
     client.send(JSON.stringify({ data }));
-    setMessage('');
+    setMessage("");
   };
 
-  
   return (
     <div className="container">
       {/* Mensajes */}
-      <div className="row bg-light" style={{ height: "50vh", overflowY: "auto", wordBreak: "break-word", paddingTop: "8px", paddingBottom: "1px", marginTop: "8px"}} ref={messagesEndRef}>
+      <div
+        className="row bg-light"
+        style={{
+          height: "50vh",
+          overflowY: "auto",
+          wordBreak: "break-word",
+          paddingTop: "8px",
+          paddingBottom: "1px",
+          marginTop: "8px",
+        }}
+        ref={messagesEndRef}
+      >
         {messages.map((message, index) => (
           <p key={index}>
             {message.written_as}: {message.message}
           </p>
         ))}
-        
       </div>
-  
+
       {/* Envío y botones */}
       <div className="row">
-        <div className="col" style={{ backgroundColor: "#444444", paddingTop: "10px", position: "absolute", bottom: 0, left: 0, right: 0 }}>
+        <div
+          className="col"
+          style={{
+            backgroundColor: "#444444",
+            paddingTop: "10px",
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+          }}
+        >
           <div className="row">
             <div className="w-100">
               <input
@@ -98,9 +120,6 @@ const Chat = () => {
       </div>
     </div>
   );
-  
- 
 };
 
 export default Chat;
-

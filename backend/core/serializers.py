@@ -4,20 +4,25 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth import password_validation
 
+
 class CharacterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Character
         fields = '__all__'
+
 
 class PlayerSerializer(serializers.ModelSerializer):
     characters = CharacterSerializer(many=True, read_only=True)
 
     class Meta:
         model = Player
-        fields = ['id', 'user', 'room', 'is_gm', 'game_mode', 'created_at', 'characters']
+        fields = ['id', 'user', 'room', 'is_gm',
+                  'game_mode', 'created_at', 'characters']
+
 
 class RegistrationSerializer(serializers.ModelSerializer):
-    password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+    password2 = serializers.CharField(
+        style={'input_type': 'password'}, write_only=True)
 
     class Meta:
         model = get_user_model()
@@ -28,7 +33,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if data['password'] != data['password2']:
-            raise serializers.ValidationError({"password2": "Las contraseñas deben coincidir"})
+            raise serializers.ValidationError(
+                {"password2": "Las contraseñas deben coincidir"})
         try:
             password_validation.validate_password(data['password'])
         except ValidationError as e:
@@ -50,20 +56,23 @@ class RegistrationSerializer(serializers.ModelSerializer):
         )
         return user
 
+
 class RoomSerializer(serializers.ModelSerializer):
     player_count = serializers.SerializerMethodField()
     spectator_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Room
-        fields = ('id', 'owner', 'name', 'room_id', 'created_at', 'player_count', 'spectator_count')
+        fields = ('id', 'owner', 'name', 'room_id', 'created_at',
+                  'player_count', 'spectator_count')
 
     def get_player_count(self, instance):
         return instance.players.filter(game_mode='p').count()
 
     def get_spectator_count(self, instance):
         return instance.players.filter(game_mode='s').count()
-    
+
+
 class FileSerializer(serializers.ModelSerializer):
     path = serializers.SerializerMethodField()
 
@@ -76,18 +85,20 @@ class FileSerializer(serializers.ModelSerializer):
             return obj.path.path
         return None
 
+
 class ImageSerializer(FileSerializer):
     class Meta(FileSerializer.Meta):
         model = Image
+
 
 class AudioSerializer(FileSerializer):
     class Meta(FileSerializer.Meta):
         model = Audio
 
+
 class OtherSerializer(FileSerializer):
     class Meta(FileSerializer.Meta):
         model = Other
-
 
 
 class DirectorySerializer(serializers.ModelSerializer):
@@ -98,16 +109,20 @@ class DirectorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Directory
-        fields = ('id', 'name', 'created_at', 'subdirectories', 'images', 'audios', 'others')
+        fields = ('id', 'name', 'created_at', 'subdirectories',
+                  'images', 'audios', 'others')
 
     def get_subdirectories(self, obj):
-        serializer = self.__class__(obj.subdirectories.all(), many=True, context=self.context)
+        serializer = self.__class__(
+            obj.subdirectories.all(), many=True, context=self.context)
         return serializer.data
-    
+
+
 class MensajeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ('id', 'user', 'message', 'date','written_as')
+        fields = ('id', 'user', 'message', 'date', 'written_as')
+
 
 class ChatSerializer(serializers.ModelSerializer):
     mensajes = MensajeSerializer(many=True, read_only=True)
@@ -116,13 +131,15 @@ class ChatSerializer(serializers.ModelSerializer):
         model = Chat
         fields = ('id', 'messages')
 
+
 class DetailedRoomSerializer(RoomSerializer):
     root_directory = DirectorySerializer(read_only=True)
     players = PlayerSerializer(many=True, read_only=True)
     messages = serializers.SerializerMethodField()
 
     class Meta(RoomSerializer.Meta):
-        fields = RoomSerializer.Meta.fields + ('players', 'root_directory', 'messages')
+        fields = RoomSerializer.Meta.fields + \
+            ('players', 'root_directory', 'messages')
 
     def get_messages(self, obj):
         chat = Chat.objects.filter(room=obj).first()

@@ -1,23 +1,23 @@
-import React, { useState, useContext} from 'react';
-import { UserContext } from '../contexts';
+import React, { useState, useContext } from "react";
+import { UserContext } from "../contexts";
 
 function LoginPage() {
-  const {setToken} = useContext(UserContext)
+  const { setToken } = useContext(UserContext);
 
   const [formData, setFormData] = useState({
-    username: '',
-    password: '',
+    username: "",
+    password: "",
   });
 
   const [formErrors, setFormErrors] = useState({
-    username: '',
-    password: '',
+    username: "",
+    password: "",
   });
 
   const handleChange = (event) => {
     setFormData({
       ...formData,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
 
@@ -32,52 +32,69 @@ function LoginPage() {
         newErrors[key] = value[0];
       }
     }
-  
+
     setFormErrors(newErrors);
   };
-  
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    fetch('http://172.18.0.2:8000/auth/login/', {
-      method: 'POST',
+    fetch("http://172.18.0.2:8000/auth/login/", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(formData),
     })
-      .then(response => {
+      .then((response) => {
         return response.json();
       })
-      .then(data => {
-        if (data.token) {  
+      .then((data) => {
+        if (data.token) {
           setToken(data.token);
           handleErrors(null);
         } else {
           handleErrors(data);
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       });
   };
 
   return (
-    <div className="container mt-5" style={{ paddingTop: '20px' }}>
-      <h1>Registration Page</h1>
+    <div className="container mt-5" style={{ paddingTop: "20px" }}>
+      <h1>Login Page</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="username">Username:</label>
-          <input type="text" className={`form-control ${formErrors.username && 'is-invalid'}`} name="username" value={formData.username} onChange={handleChange} />
-          {formErrors.username && <div className="invalid-feedback">{formErrors.username} </div>}
+          <input
+            type="text"
+            className={`form-control ${formErrors.username && "is-invalid"}`}
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+          />
+          {formErrors.username && (
+            <div className="invalid-feedback">{formErrors.username} </div>
+          )}
         </div>
         <div className="form-group">
           <label htmlFor="password">Password:</label>
-          <input type="password" className={`form-control ${formErrors.password && 'is-invalid'}`} name="password" value={formData.password} onChange={handleChange} />
-          {formErrors.password && <div className="invalid-feedback">{formErrors.password}</div>}
+          <input
+            type="password"
+            className={`form-control ${formErrors.password && "is-invalid"}`}
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+          />
+          {formErrors.password && (
+            <div className="invalid-feedback">{formErrors.password}</div>
+          )}
         </div>
-        <button type="submit" className="btn btn-primary mt-3">Submit</button>
+        <button type="submit" className="btn btn-primary mt-3">
+          Submit
+        </button>
       </form>
     </div>
   );

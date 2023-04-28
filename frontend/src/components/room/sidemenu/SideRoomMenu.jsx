@@ -1,10 +1,9 @@
-import React, { useContext, useState } from 'react'
-import { Chat } from '../chat';
-import { MenuTab } from './MenuTab';
-import { RoomContext } from '../../../contexts'
+import React, { useContext, useState } from "react";
+import { Chat } from "../chat";
+import { MenuTab } from "./MenuTab";
+import { RoomContext } from "../../../contexts";
 export const SideRoomMenu = () => {
-
-  const {activeTab} = useContext(RoomContext)
+  const { activeTab } = useContext(RoomContext);
 
   return (
     <>
@@ -18,27 +17,46 @@ export const SideRoomMenu = () => {
         </ul>
 
         <div className="tab-content">
-          <div className={`tab-pane ${activeTab === 'chat-tab' ? 'active' : ''}`} id="chat-tab">
+          <div
+            className={`tab-pane ${activeTab === "chat-tab" ? "active" : ""}`}
+            id="chat-tab"
+          >
             {/* Contenido de la pestaña de chat */}
-            <Chat/>
+            <Chat />
             {/* <Chat /> */}
           </div>
-          <div className={`tab-pane ${activeTab === 'gallery-tab' ? 'active' : ''}`} id="gallery-tab">
+          <div
+            className={`tab-pane ${
+              activeTab === "gallery-tab" ? "active" : ""
+            }`}
+            id="gallery-tab"
+          >
             {/* Contenido de la pestaña de imagenes */}
             <p>Pestaña de Imagenes</p>
             <p>¿Pestaña de Personajes?</p>
           </div>
-          <div className={`tab-pane ${activeTab === 'diary-tab' ? 'active' : ''}`} id="diary-tab">
+          <div
+            className={`tab-pane ${activeTab === "diary-tab" ? "active" : ""}`}
+            id="diary-tab"
+          >
             {/* Contenido de la pestaña de diario */}
             <p>Pestaña de Diario</p>
             <p>¿Pestaña de Directorios?</p>
           </div>
-          <div className={`tab-pane ${activeTab === 'music-tab' ? 'active' : ''}`} id="music-tab">
+          <div
+            className={`tab-pane ${activeTab === "music-tab" ? "active" : ""}`}
+            id="music-tab"
+          >
             {/* Contenido de la pestaña de musica */}
             <p>Pestaña de Musica</p>
             <p>¿Pestaña de Macros?</p>
           </div>
-          <div className={`tab-pane ${activeTab === 'settings-tab' ? 'active' : ''}`} id="settings-tab">
+          <div
+            className={`tab-pane ${
+              activeTab === "settings-tab" ? "active" : ""
+            }`}
+            id="settings-tab"
+          >
             {/* Contenido de la pestaña de opciones */}
             <p>Pestaña de Opciones</p>
           </div>
@@ -46,6 +64,6 @@ export const SideRoomMenu = () => {
       </div>
     </>
   );
-}
+};
 
 export default SideRoomMenu;

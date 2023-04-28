@@ -1,18 +1,18 @@
 import React from "react";
 import { Carousel } from "react-bootstrap";
 
-const CarouselComponent = ({images}) => {
+const CarouselComponent = ({ images }) => {
   return (
     <Carousel>
       {images.map((image, index) => (
         <Carousel.Item key={index}>
-          <div style={{ height: '100vh' }}>
+          <div style={{ height: "100vh" }}>
             <img
               className="d-block mx-auto"
               style={{
-                height: '100%',
-                width: '100%',
-                objectFit: 'cover',
+                height: "100%",
+                width: "100%",
+                objectFit: "cover",
               }}
               src={image.src}
               alt={image.alt}
@@ -25,7 +25,6 @@ const CarouselComponent = ({images}) => {
         </Carousel.Item>
       ))}
     </Carousel>
-
   );
 };
 

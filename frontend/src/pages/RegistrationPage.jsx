@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 function RegistrationPage() {
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    password2: ''
+    username: "",
+    email: "",
+    password: "",
+    password2: "",
   });
 
   const [formErrors, setFormErrors] = useState({
-    username: '',
-    email: '',
-    password: '',
-    password2: ''
+    username: "",
+    email: "",
+    password: "",
+    password2: "",
   });
 
   const handleChange = (event) => {
     setFormData({
       ...formData,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
 
@@ -27,7 +27,7 @@ function RegistrationPage() {
       username: null,
       email: null,
       password: null,
-      password2: null
+      password2: null,
     };
 
     if (errors) {
@@ -42,54 +42,88 @@ function RegistrationPage() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    fetch('http://172.18.0.2:8000/auth/register/', {
-      method: 'POST',
+    fetch("http://172.18.0.2:8000/auth/register/", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(formData),
     })
-      .then(response => {
-          return response.json();
+      .then((response) => {
+        return response.json();
       })
-      .then(data => {
-        console.log(data)
-        if(data.username && typeof data.username === 'string' ){
-          handleErrors(null)
+      .then((data) => {
+        console.log(data);
+        if (data.username && typeof data.username === "string") {
+          handleErrors(null);
         } else {
-          handleErrors(data)
+          handleErrors(data);
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       });
   };
 
   return (
-    <div className="container mt-5" style={{ paddingTop: '20px' }}>
+    <div className="container mt-5" style={{ paddingTop: "20px" }}>
       <h1>Registration Page</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="username">Username:</label>
-          <input type="text" className={`form-control ${formErrors.username && 'is-invalid'}`} name="username" value={formData.username} onChange={handleChange} />
-          {formErrors.username && <div className="invalid-feedback">{formErrors.username}</div>}
+          <input
+            type="text"
+            className={`form-control ${formErrors.username && "is-invalid"}`}
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+          />
+          {formErrors.username && (
+            <div className="invalid-feedback">{formErrors.username}</div>
+          )}
         </div>
         <div className="form-group">
           <label htmlFor="email">Email:</label>
-          <input type="email" className={`form-control ${formErrors.email && 'is-invalid'}`} name="email" value={formData.email} onChange={handleChange} />
-          {formErrors.email && <div className="invalid-feedback">{formErrors.email}</div>}
+          <input
+            type="email"
+            className={`form-control ${formErrors.email && "is-invalid"}`}
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+          />
+          {formErrors.email && (
+            <div className="invalid-feedback">{formErrors.email}</div>
+          )}
         </div>
         <div className="form-group">
           <label htmlFor="password">Password:</label>
-          <input type="password" className={`form-control ${formErrors.password && 'is-invalid'}`} name="password" value={formData.password} onChange={handleChange} />
-          {formErrors.password && <div className="invalid-feedback">{formErrors.password}</div>}
+          <input
+            type="password"
+            className={`form-control ${formErrors.password && "is-invalid"}`}
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+          />
+          {formErrors.password && (
+            <div className="invalid-feedback">{formErrors.password}</div>
+          )}
         </div>
         <div className="form-group">
           <label htmlFor="password2">Confirm Password:</label>
-          <input type="password" className={`form-control ${formErrors.password2 && 'is-invalid'}`} name="password2" value={formData.password2} onChange={handleChange} />
-          {formErrors.password2 && <div className="invalid-feedback">{formErrors.password2}</div>}
+          <input
+            type="password"
+            className={`form-control ${formErrors.password2 && "is-invalid"}`}
+            name="password2"
+            value={formData.password2}
+            onChange={handleChange}
+          />
+          {formErrors.password2 && (
+            <div className="invalid-feedback">{formErrors.password2}</div>
+          )}
         </div>
-        <button type="submit" className="btn btn-primary mt-3">Submit</button>
+        <button type="submit" className="btn btn-primary mt-3">
+          Submit
+        </button>
       </form>
     </div>
   );

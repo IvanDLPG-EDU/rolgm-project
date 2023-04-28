@@ -4,11 +4,11 @@ import { Container, Row, Col, Form, Button } from "react-bootstrap";
 export const RoomListPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [rooms, setRooms] = useState([]);
-  const backendIP = import.meta.env.VITE_SERVER_HOST;
+
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const response = await fetch('http://172.18.0.2:8000/api/rooms/');
+        const response = await fetch("http://172.18.0.2:8000/api/rooms/");
         const data = await response.json();
         setRooms(data);
       } catch (error) {
@@ -20,21 +20,31 @@ export const RoomListPage = () => {
 
   async function handleSearch(event) {
     event.preventDefault();
+    let response = null;
+
     try {
-      const response = await fetch(`http://172.18.0.2:8000/api/rooms/search/?search=${searchTerm}`);
+      if (!searchTerm) {
+        response = await fetch("http://172.18.0.2:8000/api/rooms/");
+      } else {
+        const formattedSearchTerm = searchTerm.replace("#", " ");
+        response = await fetch(
+          `http://172.18.0.2:8000/api/rooms/search/?search=${formattedSearchTerm}&ordering=name`
+        );
+      }
+
       const data = await response.json();
       setRooms(data);
     } catch (error) {
       console.error(error);
     }
-  };
+  }
 
   const handleSearchTermChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
   return (
-    <Container className="mt-5" style={{ paddingTop: '20px' }}>  
+    <Container className="mt-5" style={{ paddingTop: "20px" }}>
       <h1>Buscar Salas</h1>
       <Form onSubmit={handleSearch}>
         <Row>
@@ -59,10 +69,16 @@ export const RoomListPage = () => {
           <Col xs={12} md={6} lg={4} key={room.id}>
             <div className="card mb-4">
               <div className="card-body">
-                <h5 className="card-title">{room.name+'#'+room.room_id}</h5>
+                <h5 className="card-title">{room.name + "#" + room.room_id}</h5>
                 <p className="card-text">{room.created_at}</p>
-                <p className="card-text">Jugadores: {room.player_count} | Espectadores: {room.spectator_count} </p>
-                <a href={`/sala/${room.name+'/'+room.room_id}`} className="btn btn-primary">
+                <p className="card-text">
+                  Jugadores: {room.player_count} | Espectadores:{" "}
+                  {room.spectator_count}{" "}
+                </p>
+                <a
+                  href={`/sala/${room.name + "/" + room.room_id}`}
+                  className="btn btn-primary"
+                >
                   Ver Sala
                 </a>
               </div>

@@ -1,52 +1,43 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { NavLink } from "react-router-dom";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
+import { UserContext } from '../../contexts';
 
-export const MainNavbar = () => {
-  const [isAbsolute, setIsAbsolute] = useState(true);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const position = window.pageYOffset;
-      if (position === 0) {
-        setIsAbsolute(true);
-      } else {
-        setIsAbsolute(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+const MainNavbar = () => {
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const { token, handleLogout } = useContext(UserContext);
+  const handleNavbarToggle = () => {
+    setIsCollapsed(!isCollapsed);
+  };
 
   return (
-    <div>
-      <Navbar
-        bg="light"
-        expand="lg"
-        className={isAbsolute ? "absolute" : ""}
-        fixed="top"
-      >
-        <Container>
-          <Navbar.Brand href="/">RolGM</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav>
-              <Nav.Link href="/salas">Salas</Nav.Link>
-              {/* <Nav.Link href="/perfil">Mi perfil</Nav.Link>*/}
-            </Nav>
-            <Nav>
-              <Nav.Link href="/login">Iniciar sesión</Nav.Link>
-              <Button variant="outline-success" href="/registration">
-                Registrarse
-              </Button>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-    </div>
+    <Navbar bg="light" expand="lg" fixed="top">
+      <Container>
+        <Navbar.Brand href="/">RolGM</Navbar.Brand>
+        <Navbar.Toggle onClick={handleNavbarToggle} />
+        <Navbar.Collapse className={isCollapsed ? "justify-content-end" : ""}>
+          <Nav className="me-auto">
+            
+          </Nav>
+          <Nav>
+            <NavLink to="/salas" className="nav-link me-3">Salas</NavLink>
+            {token && token !== "null" ? (
+              <>
+                <NavLink to="#" className="nav-link me-3">Perfil</NavLink>
+                <NavLink to="/login" onClick={handleLogout} className="nav-link me-3">Logout</NavLink>
+              </>
+            ) : (
+              <>
+                <NavLink to="/login" className="nav-link me-3">Login</NavLink>
+                <Button variant="outline-success" href="/registration" className="me-3">
+                  Registrarse
+                </Button>
+              </>
+            )}
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
 

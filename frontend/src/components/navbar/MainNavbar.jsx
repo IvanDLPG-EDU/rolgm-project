@@ -20,9 +20,9 @@ const MainNavbar = () => {
             
           </Nav>
           <Nav>
-            <NavLink to="/salas" className="nav-link me-3">Salas</NavLink>
             {token && token !== "null" ? (
               <>
+                <NavLink to="/salas" className="nav-link me-3">Salas</NavLink>
                 <NavLink to="#" className="nav-link me-3">Perfil</NavLink>
                 <NavLink to="/login" onClick={handleLogout} className="nav-link me-3">Logout</NavLink>
               </>

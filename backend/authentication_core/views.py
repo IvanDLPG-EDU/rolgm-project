@@ -8,7 +8,7 @@ from rest_framework.decorators import api_view
 # from allauth.account.models import EmailConfirmationHMAC
 
 from django.contrib.auth import authenticate
-from .serializers import RegistrationSerializer, LoginSerializer, UserSerializer
+from .serializers import RegistrationSerializer, LoginSerializer, UserSerializerToken
 from rest_framework.exceptions import ValidationError
 
 # Create your views here.
@@ -37,7 +37,7 @@ class AuthenticationView(APIView):
             password = serializer.validated_data['password']
             user = authenticate(username=username, password=password)
             if user:
-                serializer = UserSerializer(user)
+                serializer = UserSerializerToken(user)
                 return Response(serializer.data)
             else:
                 json_data = {

@@ -7,18 +7,24 @@ from .models import User
 from django.db.models import Q
 
 
-class UserSerializer(serializers.ModelSerializer):
-    token = serializers.SerializerMethodField()
-
+class UserSerializerBase(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'public_name', 'email',
-                  'bio', 'profile_picture', 'token')
+        fields = ('id', 'public_name', 'bio', 'profile_picture')
+
+class UserSerializerToken(UserSerializerBase):
+    token = serializers.SerializerMethodField()
+
+    class Meta(UserSerializerBase.Meta):
+        fields = UserSerializerBase.Meta.fields + ('token',)
 
     def get_token(self, obj):
         token, _ = Token.objects.get_or_create(user=obj)
         return token.key
 
+class UserSerializerFull(UserSerializerBase):
+    class Meta(UserSerializerBase.Meta):
+        fields = UserSerializerBase.Meta.fields + ('username','email')
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(required=True)

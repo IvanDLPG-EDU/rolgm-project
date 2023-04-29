@@ -5,8 +5,9 @@ import { SideRoomMenu } from "./sidemenu";
 import { RoomContext, UserContext } from "../../contexts";
 
 export const Room = () => {
-  const { setActiveRoom, setCharacterList } = useContext(RoomContext);
-  const { token } = useContext(UserContext);
+  const { setActiveRoom, setCharacterList, characterList } =
+    useContext(RoomContext);
+  const { token, user } = useContext(UserContext);
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const { roomName, roomId } = useParams();
 
@@ -36,11 +37,14 @@ export const Room = () => {
       }
     )
       .then((response) => response.json())
-      .then((data) =>
+      .then((data) => {
+        const actualUser = { id: 0, name: user.username };
         setCharacterList(
-          data[0].characters.filter((character) => character.name.trim() !== "")
-        )
-      )
+          data[0]?.characters
+            ? [actualUser, ...data[0].characters]
+            : [actualUser]
+        );
+      })
       .catch((error) => console.error(error));
   }, []);
 

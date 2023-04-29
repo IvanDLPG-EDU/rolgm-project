@@ -121,7 +121,7 @@ class Player(models.Model):
         unique_together = ('user', 'room')
 
     def __str__(self):
-        return self.user.username
+        return '%s (%s)' % (self.user, self.room)
 
 
 class Chat(models.Model):

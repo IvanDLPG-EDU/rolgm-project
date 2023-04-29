@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function RegistrationPage() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -14,6 +17,20 @@ function RegistrationPage() {
     password: "",
     password2: "",
   });
+
+  useEffect(() => {
+    const username = formData.username;
+
+    const formattedUsername = username
+      .toLowerCase()
+      .replace(/ /g, "_")
+      .replace(/[^a-z0-9_.-]/g, "");
+
+    setFormData({
+      ...formData,
+      username: formattedUsername,
+    });
+  }, [formData.username]);
 
   const handleChange = (event) => {
     setFormData({
@@ -56,6 +73,7 @@ function RegistrationPage() {
         console.log(data);
         if (data.username && typeof data.username === "string") {
           handleErrors(null);
+          navigate("/");
         } else {
           handleErrors(data);
         }
@@ -71,6 +89,9 @@ function RegistrationPage() {
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="username">Username:</label>
+          <span style={{ color: "gray", fontSize: "0.8em", marginLeft: "5px" }}>
+            ( a-z 0-9 _ . - )
+          </span>
           <input
             type="text"
             className={`form-control ${formErrors.username && "is-invalid"}`}

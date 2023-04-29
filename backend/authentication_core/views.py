@@ -13,16 +13,6 @@ from rest_framework.exceptions import ValidationError
 
 # Create your views here.
 
-# @api_view(['POST'])
-# def registration_view(request):
-#     serializer = RegistrationSerializer(data=request.data)
-#     if serializer.is_valid():
-#         user = serializer.save(request)
-#         email_confirmation = EmailConfirmationHMAC(user)
-#         email_confirmation.send()
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
-#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 class RegistrationView(APIView):
     authentication_classes = []
     permission_classes = []

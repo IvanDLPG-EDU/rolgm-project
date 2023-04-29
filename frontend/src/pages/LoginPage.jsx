@@ -1,8 +1,10 @@
 import React, { useState, useContext } from "react";
 import { UserContext } from "../contexts";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
-  const { setToken } = useContext(UserContext);
+  const navigate = useNavigate();
+  const { setToken, setUser, user } = useContext(UserContext);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -51,8 +53,10 @@ function LoginPage() {
       })
       .then((data) => {
         if (data.token) {
+          setUser(data);
           setToken(data.token);
           handleErrors(null);
+          navigate("/");
         } else {
           handleErrors(data);
         }
@@ -67,7 +71,7 @@ function LoginPage() {
       <h1>Login Page</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="username">Username:</label>
+          <label htmlFor="username">Email or Username:</label>
           <input
             type="text"
             className={`form-control ${formErrors.username && "is-invalid"}`}

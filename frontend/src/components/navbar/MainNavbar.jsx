@@ -4,34 +4,39 @@ import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { UserContext } from '../../contexts';
 
 const MainNavbar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
   const { token, handleLogout } = useContext(UserContext);
+
   const handleNavbarToggle = () => {
-    setIsCollapsed(!isCollapsed);
+    setIsExpanded(!isExpanded);
   };
 
+  const handleNavLinkClick = () => {
+    setIsExpanded(false);
+  }
+
   return (
-    <Navbar bg="light" expand="lg" fixed="top">
+    <Navbar bg="light" expand="lg" fixed="top" expanded={isExpanded}>
       <Container>
-        <Navbar.Brand href="/">RolGM</Navbar.Brand>
+      <NavLink to="/" className="navbar-brand">RolGM</NavLink>
         <Navbar.Toggle onClick={handleNavbarToggle} />
-        <Navbar.Collapse className={isCollapsed ? "justify-content-end" : ""}>
+        <Navbar.Collapse className={isExpanded ? "justify-content-end" : ""}>
           <Nav className="me-auto">
-            
+
           </Nav>
           <Nav>
             {token && token !== "null" ? (
               <>
-                <NavLink to="/salas" className="nav-link me-3">Salas</NavLink>
-                <NavLink to="#" className="nav-link me-3">Perfil</NavLink>
+                <NavLink to="/salas" className="nav-link me-3" onClick={handleNavLinkClick}>Salas</NavLink>
+                <NavLink to="#" className="nav-link me-3" onClick={handleNavLinkClick}>Perfil</NavLink>
                 <NavLink to="/login" onClick={handleLogout} className="nav-link me-3">Logout</NavLink>
               </>
             ) : (
               <>
-                <NavLink to="/login" className="nav-link me-3">Login</NavLink>
-                <Button variant="outline-success" href="/registration" className="me-3">
+                <NavLink to="/login" className="nav-link me-3" onClick={handleNavLinkClick}>Login</NavLink>
+                <NavLink to="/registration" className="btn btn-outline-success me-3" onClick={handleNavLinkClick}>
                   Registrarse
-                </Button>
+                </NavLink>
               </>
             )}
           </Nav>

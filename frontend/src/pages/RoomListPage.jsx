@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 export const RoomListPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -45,7 +46,16 @@ export const RoomListPage = () => {
 
   return (
     <Container className="mt-5" style={{ paddingTop: "20px" }}>
-      <h1>Buscar Salas</h1>
+      <Row>
+        <Col>
+          <div className="d-flex align-items-center mb-3">
+            <h1 className="me-3">Buscar Salas</h1>
+            <Button as={Link} to="/salas/crear" variant="primary">
+              Crear Sala
+            </Button>
+          </div>
+        </Col>
+      </Row>
       <Form onSubmit={handleSearch}>
         <Row>
           <Col xs={12} md={8} lg={9}>

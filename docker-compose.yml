@@ -15,13 +15,18 @@ services:
             POSTGRES_DB: ${DB_NAME}
             POSTGRES_USER: ${DB_USER}
             POSTGRES_PASSWORD: ${DB_PASSWORD}
+        healthcheck:
+            test: ["CMD", "pg_isready"]
+            interval: 1s
+            retries: 60
         image: postgres
 
 
     django-base:
         container_name: '${PROJECT_NAME}-server'
         depends_on:
-            - postgresql-base
+            postgresql-base:
+                condition: service_healthy
         networks:
           main:
             ipv4_address: '${SERVER_HOST}'

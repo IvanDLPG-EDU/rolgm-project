@@ -13,10 +13,11 @@ services:
             - './data/:/var/lib/postgresql/data'
         environment:
             POSTGRES_DB: ${DB_NAME}
+            PGUSER: ${DB_USER}
             POSTGRES_USER: ${DB_USER}
             POSTGRES_PASSWORD: ${DB_PASSWORD}
         healthcheck:
-            test: ["CMD", "pg_isready"]
+            test: ["CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${DB_NAME}", "-h", "localhost", "-p", "5432"]
             interval: 1s
             retries: 60
         image: postgres

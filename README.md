@@ -11,7 +11,7 @@ para cubrir las necesidades de los jugadores.
 
 ## Requisitos
 - Es necesario tener instalado [Docker](https://www.docker.com/)
-- Es necesario tener Make instalado. Si no lo tienes, los comandos de Make puedes copiarlos y ejecutarlos manualmente
+- Es recomendable tener Make instalado. Si no lo tienes, puedes copiar los comandos del Makefile y ejecutarlos manualmente
 - Es necesario contar con almenos 3.5 GB de espacio de almacenamiento
 
 ## Instalación

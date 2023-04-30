@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
+from django.core.validators import MinValueValidator
 import secrets
 import os
 
@@ -56,11 +57,17 @@ class Room(models.Model):
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='rooms')
     name = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
+    description = models.TextField(blank=True, null=True)
+    image = models.ImageField(null=True, blank=True, upload_to='room-images')
     root_directory = models.OneToOneField(
         Directory, on_delete=models.CASCADE, null=True, blank=True)
     room_id = models.CharField(
         max_length=4, editable=False, null=True, blank=True)
+    max_players = models.IntegerField(default=-1, validators=[MinValueValidator(-1)])
+    is_private = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    password = models.CharField(max_length=255, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.name}:{self.room_id}"

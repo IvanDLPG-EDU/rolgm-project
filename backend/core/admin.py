@@ -42,13 +42,19 @@ class OtherAdmin(admin.ModelAdmin):
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
     form = RoomForm
-    list_display = ('room_name', 'owner', 'created_at', 'root_directory')
-    search_fields = ('name',)
+    list_display = ('owner', 'room_name', 'created_at', 'root_directory', 'max_players_display','is_private' , 'is_active')
+    list_filter = ('is_private', 'is_active', 'created_at')
+    search_fields = ('name', 'created_at')
     ordering = ('-created_at',)
 
     def room_name(self, obj):
         return f"{obj.name}:{obj.room_id}"
 
+    def max_players_display(self, obj):
+        if obj.max_players == -1:
+            return "∞"
+        return obj.max_players
+    max_players_display.short_description = "Max Players"
 
 @admin.register(Canvas)
 class CanvasAdmin(admin.ModelAdmin):

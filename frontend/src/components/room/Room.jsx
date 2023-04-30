@@ -38,7 +38,7 @@ export const Room = () => {
     )
       .then((response) => response.json())
       .then((data) => {
-        const actualUser = { id: 0, name: user.username };
+        const actualUser = { id: 0, name: user.public_name };
         setCharacterList(
           data[0]?.characters
             ? [actualUser, ...data[0].characters]

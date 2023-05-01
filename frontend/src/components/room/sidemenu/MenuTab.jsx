@@ -1,13 +1,11 @@
-import React, { useContext } from "react";
-import { RoomContext } from "../../../contexts";
+import React from "react";
 
-export const MenuTab = ({ tabName, icon, tabWidth = 24, tabHeight = 24 }) => {
-  const { activeTab, handleTabClick } = useContext(RoomContext);
+const MenuTab = ({ tabName, icon, active = false, tabWidth = 24, tabHeight = 24, onClick }) => {
   return (
     <li className="nav-item">
       <button
-        className={`nav-link ${activeTab === tabName ? "active" : ""}`}
-        onClick={() => handleTabClick(tabName)}
+        className={`nav-link ${active ? "active" : ""}`}
+        onClick={() => onClick(tabName)}
       >
         <img src={icon} alt={tabName} width={tabWidth} height={tabHeight} />
       </button>

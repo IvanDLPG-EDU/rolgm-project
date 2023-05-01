@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { RoomContext } from "./allContext";
 
 export const RoomProvider = ({ children }) => {
@@ -9,14 +9,7 @@ export const RoomProvider = ({ children }) => {
     setActiveTab(tabId);
   };
 
-  const [selectedName, setSelectedName] = useState(null);
   const [characterList, setCharacterList] = useState([]);
-
-  useEffect(() => {
-    if (characterList.length > 0 && !selectedName) {
-      setSelectedName(characterList[0].name);
-    }
-  }, [characterList]);
 
   return (
     <RoomContext.Provider
@@ -25,8 +18,6 @@ export const RoomProvider = ({ children }) => {
         handleTabClick,
         setActiveRoom,
         activeRoom,
-        setSelectedName,
-        selectedName,
         setCharacterList,
         characterList,
       }}

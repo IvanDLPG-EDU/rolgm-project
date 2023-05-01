@@ -70,7 +70,6 @@ function RegistrationPage() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         if (data.username && typeof data.username === "string") {
           handleErrors(null);
           navigate("/");

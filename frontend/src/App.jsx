@@ -9,7 +9,6 @@ import "./styles/home.css";
 export const App = () => {
   const location = useLocation();
   const shouldRenderNavbar = !location.pathname.includes("/sala/");
-
   return (
     <>
       <UserProvider>

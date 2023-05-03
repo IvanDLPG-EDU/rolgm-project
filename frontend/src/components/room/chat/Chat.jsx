@@ -17,7 +17,7 @@ const Chat = () => {
   }, [characterList])
   
   return (
-    <div className="container-fluid d-flex flex-column vh-90">
+    <div>
       <MessageList messages={messages} />
       <MessageForm
         selectedName={selectedName}

@@ -56,7 +56,7 @@ class Other(File):
 class Room(models.Model):
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='rooms')
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, null=True, blank=True,)
     description = models.TextField(blank=True, null=True)
     image = models.ImageField(null=True, blank=True, upload_to='room-images')
     root_directory = models.OneToOneField(
@@ -82,7 +82,7 @@ class Room(models.Model):
             # Regenerate the id until it is unique for this name
             self.room_id = secrets.token_hex(2).upper()
 
-        super().save(*args, **kwargs)
+        super(Room, self).save(*args, **kwargs)
 
 
 class Canvas(models.Model):

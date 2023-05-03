@@ -23,7 +23,7 @@ const MessageList = ({ messages }) => {
   return (
     <div
       ref={messagesEndRef}
-      className="row flex-grow-1 p-3"
+      className="flex-grow-1 p-3"
       style={{
         backgroundColor: "#f9f9f9",
         height: "calc(100vh - 108px - 60px)",

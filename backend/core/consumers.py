@@ -7,9 +7,9 @@ from .services import create_mensaje
 
 class RoomConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_id = self.scope['url_route']['kwargs']['room_id']
-        self.room_group_name = 'room_%s_%s' % (self.room_name, self.room_id)
+        self.room_group_name = 'room_%s' % (self.room_id)
+        print(self.room_group_name)
         # Join room group
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -47,6 +47,8 @@ class RoomConsumer(AsyncWebsocketConsumer):
         message = event['message']
         written_as = event['written_as']
 
+        print(event)
+
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message,
@@ -55,9 +57,6 @@ class RoomConsumer(AsyncWebsocketConsumer):
 
         # Create mensaje en la base de datos
         await create_mensaje(
-            room_name=self.room_name,
             room_id=self.room_id,
-            user_id=None,
-            message=message,
-            written_as=written_as,
+            data=event,
         )

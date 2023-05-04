@@ -5,17 +5,18 @@ import { SideRoomMenu } from "./sidemenu";
 import { RoomContext, UserContext } from "../../contexts";
 import { Chat } from "./chat";
 import { Character } from "./character";
+import useWebSocket from "./hooks/useWebSocket";
 
-const fetchRoomData = async (roomName, roomId, setActiveRoom) => {
-  const response = await fetch(`http://172.18.0.2:8000/api/room/${roomName}/${roomId}`);
+const fetchRoomData = async (roomId, setActiveRoom) => {
+  const response = await fetch(`http://172.18.0.2:8000/api/room/${roomId}`);
   const data = await response.json();
   setActiveRoom(data);
 };
 
-const fetchCharacterList = async (roomName, roomId, token, setCharacterList) => {
+const fetchCharacterList = async (roomId, token, setCharacterList) => {
   try {
     const response = await fetch(
-      `http://172.18.0.2:8000/api/room/${roomName}/${roomId}/my-characters/`,
+      `http://172.18.0.2:8000/api/room/${roomId}/my-player/`,
       { headers: { Authorization: `Token ${token}` } }
     );
     const data = await response.json();
@@ -25,28 +26,47 @@ const fetchCharacterList = async (roomName, roomId, token, setCharacterList) => 
   }
 };
 
-const tabs = [
-  { name: "Chat", icon: "/media/chat-icon.svg", content: <Chat /> },
-  { name: "Character", icon: "/media/character-icon.png", content: <Character /> },
-  { name: "Diary", icon: "/media/diary.svg", content: <Chat /> },
-  { name: "Music", icon: "/media/music.svg", content: <Chat /> },
-  { name: "Setting", icon: "/media/settings.svg", content: <Chat /> },
-];
+const fetchMessages = async (roomId, token, setMessages) => {
+  try {
+    const response = await fetch(
+      `http://172.18.0.2:8000/api/room/${roomId}/chat/`,
+      { headers: { Authorization: `Token ${token}` } }
+    );
+    const data = await response.json();
+    setMessages(data?.messages || []);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const Room = () => {
-  const { setActiveRoom, setCharacterList } = useContext(RoomContext);
-  const { token } = useContext(UserContext);
-  const { roomName, roomId } = useParams();
+  const { setActiveRoom, setCharacterList, activeRoom, characterList } = useContext(RoomContext);
+  const { token, user } = useContext(UserContext);
+  const { roomId } = useParams();
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const { client } = useWebSocket(activeRoom, setMessages);
 
   const handleMenuButtonClick = () => setIsSideMenuOpen(!isSideMenuOpen);
 
-  useEffect(() => {
-    fetchRoomData(roomName, roomId, setActiveRoom);
-    fetchCharacterList(roomName, roomId, token, setCharacterList);
-  }, [roomName, roomId, token, setActiveRoom, setCharacterList]);
+  const tabs = [
+    { name: "Chat", icon: "/media/chat-icon.svg", content: <Chat client={client} messages={messages} characterList={characterList} /> },
+    { name: "Character", icon: "/media/character-icon.png", content: <Character /> },
+    { name: "Diary", icon: "/media/diary.svg", content: <Chat /> },
+    { name: "Music", icon: "/media/music.svg", content: <Chat /> },
+    { name: "Setting", icon: "/media/settings.svg", content: <Chat /> },
+  ];
 
-  const memoizedSideMenu = useMemo(() => <SideRoomMenu tabs={tabs} />, []); 
+  useEffect(() => {
+    fetchRoomData(roomId, setActiveRoom);
+  }, []);
+
+  useEffect(() => {
+    fetchCharacterList(roomId, token, setCharacterList);
+    fetchMessages(roomId, token, setMessages)
+  }, [token]);
+
+  const memoizedSideMenu = useMemo(() => <SideRoomMenu tabs={tabs} />, [client, messages, characterList]); 
 
   return (
     <div className={`room-wrapper ${isSideMenuOpen ? "room-menu-open" : ""}`}>

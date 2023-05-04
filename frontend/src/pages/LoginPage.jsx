@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { setToken, setUser, user } = useContext(UserContext);
+  const { setToken, setUser } = useContext(UserContext);
 
   const [formData, setFormData] = useState({
     username: "",

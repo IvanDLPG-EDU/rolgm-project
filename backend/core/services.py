@@ -10,8 +10,10 @@ def create_mensaje(room_id, data):
     # crear el mensaje en el chat
     mensaje = Message(
         chat=chat,
-        user_id=None,
+        user_id=data['user_id'],
         message=data['message'],
         written_as=data['written_as']
     )
     mensaje.save()
+    
+    return mensaje

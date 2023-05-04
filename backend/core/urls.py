@@ -1,15 +1,16 @@
 from django.urls import path, re_path
-from .views import RoomListAPIView, RoomSearchView,CreateRoomView ,RoomDirectoryAPIView, DetailedRoomAPIView, GetPlayersAndCharactersAPIView
+from .views import RoomListAPIView, RoomSearchView,CreateRoomView ,RoomDirectoryAPIView, RoomChatAPIView, DetailedRoomAPIView, UserPlayerAPIView
 
 urlpatterns = [
     path('rooms/', RoomListAPIView.as_view(), name='room_list'),
     path('rooms/search/', RoomSearchView.as_view(), name='room_search'),
     path('rooms/create/', CreateRoomView.as_view(), name='room_create'),
-    re_path(r'^room/(?P<room_name>[A-Za-z0-9_.ñÑ-]+)/(?P<room_id>[A-Z\d]+)$',
+    re_path(r'^room/(?P<id>\d+)/$',
             DetailedRoomAPIView.as_view(), name='room_detailed'),
-    re_path(r'^room/(?P<room_name>[A-Za-z0-9_.ñÑ-]+)/(?P<room_id>[A-Z\d]+)/directory/$',
-            RoomDirectoryAPIView.as_view(), name='room_directory'),
-    re_path(r'^room/(?P<room_name>[A-Za-z0-9_.ñÑ-]+)/(?P<room_id>[A-Z\d]+)/my-characters/$',
-            GetPlayersAndCharactersAPIView.as_view(), name='user_characters')
-
+    re_path(r'^room/(?P<id>\d+)/directories/$',
+            RoomDirectoryAPIView.as_view(), name='room_directories'),
+    re_path(r'^room/(?P<id>\d+)/my-player/$',
+            UserPlayerAPIView.as_view(), name='user_player'),
+    re_path(r'^room/(?P<id>\d+)/chat/$',
+            RoomChatAPIView.as_view(), name='room_chat'),
 ]

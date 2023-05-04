@@ -81,30 +81,15 @@ class DirectorySerializer(serializers.ModelSerializer):
         return serializer.data
 
 
-class MensajeSerializer(serializers.ModelSerializer):
+class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = ('id', 'user', 'message', 'date', 'written_as')
 
 
 class ChatSerializer(serializers.ModelSerializer):
-    mensajes = MensajeSerializer(many=True, read_only=True)
+    messages = MessageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Chat
         fields = ('id', 'messages')
-
-
-class DetailedRoomSerializer(RoomSerializer):
-    root_directory = DirectorySerializer(read_only=True)
-    players = PlayerSerializer(many=True, read_only=True)
-    messages = serializers.SerializerMethodField()
-
-    class Meta(RoomSerializer.Meta):
-        fields = RoomSerializer.Meta.fields + \
-            ('players', 'root_directory', 'messages')
-
-    def get_messages(self, obj):
-        chat = Chat.objects.filter(room=obj).first()
-        messages = chat.messages.all()
-        return MensajeSerializer(messages, many=True).data

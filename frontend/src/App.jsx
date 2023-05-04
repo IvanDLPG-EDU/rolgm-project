@@ -21,7 +21,7 @@ export const App = () => {
             <Route path="/salas" element={<RoomListPage />} />
             <Route path="/salas/crear" element={<RoomCreationPage />} />
             <Route path="/sala/sala-debug" element={<Room />} />
-            <Route path="/sala/:roomName/:roomId" element={<Room />} />
+            <Route path="/sala/:roomId" element={<Room />} />
             <Route path="/*" element={<Navigate to="/" />} />
           </Routes>
         </RoomProvider>

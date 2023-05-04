@@ -86,7 +86,7 @@ export const RoomListPage = () => {
                   {room.spectator_count}{" "}
                 </p>
                 <a
-                  href={`/sala/${room.name + "/" + room.room_id}`}
+                  href={`/sala/${room.id}/`}
                   className="btn btn-primary"
                 >
                   Ver Sala

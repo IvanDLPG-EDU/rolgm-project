@@ -1,7 +1,16 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 
-const MessageForm = ({ selectedName, setSelectedName, nameList, client }) => {
+const MessageForm = ({ nameList, client, UserID }) => {
     const [message, setMessage] = useState("");
+    const [selectedName, setSelectedName] = useState(nameList[0] || null);
+
+    useEffect(() => {
+      if (selectedName == null && nameList.length > 0) {
+        setSelectedName(nameList[0])
+      }
+
+    }, [nameList])
+    
 
     const sendMessage = useCallback(() => {
         if (!message || /^\s*$/.test(message)) {
@@ -11,7 +20,9 @@ const MessageForm = ({ selectedName, setSelectedName, nameList, client }) => {
         const data = {
             message: message.trim(),
             written_as: selectedName,
+            user_id: UserID,
         };
+
         client.send(JSON.stringify({ data }));
         setMessage("");
     }, [message, selectedName, client]);

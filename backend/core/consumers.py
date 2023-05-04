@@ -3,6 +3,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 
 # Importar modelos
 from .services import create_mensaje
+from .serializers import MessageSerializer
 
 
 class RoomConsumer(AsyncWebsocketConsumer):
@@ -31,6 +32,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
         data = text_data_json['data']
         message = data['message']
         written_as = data['written_as']
+        user_id = data['user_id']
 
         # Send message to room group
         await self.channel_layer.group_send(
@@ -39,24 +41,21 @@ class RoomConsumer(AsyncWebsocketConsumer):
                 'type': 'chat_message',
                 'message': message,
                 'written_as': written_as,
+                'user_id': user_id,
             }
         )
 
     # Receive message from room group
     async def chat_message(self, event):
-        message = event['message']
-        written_as = event['written_as']
-
-        print(event)
-
-        # Send message to WebSocket
-        await self.send(text_data=json.dumps({
-            'message': message,
-            'written_as': written_as
-        }))
 
         # Create mensaje en la base de datos
-        await create_mensaje(
+        mensaje = await create_mensaje(
             room_id=self.room_id,
             data=event,
         )
+
+        # Serializar el mensaje creado en la base de datos
+        serializer = MessageSerializer(mensaje)
+
+        # Enviar el mensaje serializado de vuelta al cliente a través del WebSocket
+        await self.send(text_data=json.dumps(serializer.data))

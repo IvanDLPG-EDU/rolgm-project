@@ -1,8 +1,11 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import Message from "./Message";
 
-const MessageList = ({ messages }) => {
+const MessageList = ({ messages, UserID }) => {
   const messagesEndRef = useRef(null);
   const [scrollBottom, setScrollBottom] = useState(true);
+
+  let lastWrittenAs = null
 
   const scrollToBottom = () => {
     messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
@@ -30,11 +33,23 @@ const MessageList = ({ messages }) => {
         overflow: "auto",
       }}
     >
-      {messages.map(({ message, written_as }, index) => (
-        <p key={index} className="mb-1 text-break">
-          <strong>{written_as}:</strong> {message}
-        </p>
-      ))}
+      {messages.map(({ message, written_as, user, id }) => {
+        let is_own = UserID === user;
+
+        // Mostrar el nombre solo si el mensaje anterior no fue del mismo personaje
+        let showName = lastWrittenAs !== written_as;
+        lastWrittenAs = written_as;
+
+        return (
+          <Message
+            key={id}
+            message={message}
+            written_as={showName ? written_as : null}
+            is_own={is_own}
+          />
+        );
+      })}
+
     </div>
   );
 };

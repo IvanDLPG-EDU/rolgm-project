@@ -58,7 +58,7 @@ export const RoomListPage = () => {
       </Row>
       <Form onSubmit={handleSearch}>
         <Row>
-          <Col xs={12} md={8} lg={9}>
+          <Col xs={12} md={8} lg={9} className="mb-3">
             <Form.Control
               type="text"
               placeholder="Ingrese su búsqueda aquí"

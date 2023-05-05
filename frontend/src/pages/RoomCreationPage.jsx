@@ -68,8 +68,7 @@ function RoomCreationPage() {
     };
 
     return (
-        <div className="container mt-5" style={{ paddingTop: "20px" }}>
-            <h1>Create A Room</h1>
+        <div className="container pb-4" style={{ paddingTop: "20px" }}>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="name">*Nombre:</label>

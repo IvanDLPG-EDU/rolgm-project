@@ -1,10 +1,11 @@
 from django.urls import path, re_path
-from .views import RoomListAPIView, RoomSearchView,CreateRoomView ,RoomDirectoryAPIView, RoomChatAPIView, DetailedRoomAPIView, UserPlayerAPIView
+from .views import RoomListAPIView, CharacterCreateView, RoomSearchView,CreateRoomView ,RoomDirectoryAPIView, RoomChatAPIView, DetailedRoomAPIView, UserPlayerAPIView
 
 urlpatterns = [
     path('rooms/', RoomListAPIView.as_view(), name='room_list'),
     path('rooms/search/', RoomSearchView.as_view(), name='room_search'),
     path('rooms/create/', CreateRoomView.as_view(), name='room_create'),
+    path('character/create/', CharacterCreateView.as_view(), name='character_create'),
     re_path(r'^room/(?P<id>\d+)/$',
             DetailedRoomAPIView.as_view(), name='room_detailed'),
     re_path(r'^room/(?P<id>\d+)/directories/$',

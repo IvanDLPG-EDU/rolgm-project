@@ -8,8 +8,8 @@ from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-from .serializers import RoomSerializer, DirectorySerializer, ChatSerializer, PlayerSerializer
-from .models import Room, Player
+from .serializers import CharacterSerializer, RoomSerializer, DirectorySerializer, ChatSerializer, PlayerSerializer
+from .models import Room, Player, Character
 
 from django.db.models import Q
 
@@ -99,3 +99,20 @@ class CreateRoomView(CreateAPIView):
         serializer = RoomSerializer(room)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
+class CharacterCreateView(CreateAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
+    def create(self, request, *args, **kwargs):
+        player_id = request.data.get('player_id')
+        player = get_object_or_404(Player, id=player_id)
+        name = request.data.get('name')
+
+        character = Character.objects.create(
+            player=player,
+            name=name,
+        )
+
+        serializer = CharacterSerializer(character)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

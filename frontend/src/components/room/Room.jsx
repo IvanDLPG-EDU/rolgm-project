@@ -4,7 +4,7 @@ import { Canvas } from "./canvas";
 import { SideRoomMenu } from "./sidemenu";
 import { RoomContext, UserContext } from "../../contexts";
 import { Chat } from "./chat";
-import { Character } from "./character";
+import { CharacterMenu } from "./character";
 import useWebSocket from "./hooks/useWebSocket";
 
 const fetchRoomData = async (roomId, setActiveRoom) => {
@@ -13,14 +13,14 @@ const fetchRoomData = async (roomId, setActiveRoom) => {
   setActiveRoom(data);
 };
 
-const fetchCharacterList = async (roomId, token, setCharacterList) => {
+const fetchOwnPlayer = async (roomId, token, setOwnPlayer) => {
   try {
     const response = await fetch(
       `http://172.18.0.2:8000/api/room/${roomId}/my-player/`,
       { headers: { Authorization: `Token ${token}` } }
     );
     const data = await response.json();
-    setCharacterList(data[0]?.characters || []);
+    setOwnPlayer(data || []);
   } catch (error) {
     console.error(error);
   }
@@ -40,7 +40,7 @@ const fetchMessages = async (roomId, token, setMessages) => {
 };
 
 const Room = () => {
-  const { setActiveRoom, setCharacterList, activeRoom, characterList } = useContext(RoomContext);
+  const { setActiveRoom, setOwnPlayer, activeRoom, characterList } = useContext(RoomContext);
   const { token, user } = useContext(UserContext);
   const { roomId } = useParams();
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
@@ -51,7 +51,7 @@ const Room = () => {
 
   const tabs = [
     { name: "Chat", icon: "/media/chat-icon.svg", content: <Chat client={client} messages={messages} characterList={characterList} /> },
-    { name: "Character", icon: "/media/character-icon.png", content: <Character /> },
+    { name: "Character", icon: "/media/character-icon.png", content: <CharacterMenu /> },
     { name: "Diary", icon: "/media/diary.svg", content: <Chat /> },
     { name: "Music", icon: "/media/music.svg", content: <Chat /> },
     { name: "Setting", icon: "/media/settings.svg", content: <Chat /> },
@@ -62,11 +62,11 @@ const Room = () => {
   }, []);
 
   useEffect(() => {
-    fetchCharacterList(roomId, token, setCharacterList);
+    fetchOwnPlayer(roomId, token, setOwnPlayer);
     fetchMessages(roomId, token, setMessages)
   }, [token]);
 
-  const memoizedSideMenu = useMemo(() => <SideRoomMenu tabs={tabs} />, [client, messages, characterList]); 
+  const memoizedSideMenu = useMemo(() => <SideRoomMenu tabs={tabs} />, [client, messages, characterList]);
 
   return (
     <div className={`room-wrapper ${isSideMenuOpen ? "room-menu-open" : ""}`}>

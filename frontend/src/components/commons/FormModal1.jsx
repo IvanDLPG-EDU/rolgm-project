@@ -1,7 +1,7 @@
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useState } from 'react';
 
-const FormModal = ({ show, onHide, fields, handleFormSubmit, fixedValues }) => {
+const FormModal1 = ({ show, onHide, fields, handleFormSubmit, fixedValues }) => {
 
   return (
     <Modal show={show} onHide={onHide}>
@@ -39,4 +39,4 @@ const FormModal = ({ show, onHide, fields, handleFormSubmit, fixedValues }) => {
   );
 };
 
-export default FormModal;
+export default FormModal1;

@@ -69,8 +69,8 @@ class UserPlayerAPIView(APIView):
 
     def get(self, request, id):
         room = get_object_or_404(Room, id=id)
-        players = Player.objects.filter(room=room, user=request.user)
-        serializer = PlayerSerializer(players, many=True)
+        player = Player.objects.filter(room=room, user=request.user)
+        serializer = PlayerSerializer(player, many=True)
         return Response(serializer.data)
 
 class CreateRoomView(CreateAPIView):
@@ -100,14 +100,19 @@ class CreateRoomView(CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class CharacterCreateView(CreateAPIView):
+class CharacterCreateView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+    allowed_methods = ['POST']  # agregar el método POST permitido
     
-    def create(self, request, *args, **kwargs):
-        player_id = request.data.get('player_id')
+    def post(self, request, *args, **kwargs):  # cambiar el nombre del método a 'post'
+        
+        player_id = request.data['player_id']
+        name = request.data['name']
+        
         player = get_object_or_404(Player, id=player_id)
-        name = request.data.get('name')
+
+
 
         character = Character.objects.create(
             player=player,
@@ -116,3 +121,13 @@ class CharacterCreateView(CreateAPIView):
 
         serializer = CharacterSerializer(character)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class PlayerCharactersAPIView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, id):
+        player = get_object_or_404(Player, id=id)
+        characters = player.characters
+        serializer = CharacterSerializer(characters, many=True)
+        return Response(serializer.data)

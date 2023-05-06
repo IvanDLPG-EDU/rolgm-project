@@ -1,43 +1,57 @@
 import React, { useContext, useState, useEffect } from "react";
 import { RoomContext } from "../../../contexts";
 import { ListGroup, Button, Container } from "react-bootstrap";
-import { FormModal } from "../../commons"
+import { FormModal1, useFormModal } from "../../commons"
 
-const fields = [
-  { name: 'name', label: 'Nombre', type: 'text' },
-  { name: 'player_id', label: 'Player ID', type: 'number' },
-];
-
-const fixedValues = {
-  player_id: 1,
-};
+const formMetadata = {
+  title: "Crear Personaje",
+  cancelBtn: "Cancelar",
+  submitBtn: "Enviar",
+  fetchMetadata: {
+    url: "http://172.18.0.2:8000/api/character/create/",
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${localStorage.getItem("token")}`,
+    },
+  }
+}
 
 const Character = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [response, setResponse] = useState("");
-  const { characterList } = useContext(RoomContext);
+  // const [response, setResponse] = useState("");
+  const { characterList, setCharacterList, ownPlayer } = useContext(RoomContext);
+  const { setShowModal, FormModal } = useFormModal()
+
+  const fields = [
+    { name: 'name', label: 'Nombre', type: 'text', required: true },
+    { name: 'player_id', label: 'Player ID', type: 'number', disabled: true, default: ownPlayer.id },
+  ];
+
+  // const handleFormSubmit = (event) => {
+  //   event.preventDefault();
+  //   // Recopilar los valores de los campos de formulario
+  //   const formData = {};
+  //   fields.forEach((field) => {
+  //     formData[field.name] = event.target.elements[field.name].value;
+  //   });
+
+  //   // Agregar los valores al objeto del estado de respuesta
+  //   setResponse({ ...formData });
+
+  //   // Cerrar el modal
+  //   setShowModal(false)
+  // };
 
 
-  const handleFormSubmit = (event) => {
-    event.preventDefault();
-    // Recopilar los valores de los campos de formulario
-    const formData = {};
-    fields.forEach((field) => {
-      formData[field.name] = event.target.elements[field.name].value;
-    });
-  
-    // Agregar los valores al objeto del estado de respuesta
-    setResponse({ ...formData });
-  
-    // Cerrar el modal
-    setShowModal(false)
+  // useEffect(() => {
+  //   console.log(response)
+  // }, [response])
+
+
+  const updateCharacterList = async (data) => {
+      setCharacterList([...characterList, data]);
   };
 
-
-  useEffect(() => {
-    console.log(response)
-  }, [response])
-  
 
   return (
     <>
@@ -56,11 +70,11 @@ const Character = () => {
       </Container>
 
       <FormModal
+        formMetadata={formMetadata}
         fields={fields}
-        fixedValues={fixedValues}
-        handleFormSubmit={handleFormSubmit}
-        show={showModal}
+        // onSubmit={handleFormSubmit}
         onHide={() => setShowModal(false)}
+        onSuccess={updateCharacterList}
       />
 
     </>

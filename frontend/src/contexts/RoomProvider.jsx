@@ -13,6 +13,7 @@ export const RoomProvider = ({ children }) => {
   const [characterList, setCharacterList] = useState([]);
   const [templateList, setTemplateList] = useState([]);
 
+
   useEffect(() => {
     setCharacterList(ownPlayer?.characters || []);
   }, [ownPlayer]);

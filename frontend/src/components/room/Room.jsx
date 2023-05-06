@@ -20,7 +20,7 @@ const fetchOwnPlayer = async (roomId, token, setOwnPlayer) => {
       { headers: { Authorization: `Token ${token}` } }
     );
     const data = await response.json();
-    setOwnPlayer(data || []);
+    setOwnPlayer(data[0] || null);
   } catch (error) {
     console.error(error);
   }
@@ -64,7 +64,7 @@ const Room = () => {
   useEffect(() => {
     fetchOwnPlayer(roomId, token, setOwnPlayer);
     fetchMessages(roomId, token, setMessages)
-  }, [token]);
+  }, [token, activeRoom]);
 
   const memoizedSideMenu = useMemo(() => <SideRoomMenu tabs={tabs} />, [client, messages, characterList]);
 

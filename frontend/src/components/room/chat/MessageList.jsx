@@ -1,7 +1,10 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState, useContext } from "react";
 import Message from "./Message";
+import { RoomContext } from "../../../contexts";
 
-const MessageList = ({ messages, UserID }) => {
+const MessageList = () => {
+  const { roomData } = useContext(RoomContext)
+  const { messages, ownPlayer, loadingOwnPlayer } = roomData
   const messagesEndRef = useRef(null);
   const [scrollBottom, setScrollBottom] = useState(true);
 
@@ -33,8 +36,9 @@ const MessageList = ({ messages, UserID }) => {
         overflow: "auto",
       }}
     >
-      {messages.map(({ message, written_as, user, id }) => {
-        let is_own = UserID === user;
+      { !loadingOwnPlayer && messages.map(({ message, written_as, user, id }) => {
+
+        let is_own = ownPlayer.user === user;
 
         // Mostrar el nombre solo si el mensaje anterior no fue del mismo personaje
         let showName = lastWrittenAs !== written_as;

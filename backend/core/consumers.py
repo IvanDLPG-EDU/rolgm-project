@@ -30,6 +30,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         data = text_data_json['data']
+        print("data", data)
         message = data['message']
         written_as = data['written_as']
         user_id = data['user_id']

@@ -18,35 +18,14 @@ const formMetadata = {
 }
 
 const Character = () => {
-  // const [response, setResponse] = useState("");
-  const { characterList, setCharacterList, ownPlayer } = useContext(RoomContext);
+  const { characterList, setCharacterList, roomData } = useContext(RoomContext);
+  const { ownPlayer } = roomData
   const { setShowModal, FormModal } = useFormModal()
 
   const fields = [
     { name: 'name', label: 'Nombre', type: 'text', required: true },
     { name: 'player_id', label: 'Player ID', type: 'number', disabled: true, default: ownPlayer.id },
   ];
-
-  // const handleFormSubmit = (event) => {
-  //   event.preventDefault();
-  //   // Recopilar los valores de los campos de formulario
-  //   const formData = {};
-  //   fields.forEach((field) => {
-  //     formData[field.name] = event.target.elements[field.name].value;
-  //   });
-
-  //   // Agregar los valores al objeto del estado de respuesta
-  //   setResponse({ ...formData });
-
-  //   // Cerrar el modal
-  //   setShowModal(false)
-  // };
-
-
-  // useEffect(() => {
-  //   console.log(response)
-  // }, [response])
-
 
   const updateCharacterList = async (data) => {
       setCharacterList([...characterList, data]);
@@ -72,7 +51,6 @@ const Character = () => {
       <FormModal
         formMetadata={formMetadata}
         fields={fields}
-        // onSubmit={handleFormSubmit}
         onHide={() => setShowModal(false)}
         onSuccess={updateCharacterList}
       />

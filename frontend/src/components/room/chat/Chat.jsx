@@ -1,28 +1,29 @@
 import React, { useState, useContext, useEffect } from "react";
-import { UserContext } from "../../../contexts";
+import { RoomContext, UserContext } from "../../../contexts";
 import MessageList from "./MessageList";
 import MessageForm from "./MessageForm";
 
 
-const Chat = ({ client, messages, characterList }) => {
+const Chat = () => {
 
-  const { user } = useContext(UserContext);
-  const [ nameList, setNameList ] = useState([]);
+  const { roomData } = useContext(RoomContext);
+  const { ownPlayer, user } = roomData
+  const [nameList, setNameList] = useState([]);
 
   useEffect(() => {
-    setNameList([user.public_name, ...characterList.map(character => character.name)])
-  }, [characterList])
-  
+    if (ownPlayer) {
+      setNameList([user.public_name, ...ownPlayer.characters.map(character => character.name)])
+    }
+  }, [roomData.ownPlayer])
+
   return (
     <div>
-      <MessageList messages={messages} UserID={user.id}/>
+      <MessageList />
       <MessageForm
         nameList={nameList}
-        client={client}
-        UserID={user.id}
       />
     </div>
-  );  
+  );
 };
 
 export default Chat;

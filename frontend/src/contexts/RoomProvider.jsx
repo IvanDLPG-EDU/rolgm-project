@@ -29,10 +29,10 @@ export const RoomProvider = ({ children }) => {
   const [roomData, dispatch] = useReducer(roomReducer, initialState)
 
 
-  const sendChatMessage = (message) => {
+  const sendChatMessage = (data) => {
     const action = {
       type: 'send_chat_message',
-      payload: message
+      payload: data
     }
     dispatch(action);
   }
@@ -92,9 +92,13 @@ export const RoomProvider = ({ children }) => {
         const newClient = new WebSocket(
           `ws://172.18.0.2:8000/ws/room/${activeRoom.id}/`
         );
-        newClient.onmessage = (message) => {
-          const messageData = JSON.parse(message.data);
-          dispatch({ type: 'set_chat_messages', payload: messageData || [] });
+        newClient.onmessage = (returned) => {
+          const returnedData = JSON.parse(returned.data);
+
+          if (returnedData.type == 'message') {
+            dispatch({ type: 'set_chat_messages', payload: returnedData.text_data || [] });
+          }
+          
         };
         dispatch({ type: 'set_chat_client', payload: newClient || null });
       } catch (error) {

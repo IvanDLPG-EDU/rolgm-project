@@ -14,21 +14,24 @@ const MessageForm = ({ nameList }) => {
   }, [nameList]);
 
   const handleSubmit = (e) => {
-      e.preventDefault();
+    e.preventDefault();
 
-      if (!message || /^\s*$/.test(message)) {
-        return;
-      }
+    if (!message || /^\s*$/.test(message)) {
+      return;
+    }
 
-      const data = {
+    const data = {
+      type: 'add_chat_message',
+      payload: {
         message: message.trim(),
         written_as: selectedName,
         user_id: ownPlayer.user,
-      };
+      }
+    };
 
-      sendChatMessage({ client, data });
-      setMessage("");
-    }
+    sendChatMessage({ client, data });
+    setMessage("");
+  }
 
   return (
     <form

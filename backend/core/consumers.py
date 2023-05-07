@@ -27,36 +27,39 @@ class RoomConsumer(AsyncWebsocketConsumer):
         )
 
     # Receive message from WebSocket
+
+    # type: 'send_chat_message',
+    # payload: message
+
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         data = text_data_json['data']
-        print("data", data)
-        message = data['message']
-        written_as = data['written_as']
-        user_id = data['user_id']
 
-        # Send message to room group
+        type = data['type']
+        payload = data['payload']
+
         await self.channel_layer.group_send(
             self.room_group_name,
             {
-                'type': 'chat_message',
-                'message': message,
-                'written_as': written_as,
-                'user_id': user_id,
+                'type': type,
+                'payload': payload
             }
         )
 
     # Receive message from room group
-    async def chat_message(self, event):
+    async def add_chat_message(self, event):
 
         # Create mensaje en la base de datos
         mensaje = await create_mensaje(
             room_id=self.room_id,
-            data=event,
+            data=event['payload'],
         )
 
         # Serializar el mensaje creado en la base de datos
         serializer = MessageSerializer(mensaje)
 
         # Enviar el mensaje serializado de vuelta al cliente a través del WebSocket
-        await self.send(text_data=json.dumps(serializer.data))
+        await self.send(text_data=json.dumps({
+            'type': 'message',
+            'text_data': serializer.data
+        }))

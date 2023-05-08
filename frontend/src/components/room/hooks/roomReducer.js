@@ -10,12 +10,14 @@ export const roomReducer = (state = initialState, action) => {
         ...state,
         ownPlayer: action.payload
       };
-    case 'send_chat_message':
+
+    case 'send_to_server':
       action.payload.client.send(JSON.stringify({ data: action.payload.data }));
 
       return {
         ...state
       };
+
     case 'set_chat_messages':
       let newMessages = [];
       if (Array.isArray(action.payload)) {
@@ -44,6 +46,33 @@ export const roomReducer = (state = initialState, action) => {
       return {
         ...state,
         loadingOwnPlayer: action.payload
+      };
+
+    case 'set_character':
+      let newCharacters = [];
+      if (Array.isArray(action.payload)) {
+        newCharacters = action.payload;
+      } else if (typeof action.payload === 'object' && action.payload !== null) {
+        newCharacters = [action.payload];
+      }
+
+      const updatedCharacters = newCharacters.reduce((acc, newCharacter) => {
+        const existingCharacterIndex = acc.findIndex(c => c.id === newCharacter.id);
+        if (existingCharacterIndex !== -1) {
+          acc[existingCharacterIndex] = { ...acc[existingCharacterIndex], ...newCharacter };
+        } else {
+          acc.push(newCharacter);
+        }
+        return acc;
+      }, [...state.ownPlayer.characters]);
+
+
+      return {
+        ...state,
+        ownPlayer: {
+          ...state.ownPlayer,
+          characters: updatedCharacters
+        }
       };
 
     default:

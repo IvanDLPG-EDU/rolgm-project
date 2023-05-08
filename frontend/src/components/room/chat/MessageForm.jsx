@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { RoomContext } from "../../../contexts";
 
 const MessageForm = ({ nameList }) => {
-  const { sendChatMessage, roomData } = useContext(RoomContext);
+  const { sendToServer, roomData } = useContext(RoomContext);
   const { client, ownPlayer } = roomData
   const [message, setMessage] = useState("");
   const [selectedName, setSelectedName] = useState(nameList[0] || null);
@@ -29,7 +29,7 @@ const MessageForm = ({ nameList }) => {
       }
     };
 
-    sendChatMessage({ client, data });
+    sendToServer({ client, data });
     setMessage("");
   }
 

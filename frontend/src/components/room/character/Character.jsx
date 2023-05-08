@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { RoomContext } from "../../../contexts";
 import { ListGroup, Button, Container } from "react-bootstrap";
-import { FormModal1, useFormModal } from "../../commons"
+import { useFormModal } from "../../commons"
 
 const formMetadata = {
   title: "Crear Personaje",
@@ -18,8 +18,8 @@ const formMetadata = {
 }
 
 const Character = () => {
-  const { characterList, setCharacterList, roomData } = useContext(RoomContext);
-  const { ownPlayer } = roomData
+  const { sendToServer, roomData } = useContext(RoomContext);
+  const { client, ownPlayer } = roomData
   const { setShowModal, FormModal } = useFormModal()
 
   const fields = [
@@ -27,19 +27,26 @@ const Character = () => {
     { name: 'player_id', label: 'Player ID', type: 'number', disabled: true, default: ownPlayer.id },
   ];
 
-  const updateCharacterList = async (data) => {
-      setCharacterList([...characterList, data]);
-  };
+  const createCharacter = (rawData) => {
 
+    const data = {
+      type: 'add_character',
+      payload: {
+        ...rawData,
+      }
+    };
+
+    sendToServer({ client, data });
+  }
 
   return (
     <>
       <Container>
         <h1 className="my-4">Listado de personajes</h1>
         <Button variant="primary" className="mb-4" onClick={() => setShowModal(true)}>Crear personaje</Button>
-        {characterList.length ? (
+        {ownPlayer.characters.length ? (
           <ListGroup>
-            {characterList.map((character) => (
+            {ownPlayer.characters.map((character) => (
               <ListGroup.Item key={character.id}>{character.name}</ListGroup.Item>
             ))}
           </ListGroup>
@@ -52,7 +59,7 @@ const Character = () => {
         formMetadata={formMetadata}
         fields={fields}
         onHide={() => setShowModal(false)}
-        onSuccess={updateCharacterList}
+        onSuccess={createCharacter}
       />
 
     </>

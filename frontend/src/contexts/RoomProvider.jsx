@@ -11,7 +11,6 @@ export const RoomProvider = ({ children }) => {
     setActiveTab(tabId);
   };
 
-  const [characterList, setCharacterList] = useState([]);
   const [templateList, setTemplateList] = useState([]);
 
 
@@ -29,9 +28,9 @@ export const RoomProvider = ({ children }) => {
   const [roomData, dispatch] = useReducer(roomReducer, initialState)
 
 
-  const sendChatMessage = (data) => {
+  const sendToServer = (data) => {
     const action = {
-      type: 'send_chat_message',
+      type: 'send_to_server',
       payload: data
     }
     dispatch(action);
@@ -98,6 +97,10 @@ export const RoomProvider = ({ children }) => {
           if (returnedData.type == 'message') {
             dispatch({ type: 'set_chat_messages', payload: returnedData.text_data || [] });
           }
+
+          if (returnedData.type == 'character') {
+            dispatch({ type: 'set_character', payload: returnedData.text_data || [] });
+          }
           
         };
         dispatch({ type: 'set_chat_client', payload: newClient || null });
@@ -130,17 +133,6 @@ export const RoomProvider = ({ children }) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
   return (
     <RoomContext.Provider
       value={{
@@ -148,11 +140,9 @@ export const RoomProvider = ({ children }) => {
         handleTabClick,
         setActiveRoom,
         activeRoom,
-        setCharacterList,
-        characterList,
         templateList,
         setTemplateList,
-        sendChatMessage,
+        sendToServer,
         setChatMessages,
         setChatClient,
         roomData,

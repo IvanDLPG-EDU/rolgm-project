@@ -40,17 +40,18 @@ class LoginSerializer(serializers.Serializer):
 
     def validate(self, data):
         if not data.get('username'):
-            raise serializers.ValidationError({'username': ['Required field']})
+            raise serializers.ValidationError({'errors': {'username': ['Required field']}})
         if not data.get('password'):
-            raise serializers.ValidationError({'password': ['Required field']})
+            raise serializers.ValidationError({'errors': {'username': ['Required field']}})
         UserModel = get_user_model()
 
         try:
             user = UserModel.objects.get(
                 Q(email=data['username']) | Q(username=data['username']))
         except UserModel.DoesNotExist:
+            print("NelPastel3")
             raise serializers.ValidationError(
-                {'username': ['Not valid credentials'], 'password': ['Not valid credentials']})
+                {'errors': {'username': ['invalid credentials'], 'password': ['invalid credentials']}})
 
         data['username'] = user.username
 

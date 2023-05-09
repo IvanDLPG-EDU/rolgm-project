@@ -43,6 +43,7 @@ const useFormModal = () => {
                     return response.json();
                 })
                 .then((data) => {
+                    console.log("data: ", data)
                     if (data.errors) {
                         handleErrors(data.errors);
                     } else {

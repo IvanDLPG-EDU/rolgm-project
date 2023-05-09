@@ -41,7 +41,7 @@ class AuthenticationView(APIView):
                 return Response(serializer.data)
             else:
                 json_data = {
-                    'errors': {'password': ['invalid credentials'],'username': ['invalid credentials']},
+                    'errors': {'errors':{'password': ['invalid credentials'],'username': ['invalid credentials']}},
                     'data': None,
                     'status': 'error',
                 }

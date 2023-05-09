@@ -4,11 +4,25 @@ import { useNavigate } from "react-router-dom";
 
 const useFormModal = () => {
     const [showModal, setShowModal] = useState(false);
+    const [formErrors, setFormErrors] = useState("")
     const navigate = useNavigate();
 
     const FormModal = ({ formMetadata, fields, onHide, onSuccess = null}) => {
         const {title, cancelBtn, submitBtn, fetchMetadata} = formMetadata
         const {url, method, headers} = fetchMetadata
+
+        const handleErrors = (errors) => {
+            let newErrors = {
+            };
+            console.log("ERRORS:", errors)
+            if (errors) {
+              for (const [key, value] of Object.entries(errors)) {
+                newErrors[key] = value[0];
+              }
+            }
+            console.log("newErrors:", newErrors)
+            setFormErrors(newErrors);
+          };
 
         const handleSubmit = (event) => {
             event.preventDefault();
@@ -29,18 +43,17 @@ const useFormModal = () => {
                     return response.json();
                 })
                 .then((data) => {
-                    // if (data.token) {
-                    //     handleErrors(null);
-                    //     navigate("/");
-                    // } else {
-                    //     handleErrors(data);
-                    // }
-                    console.log("Data", data)
-                    setShowModal(false)
-                    onSuccess(data)
+                    if (data.errors) {
+                        handleErrors(data.errors);
+                    } else {
+                        handleErrors(null);
+                        setShowModal(false)
+                        onSuccess(data)
+                    }
+                    
                 })
                 .catch((error) => {
-                    console.error(error);
+                    console.error("a:",error);
                 });
         };
 
@@ -53,19 +66,17 @@ const useFormModal = () => {
                     <Form onSubmit={handleSubmit}>
                         {fields.map((field) => (
                             <Form.Group key={field.name} controlId={field.name}>
-
                                 <Form.Label>{field.label}</Form.Label>
-
                                 <Form.Control
+                                    className={`${formErrors[`${field.name}`] && "is-invalid"}`}
                                     type={field.type}
                                     name={field.name}
                                     placeholder={field.placeholder || null}
                                     defaultValue={field.default || null}
                                     disabled={field.disabled || false}
                                     required={field.required || false}
-
                                 />
-
+                                {formErrors[`${field.name}`] && <div className="alert text-danger">{formErrors[`${field.name}`]}</div>}
                             </Form.Group>
                         ))}
                         <div className="d-flex justify-content-end mt-3 gap-3">

@@ -103,17 +103,19 @@ class CreateRoomView(CreateAPIView):
 class CharacterCreateView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
-    allowed_methods = ['POST']  # agregar el método POST permitido
+    allowed_methods = ['POST']
     
-    def post(self, request, *args, **kwargs):  # cambiar el nombre del método a 'post'
-        
+    def post(self, request, *args, **kwargs):
         player_id = request.data['player_id']
         name = request.data['name']
         
         player = get_object_or_404(Player, id=player_id)
 
+        # Validar si el personaje ya existe para ese jugador
+        if Character.objects.filter(player=player, name=name).exists():
+            return Response({'errors':{'name': ['El personaje ya existe para este jugador',]}}, status=status.HTTP_400_BAD_REQUEST)
 
-
+        # Crear el personaje si no existe previamente
         character = Character.objects.create(
             player=player,
             name=name,

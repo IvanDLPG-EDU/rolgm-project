@@ -8,8 +8,8 @@ from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-from .serializers import RoomSerializer, DirectorySerializer, DetailedRoomSerializer, PlayerSerializer
-from .models import Room, Player
+from .serializers import CharacterSerializer, RoomSerializer, DirectorySerializer, ChatSerializer, PlayerSerializer
+from .models import Room, Player, Character
 
 from django.db.models import Q
 
@@ -22,17 +22,6 @@ class RoomListAPIView(ListAPIView):
     def get_queryset(self):
         return Room.objects.all()
 
-
-class DetailedRoomAPIView(APIView):
-    authentication_classes = []
-    permission_classes = []
-
-    def get(self, request, room_name, room_id):
-        room = get_object_or_404(Room, name=room_name, room_id=room_id)
-        serializer = DetailedRoomSerializer(room)
-        return Response(serializer.data)
-
-
 class RoomSearchView(ListAPIView):
     authentication_classes = []
     permission_classes = []
@@ -42,13 +31,31 @@ class RoomSearchView(ListAPIView):
     ordering_fields = ['name', 'room_id']
     queryset = Room.objects.all()
 
+class DetailedRoomAPIView(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request, id):
+        room = get_object_or_404(Room, id=id)
+        serializer = RoomSerializer(room)
+        return Response(serializer.data)
+
+class RoomChatAPIView(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request, id):
+        room = get_object_or_404(Room, id=id)
+        chat = room.chat.first()
+        serializer = ChatSerializer(chat)
+        return Response(serializer.data)
 
 class RoomDirectoryAPIView(APIView):
     authentication_classes = []
     permission_classes = []
 
-    def get(self, room_name, room_id):
-        room = get_object_or_404(Room, name=room_name, room_id=room_id)
+    def get(self, request, id):
+        room = get_object_or_404(Room, id=id)
         root_directory = room.root_directory
         if root_directory is None:
             return Response({'message': 'No root directory found for this room.'}, status=status.HTTP_404_NOT_FOUND)
@@ -56,14 +63,14 @@ class RoomDirectoryAPIView(APIView):
         return Response({'root_directory': root_serialized}, status=status.HTTP_200_OK)
 
 
-class GetPlayersAndCharactersAPIView(APIView):
+class UserPlayerAPIView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, room_name, room_id):
-        room = get_object_or_404(Room, name=room_name, room_id=room_id)
-        players = Player.objects.filter(room=room, user=request.user)
-        serializer = PlayerSerializer(players, many=True)
+    def get(self, request, id):
+        room = get_object_or_404(Room, id=id)
+        player = Player.objects.filter(room=room, user=request.user)
+        serializer = PlayerSerializer(player, many=True)
         return Response(serializer.data)
 
 class CreateRoomView(CreateAPIView):
@@ -92,3 +99,37 @@ class CreateRoomView(CreateAPIView):
         serializer = RoomSerializer(room)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
+class CharacterCreateView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    allowed_methods = ['POST']
+    
+    def post(self, request, *args, **kwargs):
+        player_id = request.data['player_id']
+        name = request.data['name']
+        
+        player = get_object_or_404(Player, id=player_id)
+
+        # Validar si el personaje ya existe para ese jugador
+        if Character.objects.filter(player=player, name=name).exists():
+            return Response({'errors':{'name': ['El personaje ya existe para este jugador',]}}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Crear el personaje si no existe previamente
+        character = Character.objects.create(
+            player=player,
+            name=name,
+        )
+
+        serializer = CharacterSerializer(character)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class PlayerCharactersAPIView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, id):
+        player = get_object_or_404(Player, id=id)
+        characters = player.characters
+        serializer = CharacterSerializer(characters, many=True)
+        return Response(serializer.data)

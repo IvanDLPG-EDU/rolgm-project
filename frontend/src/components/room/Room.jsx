@@ -1,52 +1,38 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { Canvas } from "./canvas";
 import { SideRoomMenu } from "./sidemenu";
-import { RoomContext, UserContext } from "../../contexts";
+import { RoomContext } from "../../contexts";
+import { Chat } from "./chat";
+import { CharacterMenu } from "./character";
 
-export const Room = () => {
-  const { setActiveRoom, setCharacterList, characterList } =
-    useContext(RoomContext);
-  const { token, user } = useContext(UserContext);
+const fetchRoomData = async (roomId, setActiveRoom) => {
+  const response = await fetch(`http://172.18.0.2:8000/api/room/${roomId}`);
+  const data = await response.json();
+  setActiveRoom(data);
+};
+
+const Room = () => {
+  const { setActiveRoom } = useContext(RoomContext);
+  const { roomId } = useParams();
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
-  const { roomName, roomId } = useParams();
 
-  const handleMenuButtonClick = () => {
-    setIsSideMenuOpen(!isSideMenuOpen);
-  };
 
-  useEffect(() => {
-    const fetchRoomData = async () => {
-      const response = await fetch(
-        `http://172.18.0.2:8000/api/room/${roomName}/${roomId}`
-      );
-      const data = await response.json();
-      setActiveRoom(data);
-    };
+  const handleMenuButtonClick = () => setIsSideMenuOpen(!isSideMenuOpen);
 
-    fetchRoomData();
-  }, [roomName]);
+  const tabs = [
+    { name: "Chat", icon: "/media/chat-icon.svg", content: <Chat /> },
+    { name: "Character", icon: "/media/character-icon.png", content: <CharacterMenu /> },
+    { name: "Diary", icon: "/media/diary.svg", content: <Chat /> },
+    { name: "Music", icon: "/media/music.svg", content: <Chat /> },
+    { name: "Setting", icon: "/media/settings.svg", content: <Chat /> },
+  ];
 
   useEffect(() => {
-    fetch(
-      `http://172.18.0.2:8000/api/room/${roomName}/${roomId}/my-characters/`,
-      {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        const actualUser = { id: 0, name: user.public_name };
-        setCharacterList(
-          data[0]?.characters
-            ? [actualUser, ...data[0].characters]
-            : [actualUser]
-        );
-      })
-      .catch((error) => console.error(error));
+    fetchRoomData(roomId, setActiveRoom);
   }, []);
+
+  const memoizedSideMenu = useMemo(() => <SideRoomMenu tabs={tabs} />, []);
 
   return (
     <div className={`room-wrapper ${isSideMenuOpen ? "room-menu-open" : ""}`}>
@@ -55,9 +41,7 @@ export const Room = () => {
           {isSideMenuOpen ? ">" : "<"}
         </button>
         <Canvas />
-        <div className="room-menu">
-          <SideRoomMenu />
-        </div>
+        <div className="room-menu">{memoizedSideMenu}</div>
       </div>
     </div>
   );

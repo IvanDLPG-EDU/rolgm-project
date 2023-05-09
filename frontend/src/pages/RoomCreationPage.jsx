@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function RoomCreationPage() {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -29,6 +31,20 @@ function RoomCreationPage() {
         }
       };
 
+
+      useEffect(() => {
+        const name = formData.name;
+    
+        const formattedName = name
+          .replace(/ /g, "_")
+          .replace(/[^a-z0-9_.ñ-]/gi, "");
+    
+        setFormData({
+          ...formData,
+          name: formattedName,
+        });
+      }, [formData.name]);
+
     const handleSubmit = (event) => {
         event.preventDefault();
 
@@ -43,7 +59,7 @@ function RoomCreationPage() {
             .then((response) => response.json())
             .then((data) => {
                 console.log("Success:", data);
-                // Realiza alguna acción adicional después de crear la sala
+                navigate("/salas");
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -52,11 +68,13 @@ function RoomCreationPage() {
     };
 
     return (
-        <div className="container mt-5" style={{ paddingTop: "20px" }}>
-            <h1>Create A Room</h1>
+        <div className="container pb-4 mt-5" style={{ paddingTop: "20px" }}>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="name">*Nombre:</label>
+                    <span style={{ color: "gray", fontSize: "0.8em", marginLeft: "5px" }}>
+                        ( a-z 0-9 _ . - )
+                    </span>
                     <input
                     type="text"
                     name="name"

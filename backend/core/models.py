@@ -56,14 +56,15 @@ class Other(File):
 class Room(models.Model):
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='rooms')
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, null=True, blank=True,)
     description = models.TextField(blank=True, null=True)
     image = models.ImageField(null=True, blank=True, upload_to='room-images')
     root_directory = models.OneToOneField(
         Directory, on_delete=models.CASCADE, null=True, blank=True)
     room_id = models.CharField(
         max_length=4, editable=False, null=True, blank=True)
-    max_players = models.IntegerField(default=-1, validators=[MinValueValidator(-1)])
+    max_players = models.IntegerField(
+        default=-1, validators=[MinValueValidator(-1)])
     is_private = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     password = models.CharField(max_length=255, null=True, blank=True)
@@ -82,7 +83,7 @@ class Room(models.Model):
             # Regenerate the id until it is unique for this name
             self.room_id = secrets.token_hex(2).upper()
 
-        super().save(*args, **kwargs)
+        super(Room, self).save(*args, **kwargs)
 
 
 class Canvas(models.Model):
@@ -156,47 +157,20 @@ class CharacterTemplate(models.Model):
         return self.name
 
 
-class BaseField(models.Model):
-    name = models.CharField(_('name'), max_length=255)
-    description = models.TextField(_('description'))
+class CharacterField(models.Model):
     character_template = models.ForeignKey(
         CharacterTemplate, on_delete=models.CASCADE, related_name='%(class)s_fields')
 
-    class Meta:
-        abstract = True
+    type = models.CharField(max_length=50)
+    name = models.CharField(max_length=50)
+    label = models.CharField(max_length=50)
+    placeholder = models.CharField(max_length=50, null=True, blank=True)
+    disabled = models.BooleanField(default=False)
+    default = models.CharField(max_length=50, null=True, blank=True)
+    required = models.BooleanField(default=False)
 
     def _str_(self):
         return self.name
-
-
-class TextField(BaseField):
-    default_value = models.CharField(
-        _('default value'), max_length=255, blank=True)
-
-
-class TextAreaField(BaseField):
-    default_value = models.TextField(_('default value'), blank=True)
-
-
-class NumberField(BaseField):
-    min_value = models.DecimalField(
-        _('minimum value'), max_digits=15, decimal_places=2, null=True, blank=True)
-    max_value = models.DecimalField(
-        _('maximum value'), max_digits=15, decimal_places=2, null=True, blank=True)
-    default_value = models.DecimalField(
-        _('default value'), max_digits=15, decimal_places=2, null=True, blank=True)
-
-
-class ColorField(BaseField):
-    default_value = models.CharField(
-        _('default value'), max_length=7, default='#000000')
-
-
-class FileField(BaseField):
-    allowed_types = models.CharField(_('allowed file types'), max_length=255, help_text=_(
-        'Enter one allowed file type per line.'))
-    max_file_size = models.PositiveIntegerField(
-        _('maximum file size (in bytes)'), null=True, blank=True)
 
 
 class Character(models.Model):

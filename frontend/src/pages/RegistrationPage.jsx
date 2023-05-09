@@ -24,7 +24,7 @@ function RegistrationPage() {
     const formattedUsername = username
       .toLowerCase()
       .replace(/ /g, "_")
-      .replace(/[^a-z0-9_.-]/g, "");
+      .replace(/[^a-z0-9_.ñ-]/g, "");
 
     setFormData({
       ...formData,
@@ -70,7 +70,6 @@ function RegistrationPage() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         if (data.username && typeof data.username === "string") {
           handleErrors(null);
           navigate("/");

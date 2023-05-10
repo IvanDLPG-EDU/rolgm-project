@@ -20,10 +20,28 @@ class RegistrationView(APIView):
     def post(self, request):
         serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.save(request)
-            # email_confirmation = EmailConfirmationHMAC(user)
-            # email_confirmation.send()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            # user = serializer.save(request)
+            # # email_confirmation = EmailConfirmationHMAC(user)
+            # # email_confirmation.send()
+            # return Response(serializer.data, status=status.HTTP_201_CREATED)
+            print("Hello XD")
+            
+        error = None
+            
+        if 'email' in serializer.errors and 'username' in serializer.errors:
+            error = {'errors': {
+                'email': ["user with this email already exists."],
+                'username': ["user with this username already exists."]
+            }}
+        elif 'username' in serializer.errors:
+            error = {'errors': {'username': ["user with this username already exists."]}}
+        elif 'email' in serializer.errors:
+            error = {'errors': {'email': ["user with this email already exists."]}}
+
+                
+        if error:
+            return Response(error, status=status.HTTP_400_BAD_REQUEST)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class AuthenticationView(APIView):

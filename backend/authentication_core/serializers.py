@@ -71,13 +71,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if data['password'] != data['password2']:
-            raise serializers.ValidationError(
-                {"password2": "Password must concide"})
+            raise serializers.ValidationError({'errors': {"password2": ["Password must concide"]}})
         try:
             password_validation.validate_password(data['password'])
         except ValidationError as e:
-            raise serializers.ValidationError({"password": e.messages})
-
+            raise serializers.ValidationError({'errors': {"password": e.messages}})
+        
         return data
 
     def to_json(self):
@@ -93,4 +92,5 @@ class RegistrationSerializer(serializers.ModelSerializer):
             email=self.validated_data['email'],
             password=self.validated_data['password'],
         )
+        
         return user

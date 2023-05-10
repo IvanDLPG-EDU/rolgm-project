@@ -17,13 +17,27 @@ export const UserProvider = ({ children }) => {
 
   }
 
+  const handleRegister = (data) => {
+
+    console.log("good", data)
+
+  }
+
   useEffect(() => {
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(user));
   }, [token]);
 
   return (
-    <UserContext.Provider value={{ token, setToken, user, setUser, handleLogout, handleLogin }}>
+    <UserContext.Provider value={{ 
+      token, 
+      setToken, 
+      user, 
+      setUser, 
+      handleLogout, 
+      handleLogin,
+      handleRegister,
+    }}>
       {children}
     </UserContext.Provider>
   );

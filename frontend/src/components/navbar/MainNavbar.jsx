@@ -2,9 +2,7 @@ import React, { useState, useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { UserContext } from '../../contexts';
-import { useFormModal } from "../commons";
-
-
+import { DarkModeSlider, useFormModal } from "../commons";
 
 const loginFormMetadata = {
   title: "Login",
@@ -53,7 +51,7 @@ const registerValidators = {
 
 const MainNavbar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const { token, handleLogout, handleLogin, handleRegister } = useContext(UserContext);
+  const { token, handleLogout, handleLogin, handleRegister, darkMode } = useContext(UserContext);
 
   const handleNavbarToggle = () => {
     setIsExpanded(!isExpanded);
@@ -62,33 +60,32 @@ const MainNavbar = () => {
   const handleNavLinkClick = () => {
     setIsExpanded(false);
   }
-
-
+  
   const loginModal = useFormModal()
   const registerModal = useFormModal()
 
   return (
     <>
-      <Navbar bg="light" expand="lg" fixed="top" expanded={isExpanded}>
+      <Navbar className={darkMode ? "bg-dark" : "bg-light"} expand="lg" fixed="top" expanded={isExpanded}>
         <Container>
-          <NavLink to="/" className="navbar-brand">RolGM</NavLink>
+          <NavLink to="/" className={`navbar-brand ${darkMode ? 'text-light' : 'text-dark'}`}>RolGM</NavLink>
           <Navbar.Toggle onClick={handleNavbarToggle} />
           <Navbar.Collapse className={isExpanded ? "justify-content-end" : ""}>
             <Nav className="me-auto">
-
+              <DarkModeSlider/>
             </Nav>
             <Nav>
               {token && token !== "null" ? (
                 <>
-                  <NavLink to="/salas" className="nav-link me-3" onClick={handleNavLinkClick}>Salas</NavLink>
-                  <NavLink to="#" className="nav-link me-3" onClick={handleNavLinkClick}>Perfil</NavLink>
-                  <NavLink to="/" onClick={handleLogout} className="nav-link me-3">Logout</NavLink>
+                  <NavLink to="/salas" className={`nav-link me-3 ${darkMode ? 'text-light' : 'text-dark'}`} onClick={handleNavLinkClick}>Salas</NavLink>
+                  <NavLink to="#" className={`nav-link me-3 ${darkMode ? 'text-light' : 'text-dark'}`} onClick={handleNavLinkClick}>Perfil</NavLink>
+                  <NavLink to="/" onClick={handleLogout} className={`nav-link me-3 ${darkMode ? 'text-light' : 'text-dark'}`}>Logout</NavLink>
 
                 </>
               ) : (
                 <>
-                  <Button variant="light" className="me-3" onClick={() => loginModal.setShowModal(true)}>Login</Button>
-                  <Button variant="light" className="btn-outline-success me-3" onClick={() => registerModal.setShowModal(true)}>Register</Button>
+                  <Button variant={ darkMode ? "dark" : "light"} className="me-3" onClick={() => loginModal.setShowModal(true)}>Login</Button>
+                  <Button variant={ darkMode ? "dark" : "light"} className="btn-outline-success me-3" onClick={() => registerModal.setShowModal(true)}>Register</Button>
                 </>
               )}
             </Nav>

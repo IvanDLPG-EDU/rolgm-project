@@ -1,9 +1,9 @@
 const Message = ({ message, written_as, is_own }) => {
     const messageClass = `mb-2 text-break py-2 px-3 border rounded
-    ${is_own ? "bg-primary text-white ms-auto" : "bg-light"}
+    ${is_own ? "bg-primary text-white ms-auto" : ""}
     d-flex`;
     const boxClass = `message-box fw-bold
-  ${is_own ? "ms-auto" : "bg-light"}
+  ${is_own ? "ms-auto" : ""}
   d-flex`;
 
     return (

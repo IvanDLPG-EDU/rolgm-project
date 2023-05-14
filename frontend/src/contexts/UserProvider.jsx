@@ -4,6 +4,8 @@ import { UserContext } from "./allContext";
 export const UserProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || null);
+  const [darkMode, setDarkMode] = useState(JSON.parse(localStorage.getItem("darkMode")) || false);
+
 
   const handleLogout = () => {
     setUser(null)
@@ -24,16 +26,21 @@ export const UserProvider = ({ children }) => {
   }
 
   useEffect(() => {
+    localStorage.setItem("darkMode", darkMode)
+    console.log("EFFE", darkMode)
+  }, [darkMode])
+  
+
+  useEffect(() => {
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(user));
   }, [token]);
 
   return (
     <UserContext.Provider value={{ 
-      token, 
-      setToken, 
-      user, 
-      setUser, 
+      token, setToken, 
+      user, setUser, 
+      darkMode, setDarkMode,
       handleLogout, 
       handleLogin,
       handleRegister,

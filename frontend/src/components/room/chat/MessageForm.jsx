@@ -35,11 +35,11 @@ const MessageForm = ({ nameList }) => {
 
   return (
     <form
-      className="row py-2 bg-light"
+      className="row py-2"
       style={{ position: "absolute", bottom: "0" }}
       onSubmit={handleSubmit}
     >
-      <div className="col-12 mb-3 mb-0">
+      <div className="col-11 mb-3 mx-auto">
         <input
           className="form-control"
           placeholder="Type a message"
@@ -47,7 +47,7 @@ const MessageForm = ({ nameList }) => {
           onChange={(e) => setMessage(e.target.value)}
         />
       </div>
-      <div className="col-6">
+      <div className="col-5 mx-auto">
         <select
           className="form-select"
           value={selectedName || ""}
@@ -60,7 +60,7 @@ const MessageForm = ({ nameList }) => {
           ))}
         </select>
       </div>
-      <div className="col-6">
+      <div className="col-5 mb-2 mx-auto">
         <button className="btn btn-primary w-100">Send</button>
       </div>
     </form>

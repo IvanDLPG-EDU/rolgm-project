@@ -29,9 +29,8 @@ const MessageList = () => {
   return (
     <div
       ref={messagesEndRef}
-      className="flex-grow-1 p-3"
+      className="flex-grow-1 p-3 custom-scrollbar"
       style={{
-        backgroundColor: "#f9f9f9",
         height: "calc(100vh - 108px - 60px)",
         overflow: "auto",
       }}

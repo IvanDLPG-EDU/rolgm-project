@@ -6,38 +6,71 @@ const useFormModal = () => {
     const [showModal, setShowModal] = useState(false);
     const [formErrors, setFormErrors] = useState("")
 
-    const FormModal = ({ formMetadata, fields, validators, onHide, onSuccess = null}) => {
-        const {title, cancelBtn, submitBtn, fetchMetadata} = formMetadata
-        const {url, method, headers} = fetchMetadata
+    const FormModal = ({ formMetadata, fields, validators, onHide, onSuccess = null }) => {
+        const { title, cancelBtn, submitBtn, fetchMetadata } = formMetadata
+        const { url, method, headers } = fetchMetadata
+
+        const [formData, setFormData] = useState({})
+
+        useEffect(() => {
+            // Establecer los valores predeterminados del formulario en formData
+            const defaultFormData = {};
+            fields.forEach((field) => {
+                if (field.default) {
+                    defaultFormData[field.name] = field.default;
+                } else {
+                    defaultFormData[field.name] =
+                        field.type == "number"
+                            ? 1
+                            : field.type == "checkbox"
+                                ? false
+                                : ""
+                }
+            });
+            console.log(fields)
+            setFormData(defaultFormData);
+        }, [fields]);
 
         const handleChange = (event) => {
-            if (validators) {
-                if (event.target.name in validators) {
-                    event.target.value = validators[event.target.name](event.target.value)
+            const { name, value, type, checked } = event.target;
+            if (validators && validators.onChange && name in validators.onChange) {
+                const validatedValue = validators.onChange[name](value);
+                setFormData((prevFormData) => ({ ...prevFormData, [name]: validatedValue }));
+
+            } else {
+                if (type === 'checkbox') {
+                    setFormData((prevFormData) => ({ ...prevFormData, [name]: checked }));
+                } else {
+                    setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
                 }
-              }
             }
+        };
+
+        const handleBlur = (event) => {
+            const { name, value } = event.target;
+
+            if (validators && validators.onBlur && name in validators.onBlur) {
+                const validatedValue = validators.onBlur[name](value);
+                setFormData((prevFormData) => ({ ...prevFormData, [name]: validatedValue }));
+
+            }
+        }
 
         const handleErrors = (errors) => {
             let newErrors = {
             };
             console.log("ERRORS:", errors)
             if (errors) {
-              for (const [key, value] of Object.entries(errors)) {
-                newErrors[key] = value[0];
-              }
+                for (const [key, value] of Object.entries(errors)) {
+                    newErrors[key] = value[0];
+                }
             }
             console.log("newErrors:", newErrors)
             setFormErrors(newErrors);
-          };
+        };
 
         const handleSubmit = (event) => {
             event.preventDefault();
-
-            const formData = {};
-            fields.forEach((field) => {
-                formData[field.name] = event.target.elements[field.name].value;
-            });
 
             console.log("FORM_DATA: ", formData)
 
@@ -57,10 +90,10 @@ const useFormModal = () => {
                         setShowModal(false)
                         onSuccess(data)
                     }
-                    
+
                 })
                 .catch((error) => {
-                    console.error("a:",error);
+                    console.error("a:", error);
                 });
         };
 
@@ -72,21 +105,34 @@ const useFormModal = () => {
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
                         {fields.map((field) => (
-                            <Form.Group key={field.name} controlId={field.name}>
+                            <Form.Group key={field.name} controlId={field.name} hidden={field.depends_on ? !formData[field.depends_on] : false}>
                                 <Form.Label>{field.label}</Form.Label>
                                 <span style={{ color: "gray", fontSize: "0.8em", marginLeft: "5px" }}>
                                     {field.info ? field.info : null}
                                 </span>
-                                <Form.Control
-                                    className={`${formErrors[`${field.name}`] && "is-invalid"}`}
-                                    type={field.type}
-                                    name={field.name}
-                                    placeholder={field.placeholder || null}
-                                    defaultValue={field.default || null}
-                                    disabled={field.disabled || false}
-                                    required={field.required || false}
-                                    onChange={handleChange}
-                                />
+                                {field.type === "checkbox" ? (
+                                    <Form.Check
+                                        name={field.name}
+                                        label={field.label}
+                                        checked={formData[field.name] || false}
+                                        onChange={handleChange}
+                                        disabled={field.disabled || false}
+                                        required={field.required || false}
+                                        isInvalid={formErrors[`${field.name}`]}
+                                    />
+                                ) : (
+                                    <Form.Control
+                                        className={`${formErrors[`${field.name}`] && "is-invalid"}`}
+                                        type={field.type}
+                                        name={field.name}
+                                        placeholder={field.placeholder || null}
+                                        disabled={field.disabled || false}
+                                        required={field.required || false}
+                                        onChange={handleChange}
+                                        onBlur={validators && validators.onBlur && field.name in validators.onBlur ? handleBlur : null}
+                                        value={formData[field.name] || ""}
+                                    />
+                                )}
                                 {formErrors[`${field.name}`] && <div className="alert text-danger">{formErrors[`${field.name}`]}</div>}
                             </Form.Group>
                         ))}
@@ -99,13 +145,14 @@ const useFormModal = () => {
                             </Button>
                         </div>
                     </Form>
+
                 </Modal.Body>
             </Modal>
         );
     };
 
 
-    return { setShowModal, FormModal }
+    return { setShowModal, showModal, FormModal }
 }
 
 export default useFormModal;

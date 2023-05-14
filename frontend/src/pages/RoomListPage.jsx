@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { useFormModal } from "../components/commons";
 
 const createRoomFormMetadata = {
@@ -13,27 +12,34 @@ const createRoomFormMetadata = {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Token ${localStorage.getItem("token")}`,
-  },
+    },
   }
 }
 
 
 const createRoomFields = [
-  { name: 'name', label: 'Nombre', type: 'text', info: "( a-z A-Z 0-9 _ . - )",required: true },
+  { name: 'name', label: 'Nombre', type: 'text', info: "( a-z A-Z 0-9 _ . - )", required: true },
   { name: 'description', label: 'Descripcion', type: 'text' },
-  { name: 'max_players', label: 'Capacidad de Jugadores', type: 'number', info: "( a-z A-Z 0-9 _ . - )" },
+  { name: 'max_players', label: 'Capacidad de Jugadores', type: 'number', info: "( -1 = No Max )" },
   { name: 'is_private', label: 'Privado', type: 'checkbox' },
-  { name: 'password', label: 'Contraseña', type: 'password' },
+  { name: 'password', label: 'Contraseña', type: 'password', depends_on: 'is_private' },
 ];
 
 const createRoomValidators = {
-  'username': (username) => {return username.toLowerCase().replace(/ /g, "_").replace(/[^a-z0-9_.ñ-]/g, "")},
-}
+  'onChange': {
+    'name': (name) => { return name.replace(/ /g, "_").replace(/[^a-zA-Z0-9_.ñÑ-]/g, "") },
+  },
+  'onBlur': {
+    'max_players': (max_players) => max_players && !isNaN(max_players) ? max_players == 0 || max_players < -1 ? -1 : max_players : -1
+  }
+};
 
 export const RoomListPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [createdRoom, setCreatedRoom] = useState("");
   const [rooms, setRooms] = useState([]);
   const createRoomModal = useFormModal()
+
   useEffect(() => {
     const fetchRooms = async () => {
       try {
@@ -45,7 +51,7 @@ export const RoomListPage = () => {
       }
     };
     fetchRooms();
-  }, []);
+  }, [createdRoom]);
 
   async function handleSearch(event) {
     event.preventDefault();
@@ -80,19 +86,7 @@ export const RoomListPage = () => {
             <div className="d-flex align-items-center mb-3">
               <h1 className="me-3">Buscar Salas</h1>
               <Button variant="primary" onClick={() => createRoomModal.setShowModal(true)}>
-                CrearConModal /ComentariosEnCode/
-              </Button> 
-
-              {/* 
-              //////////////////////////////////////  El checkbox no debe tener form-control 
-              /////////////////////////////////////   Hay que añadir la capacidad de "si x checkbox == True..."
-              
-              ////////////////////////////////////    Una buena forma es poner el nombre del campo del que depende
-              ///////////////////////////////////     Es decir, dependsOn 
-              */}
-
-              <Button as={Link} to="/salas/crear" variant="primary">
-                CrearConPAGINA
+                Crear Sala
               </Button>
             </div>
           </Col>
@@ -138,13 +132,15 @@ export const RoomListPage = () => {
           ))}
         </Row>
       </Container>
-      <createRoomModal.FormModal
-        formMetadata={createRoomFormMetadata}
-        fields={createRoomFields}
-        validators= {createRoomValidators}
-        onHide={() => createRoomModal.setShowModal(false)}
-        onSuccess={()=> console.log("Created")}
-      />
+      {createRoomModal.showModal ? (
+        <createRoomModal.FormModal
+          formMetadata={createRoomFormMetadata}
+          fields={createRoomFields}
+          validators={createRoomValidators}
+          onHide={() => createRoomModal.setShowModal(false)}
+          onSuccess={(data) => setCreatedRoom(data)}
+        />
+      ) : null}
     </>
   );
 };

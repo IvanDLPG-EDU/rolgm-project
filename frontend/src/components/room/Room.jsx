@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { Canvas } from "./canvas";
-import { SideRoomMenu } from "./sidemenu";
-import { RoomContext } from "../../contexts";
+import { Settings, SideRoomMenu } from "./sidemenu";
+import { RoomContext, UserContext } from "../../contexts";
 import { Chat } from "./chat";
 import { CharacterMenu } from "./character";
 
@@ -14,18 +14,23 @@ const fetchRoomData = async (roomId, setActiveRoom) => {
 
 const Room = () => {
   const { setActiveRoom } = useContext(RoomContext);
+  const { darkMode } = useContext(UserContext);
   const { roomId } = useParams();
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
 
-
   const handleMenuButtonClick = () => setIsSideMenuOpen(!isSideMenuOpen);
+
+  useEffect(() => {
+    console.log("ROOM",darkMode)
+  
+  }, [darkMode])
 
   const tabs = [
     { name: "Chat", icon: "/media/chat-icon.svg", content: <Chat /> },
     { name: "Character", icon: "/media/character-icon.png", content: <CharacterMenu /> },
     { name: "Diary", icon: "/media/diary.svg", content: <Chat /> },
     { name: "Music", icon: "/media/music.svg", content: <Chat /> },
-    { name: "Setting", icon: "/media/settings.svg", content: <Chat /> },
+    { name: "Setting", icon: "/media/settings.svg", content: <Settings /> },
   ];
 
   useEffect(() => {
@@ -41,7 +46,9 @@ const Room = () => {
           {isSideMenuOpen ? ">" : "<"}
         </button>
         <Canvas />
-        <div className="room-menu">{memoizedSideMenu}</div>
+        <div className={`room-menu 
+           ${darkMode ? 'bg-dark text-light' : 'bg-light text-dark'}
+            `}>{memoizedSideMenu}</div>
       </div>
     </div>
   );

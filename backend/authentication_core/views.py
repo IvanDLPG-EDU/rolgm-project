@@ -20,11 +20,10 @@ class RegistrationView(APIView):
     def post(self, request):
         serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid():
-            # user = serializer.save(request)
+            user = serializer.save(request)
             # # email_confirmation = EmailConfirmationHMAC(user)
             # # email_confirmation.send()
-            # return Response(serializer.data, status=status.HTTP_201_CREATED)
-            print("Hello XD")
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
             
         error = None
             

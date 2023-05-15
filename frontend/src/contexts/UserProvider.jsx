@@ -27,7 +27,7 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     localStorage.setItem("darkMode", darkMode)
-    console.log("EFFE", darkMode)
+  
   }, [darkMode])
   
 

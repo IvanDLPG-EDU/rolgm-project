@@ -20,11 +20,6 @@ const Room = () => {
 
   const handleMenuButtonClick = () => setIsSideMenuOpen(!isSideMenuOpen);
 
-  useEffect(() => {
-    console.log("ROOM",darkMode)
-  
-  }, [darkMode])
-
   const tabs = [
     { name: "Chat", icon: "/media/chat-icon.svg", content: <Chat /> },
     { name: "Character", icon: "/media/character-icon.png", content: <CharacterMenu /> },

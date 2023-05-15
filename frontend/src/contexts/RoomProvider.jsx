@@ -125,9 +125,9 @@ export const RoomProvider = ({ children }) => {
 
 
 
-  useEffect(() => {
-    console.log(roomData)
-  }, [roomData.user, roomData.client, roomData.messages, roomData.ownPlayer]);
+  // useEffect(() => {
+  //   console.log(roomData)
+  // }, [roomData.user, roomData.client, roomData.messages, roomData.ownPlayer]);
 
 
 

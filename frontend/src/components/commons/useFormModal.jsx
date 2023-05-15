@@ -27,7 +27,6 @@ const useFormModal = () => {
                                 : ""
                 }
             });
-            console.log(fields)
             setFormData(defaultFormData);
         }, [fields]);
 

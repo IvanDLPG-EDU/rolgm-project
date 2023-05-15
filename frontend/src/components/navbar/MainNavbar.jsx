@@ -44,9 +44,13 @@ const registerFields = [
 ];
 
 const registerValidators = {
-  'username': (username) => {return username.toLowerCase().replace(/ /g, "_").replace(/[^a-z0-9_.ñ-]/g, "")},
-}
-
+  'onChange': {
+    'username': (username) => {return username.toLowerCase().replace(/ /g, "_").replace(/[^a-z0-9_.ñ-]/g, "")},
+  },
+  'onBlur': {
+    'max_players': (max_players) => max_players && !isNaN(max_players) ? max_players == 0 || max_players < -1 ? -1 : max_players : -1
+  }
+};
 
 
 const MainNavbar = () => {

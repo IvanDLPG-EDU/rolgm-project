@@ -21,8 +21,10 @@ export const RoomProvider = ({ children }) => {
     client: null,
     messages: [],
     ownPlayer: null,
+    directories: {},
     loadingChat: true,
     loadingOwnPlayer: true,
+    loadingDirectories: true,
   };
 
   const [roomData, dispatch] = useReducer(roomReducer, initialState)
@@ -86,6 +88,22 @@ export const RoomProvider = ({ children }) => {
       }
     };
 
+    const fetchDirectories = async () => {
+      try {
+        const response = await fetch(
+          `http://172.18.0.2:8000/api/room/${activeRoom.id}/directories/`,
+          { headers: { Authorization: `Token ${token}` } }
+        );
+        const data = await response.json();
+        dispatch({ type: 'set_room_directories', payload: data.root_directory || null });
+      } catch (error) {
+        console.error(error);
+        dispatch({ type: 'set_room_directories', payload: null });
+      } finally {
+        dispatch({ type: 'set_room_directories_loading', payload: false });
+      }
+    };
+
     const getClient = async () => {
       try {
         const newClient = new WebSocket(
@@ -116,10 +134,13 @@ export const RoomProvider = ({ children }) => {
       dispatch({ type: 'set_chat_client_loading', payload: true });
       dispatch({ type: 'set_chat_loading', payload: true });
       dispatch({ type: 'set_own_player_loading', payload: true });
+      dispatch({ type: 'set_room_directories_loading', payload: true });
 
       getClient();
       fetchMessages();
       fetchOwnPlayer();
+      fetchDirectories();
+
     }
   }, [activeRoom]);
 

@@ -11,6 +11,12 @@ export const roomReducer = (state = initialState, action) => {
         ownPlayer: action.payload
       };
 
+    case 'set_room_directories':
+      return {
+        ...state,
+        directories: action.payload
+      };
+
     case 'send_to_server':
       action.payload.client.send(JSON.stringify({ data: action.payload.data }));
 
@@ -46,6 +52,12 @@ export const roomReducer = (state = initialState, action) => {
       return {
         ...state,
         loadingOwnPlayer: action.payload
+      };
+    
+    case 'set_room_directories_loading':
+      return {
+        ...state,
+        loadingDirectories: action.payload
       };
 
     case 'set_character':

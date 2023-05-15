@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { Canvas } from "./canvas";
-import { Settings, SideRoomMenu } from "./sidemenu";
+import { DirectoryTab, Settings, SideRoomMenu } from "./sidemenu";
 import { RoomContext, UserContext } from "../../contexts";
 import { Chat } from "./chat";
 import { CharacterMenu } from "./character";
@@ -23,7 +23,7 @@ const Room = () => {
   const tabs = [
     { name: "Chat", icon: "/media/chat-icon.svg", content: <Chat /> },
     { name: "Character", icon: "/media/character-icon.png", content: <CharacterMenu /> },
-    { name: "Diary", icon: "/media/diary.svg", content: <Chat /> },
+    { name: "Directory", icon: "/media/diary.svg", content: <DirectoryTab /> },
     { name: "Music", icon: "/media/music.svg", content: <Chat /> },
     { name: "Setting", icon: "/media/settings.svg", content: <Settings /> },
   ];

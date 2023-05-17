@@ -10,15 +10,16 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-owner, created = User.objects.get_or_create(
-    username='testuser',
-    email='testuser@example.com',
-    defaults={'password': 'testpassword'}
-)
+# Busca un usuario existente con la dirección de correo electrónico proporcionada
+owner = User.objects.filter(email='testuser@example.com').first()
 
-if not created:
-    # El usuario ya existía
-    print('El usuario ya existe')
+# Si no existe un usuario con esa dirección de correo electrónico, crea uno nuevo
+if not owner:
+    owner = User.objects.create_user(
+        username='testuser',
+        email='testuser@example.com',
+        password='testpassword',
+    )
 
 room, created = Room.objects.get_or_create(
     owner=owner,

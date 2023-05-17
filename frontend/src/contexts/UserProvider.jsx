@@ -10,18 +10,21 @@ export const UserProvider = ({ children }) => {
   const handleLogout = () => {
     setUser(null)
     setToken(null)
+    window.location.reload()
   }
 
   const handleLogin = (data) => {
 
     setUser(data);
     setToken(data.token)
+    window.location.reload()
 
   }
 
   const handleRegister = (data) => {
 
     console.log("good", data)
+    window.location.reload()
 
   }
 

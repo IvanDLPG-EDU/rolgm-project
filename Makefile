@@ -11,6 +11,7 @@ init:
 	docker exec -it ${PROJECT_NAME}-server python manage.py migrate
 	docker exec -it ${PROJECT_NAME}-server python manage.py collectstatic
 	docker exec -it ${PROJECT_NAME}-server python manage.py createsuperuser
+	docker exec -it ${PROJECT_NAME}-server python insert_data.py
 down:
 	docker compose down
 migrate:
@@ -31,3 +32,6 @@ bash-server:
 	docker exec -it ${PROJECT_NAME}-server /bin/bash
 bash-database:
 	docker exec -it ${PROJECT_NAME}-database /bin/bash
+
+testDb:
+	docker exec -it ${PROJECT_NAME}-server python insert_data.py

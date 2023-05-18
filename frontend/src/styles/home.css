@@ -5,3 +5,11 @@
 .btn-primary:hover {
   transform: scale(1.05);
 }
+
+.text-dark #basic-nav-dropdown {
+  color: black;
+}
+
+.text-light #basic-nav-dropdown {
+  color: white;
+}

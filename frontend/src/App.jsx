@@ -5,6 +5,7 @@ import { HomePage, RoomListPage } from "./pages";
 import { MainNavbar, Room } from "./components";
 import "./styles/rooms.css";
 import "./styles/home.css";
+import "./styles/nav.css";
 
 export const App = () => {
   const location = useLocation();

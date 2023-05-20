@@ -1,0 +1,79 @@
+a {
+    text-decoration: none;
+}
+
+.custom-navbar {
+    backdrop-filter: blur(4px);
+    /* Desenfoque del fondo */
+    border-bottom: none;
+    /* Eliminar borde inferior por defecto */
+    padding: 10px 20px;
+    /* Ajustar el espaciado interno */
+}
+
+.custom-navbar.transparent {
+    background-color: transparent;
+}
+
+.custom-navbar.navbar-expand-lg .navbar-nav {
+    margin-left: auto;
+    /* Alinear los elementos del Navbar a la derecha */
+}
+
+.custom-navbar .navbar-brand {
+    font-weight: bold;
+    /* Añadir negrita al texto del logo */
+}
+
+.custom-navbar .navbar-nav .nav-link {
+    font-weight: 500;
+    /* Añadir peso medio al texto de los enlaces */
+    margin-right: 10px;
+    /* Espaciado entre los enlaces */
+    color: #000;
+    /* Color del texto de los enlaces */
+}
+
+.custom-dropdown .dropdown-menu {
+    right: 0;
+    left: auto;
+    transform: none;
+    margin-top: 10px;
+}
+
+.text-dark #basic-nav-dropdown {
+    color: black;
+}
+
+.text-light #basic-nav-dropdown {
+    color: white;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0px;
+    text-align: center;
+}
+
+.public-name {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.username {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 0px;
+}
+
+.toggle-buttons-container {
+    width: 150px; /* Ajusta el ancho según tus necesidades */
+  }
+
+  .toggle-buttons-container button{
+    width: 78px; /* Ajusta el ancho según tus necesidades */
+  }
+

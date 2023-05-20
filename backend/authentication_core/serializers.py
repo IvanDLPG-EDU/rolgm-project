@@ -10,7 +10,7 @@ from django.db.models import Q
 class UserSerializerBase(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'public_name', 'bio', 'profile_picture')
+        fields = ('id', 'username','public_name', 'bio', 'profile_picture')
 
 class UserSerializerToken(UserSerializerBase):
     token = serializers.SerializerMethodField()
@@ -24,7 +24,7 @@ class UserSerializerToken(UserSerializerBase):
 
 class UserSerializerFull(UserSerializerBase):
     class Meta(UserSerializerBase.Meta):
-        fields = UserSerializerBase.Meta.fields + ('username','email')
+        fields = UserSerializerBase.Meta.fields + ('email',)
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(required=True)

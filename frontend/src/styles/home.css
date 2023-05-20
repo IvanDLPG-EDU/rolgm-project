@@ -6,10 +6,22 @@
   transform: scale(1.05);
 }
 
-.text-dark #basic-nav-dropdown {
-  color: black;
+.bg-custom-dark {
+  background-color: #333;
+  color: white;
 }
 
-.text-light #basic-nav-dropdown {
-  color: white;
+.bg-custom-dark .card {
+  background-color: #444; /* Color de fondo oscuro para card */
+  color: white; /* Color de texto para card */
+}
+
+.bg-custom-light {
+  background-color: #f7f7f7; /* Fondo claro personalizado */
+  color: black; /* Color de texto para el fondo claro */
+}
+
+.bg-custom-light .card {
+  background-color: #fafafa; /* Fondo de la tarjeta para el fondo claro */
+  color: black; /* Color de texto para la tarjeta en el fondo claro */
 }

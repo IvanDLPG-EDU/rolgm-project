@@ -108,7 +108,7 @@ const aspects = {
 
 
 const renderUserImage = (user) => {
-  if (user == null) {
+  if (user == null || user.profile_picture == null) {
     return (
       <Image
         src="https://avatars.githubusercontent.com/u/105361339?s=400&v=4"
@@ -117,7 +117,7 @@ const renderUserImage = (user) => {
         style={{ width: '27px', height: '27px', marginLeft: '10px' }}
       />
     );
-  }
+  } 
 
   return (
     <Image

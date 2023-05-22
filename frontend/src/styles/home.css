@@ -25,3 +25,12 @@
   background-color: #fafafa; /* Fondo de la tarjeta para el fondo claro */
   color: black; /* Color de texto para la tarjeta en el fondo claro */
 }
+
+
+* {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+}
+

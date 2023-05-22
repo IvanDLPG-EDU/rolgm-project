@@ -77,3 +77,10 @@ a {
     width: 78px; /* Ajusta el ancho según tus necesidades */
   }
 
+
+.dropdown-item:active {
+    background-color: transparent; 
+}
+
+
+ 

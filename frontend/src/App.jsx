@@ -6,10 +6,11 @@ import { UserContext } from "./contexts";
 import "./styles/rooms.css";
 import "./styles/home.css";
 import "./styles/nav.css";
+import { DetailedRoomPage } from "./pages/DetailedRoomPage";
 
 export const App = () => {
   const location = useLocation();
-  const shouldRenderNavbar = !location.pathname.includes("/sala/");
+  const shouldRenderNavbar = !location.pathname.includes("/sala/") || location.pathname.includes("/detail");
   const { user } = useContext(UserContext);
   return (
     <>
@@ -19,7 +20,9 @@ export const App = () => {
         {user ? (
           <>
             <Route path="/salas" element={<RoomListPage />} />
+            <Route path="/mis-partidas" element={<RoomListPage />} />
             <Route path="/sala/:roomId" element={<Room />} />
+            <Route path="/sala/:roomId/detail" element={<DetailedRoomPage />} />
           </>
         ) : (
           ""

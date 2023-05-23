@@ -1,5 +1,5 @@
 from channels.db import database_sync_to_async
-from .models import Room, Message, Character, Player
+from .models import Room, Message, Character, Player, Canvas
 
 
 @database_sync_to_async
@@ -29,3 +29,10 @@ def get_character(data):
         character = None
     
     return character
+
+@database_sync_to_async
+def get_active_page(canvas_id):
+    # Obtener el campo 'active_page' del modelo 'Canvas' utilizando 'canvas_id'
+    canvas = Canvas.objects.get(id=canvas_id)
+    active_page = canvas.active_page
+    return active_page

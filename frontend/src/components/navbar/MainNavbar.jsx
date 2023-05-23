@@ -143,7 +143,13 @@ const MainNavbar = () => {
   }, [user]);
 
 
-  const [createdRoom, setCreatedRoom] = useState("");
+  const [createdRoom, setCreatedRoom] = useState(null);
+
+  useEffect(() => {
+    if (createdRoom) {
+      window.location.href = "/sala/" + createdRoom.id + "/detail/"
+    }
+  }, [createdRoom])
 
   const location = useLocation();
   const inHome = location.pathname === "/";

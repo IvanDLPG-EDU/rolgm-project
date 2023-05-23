@@ -102,10 +102,13 @@ class Page(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     canvas = models.ForeignKey(
         Canvas, on_delete=models.CASCADE, related_name='pages')
-    data = models.JSONField(blank=True, null=True)
+    lines = models.JSONField(blank=True, null=True, default=list)
 
     def __str__(self):
         return self.name
+    
+    def add_line(self, line):
+        self.lines.append(line)
 
 
 class Player(models.Model):
@@ -181,3 +184,20 @@ class Character(models.Model):
 
     def __str__(self):
         return self.name
+    
+class RoomTicket(models.Model):
+    title = models.CharField(max_length=50)
+    message = models.TextField()
+    
+    petition_time = models.DateTimeField(auto_now_add=True)
+    response_time = models.DateTimeField(null=True, blank=True)
+    
+    Room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='tickets')
+    gamemode = models.CharField(max_length=1, choices=Player.game_mode_choices)
+    
+    state = models.CharField(max_length=1, choices=[('p', 'Pending'), ('a', 'Accepted'), ('r', 'Rejected')], default='p')
+    
+    dest_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tickets_dest')
+    origin_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tickets_origin')
+    
+    type = models.CharField(max_length=1, choices=[('r', 'Request'), ('i', 'invitation')], default='r')

@@ -7,7 +7,8 @@ import { Chat } from "./chat";
 import { CharacterMenu } from "./character";
 
 const fetchRoomData = async (roomId, setActiveRoom) => {
-  const response = await fetch(`http://172.18.0.2:8000/api/room/${roomId}`);
+  const response = await fetch(`http://172.18.0.2:8000/api/room/${roomId}`,
+    { headers: { Authorization: `Token ${localStorage.getItem('token')}` } });
   const data = await response.json();
   setActiveRoom(data);
 };
@@ -43,7 +44,13 @@ const Room = () => {
         <Canvas />
         <div className={`room-menu 
            ${darkMode ? 'bg-dark text-light' : 'bg-light text-dark'}
-            `}>{memoizedSideMenu}</div>
+            `}
+            style={{
+              border: '1px solid black',
+              borderLeft: 'none',
+              boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)'
+            }}
+            >{memoizedSideMenu}</div>
       </div>
     </div>
   );

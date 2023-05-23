@@ -2,7 +2,7 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 # Importar modelos
-from .services import create_mensaje, get_character
+from .services import create_mensaje, get_character, get_active_page
 from .serializers import MessageSerializer, CharacterSerializer
 
 
@@ -25,11 +25,6 @@ class RoomConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-
-    # Receive message from WebSocket
-
-    # type: 'send_chat_message',
-    # payload: message
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
@@ -66,7 +61,7 @@ class RoomConsumer(AsyncWebsocketConsumer):
 
     async def add_character(self, event):
 
-        # Create personaje en la base de datos
+        # get personaje en la base de datos
         character = await get_character(
             data=event['payload'],
         )
@@ -78,4 +73,21 @@ class RoomConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'type': 'character',
             'text_data': serializer.data
+        }))
+
+    async def add_page_line(self, event):
+        line = event['payload']['line']
+        canvas_id = event['payload']['canvas_id']
+
+        active_page = await get_active_page(
+            canvas_id,
+        )
+
+        active_page.lines.append(line)
+        active_page.save()
+
+        # Enviar la nueva linea de vuelta al cliente a través del WebSocket
+        await self.send(text_data=json.dumps({
+            'type': 'canvas_line',
+            'text_data': line
         }))

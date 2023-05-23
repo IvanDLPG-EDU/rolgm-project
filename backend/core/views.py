@@ -14,17 +14,27 @@ from .models import Room, Player, Character
 from django.db.models import Q
 
 class RoomListAPIView(ListAPIView):
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     serializer_class = RoomSerializer
 
     def get_queryset(self):
         return Room.objects.all()
 
+class OwnRoomListAPIView(ListAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = RoomSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Room.objects.filter(players__user=user)
+
+
 class RoomSearchView(ListAPIView):
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = RoomSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'room_id']
@@ -32,8 +42,8 @@ class RoomSearchView(ListAPIView):
     queryset = Room.objects.all()
 
 class DetailedRoomAPIView(APIView):
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, id):
         room = get_object_or_404(Room, id=id)
@@ -41,8 +51,8 @@ class DetailedRoomAPIView(APIView):
         return Response(serializer.data)
 
 class RoomChatAPIView(APIView):
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, id):
         room = get_object_or_404(Room, id=id)
@@ -51,8 +61,8 @@ class RoomChatAPIView(APIView):
         return Response(serializer.data)
 
 class RoomDirectoryAPIView(APIView):
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, id):
         room = get_object_or_404(Room, id=id)

@@ -5,16 +5,20 @@ import { UserContext } from "../contexts";
 export const RoomListPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [rooms, setRooms] = useState([]);
+  const [url, setUrl] = useState(window.location.pathname === "/mis-partidas" ? "http://172.18.0.2:8000/api/own-rooms/" : "http://172.18.0.2:8000/api/rooms/");
   const { darkMode } = useContext(UserContext);
 
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const response = await fetch("http://172.18.0.2:8000/api/rooms/");
+
+        const response = await fetch(url,
+          { headers: { Authorization: `Token ${localStorage.getItem('token')}` } }
+        )
         const data = await response.json();
         setRooms(data);
       } catch (error) {
-        console.error(error);
+        console.error(error.error);
       }
     };
     fetchRooms();
@@ -26,11 +30,12 @@ export const RoomListPage = () => {
 
     try {
       if (!searchTerm) {
-        response = await fetch("http://172.18.0.2:8000/api/rooms/");
+        response = await fetch(url);
       } else {
         const formattedSearchTerm = searchTerm.replace("#", " ");
         response = await fetch(
-          `http://172.18.0.2:8000/api/rooms/search/?search=${formattedSearchTerm}&ordering=name`
+          `http://172.18.0.2:8000/api/rooms/search/?search=${formattedSearchTerm}&ordering=name`,
+          { headers: { Authorization: `Token ${localStorage.getItem('token')}` } }
         );
       }
 
@@ -84,7 +89,7 @@ export const RoomListPage = () => {
                   {room.spectator_count}{" "}
                 </p>
                 <a
-                  href={`/sala/${room.id}/`}
+                  href={`/sala/${room.id}/detail`}
                   className="btn btn-primary"
                 >
                   Ver Sala

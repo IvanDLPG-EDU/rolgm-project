@@ -1,270 +1,112 @@
-import React, { useEffect, useRef, useState } from "react";
-import { fabric } from "fabric";
 
-const ToolBar = ({ canvas, lineWidth, setLineWidth }) => {
-  const fileInputRef = useRef(null);
-  const handleClearCanvas = () => {
-    if (canvas) {
-      canvas.clear();
-      canvas.renderAll();
-    }
-  };
 
-  const handleExport = () => {
-    if (canvas) {
-      const jsonData = JSON.stringify(canvas.toJSON());
-      console.log(jsonData);
-    }
-  };
+import React, { useRef, useLayoutEffect, useState, useContext } from 'react';
+import { RoomContext } from '../../../contexts';
 
-  const handleImport = (event) => {
-    if (canvas) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const jsonData = event.target.result;
-        canvas.loadFromJSON(jsonData, canvas.renderAll.bind(canvas));
-      };
-      reader.readAsText(file);
-      fileInputRef.current.value = null; // establecer el valor del input en una cadena vacía
-    }
-  };
-
-  return (
-    <div
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        zIndex: 1,
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <button onClick={handleClearCanvas}>Clear</button>
-      <button onClick={handleExport}>Export</button>
-      <input
-        type="file"
-        accept=".json"
-        ref={fileInputRef}
-        onChange={handleImport}
-      />
-      <input
-        type="range"
-        value={lineWidth}
-        min="1"
-        max="50"
-        onChange={(event) => setLineWidth(event.target.value)}
-      />
-    </div>
-  );
-};
-
-export const Canvas = () => {
-  const DEFAULT_BRUSH_WIDTH = 1;
-
-  const [canvas, setCanvas] = useState(null);
-  const [lineWidth, setLineWidth] = useState(DEFAULT_BRUSH_WIDTH);
-
+const Canvas = () => {
+  const { sendToServer, roomData } = useContext(RoomContext);
+  const { client } = roomData
   const canvasRef = useRef(null);
+  const [ctx, setCtx] = useState(null);
+  const [drawing, setDrawing] = useState(false);
+  const [color, setColor] = useState('#000000');
+  const [lines, setLines] = useState([]);
 
-  useEffect(() => {
-    const canvasInstance = new fabric.Canvas(canvasRef.current, {
-      isDrawingMode: true,
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
-
-    setCanvas(canvasInstance);
-
-    const handleResize = () => {
-      canvasInstance.setDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      canvasInstance.dispose();
-      window.removeEventListener("resize", handleResize);
-    };
+  useLayoutEffect(() => {
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+    setCtx(context);
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    return () => window.removeEventListener('resize', resizeCanvas);
   }, []);
 
-  useEffect(() => {
-    if (canvas) {
-      canvas.freeDrawingBrush.width = lineWidth;
-    }
-  }, [lineWidth]);
+  const resizeCanvas = () => {
+    const canvas = canvasRef.current;
+    canvas.width = window.innerWidth - 18;
+    canvas.height = window.innerHeight - 18;
+  };
 
-  useEffect(() => {
-    if (canvas) {
-      canvas.on("pointermove", (event) => {
-        if (event.pointerType === "mouse") {
-          const pointer = canvas.getPointer(event.e);
-          const x = pointer.x;
-          const y = pointer.y;
-          // hacer algo con las coordenadas x e y
-        }
-      });
-    }
-  }, [canvas]);
+  const startDrawing = (event) => {
+    const { offsetX, offsetY } = event.nativeEvent;
+    ctx.beginPath();
+    ctx.moveTo(offsetX, offsetY);
+    setDrawing(true);
+  };
+
+  const draw = (event) => {
+    if (!drawing) return;
+    const { offsetX, offsetY } = event.nativeEvent;
+    ctx.lineTo(offsetX, offsetY);
+    ctx.strokeStyle = color;
+    ctx.stroke();
+  };
+
+  const endDrawing = () => {
+    setDrawing(false);
+    const canvasData = canvasRef.current.toDataURL(); // Convert canvas to base64 image
+    const newLine = { color, data: canvasData };
+    setLines([...lines, newLine]);
+  };
+
+  const clearCanvas = () => {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    setLines([]);
+  };
+
+  const sendLineToServer = () => {
+    const newLine = lines[lines.length - 1];
+    // Send newLine to the server using your preferred method (e.g., fetch)
+    console.log('Sending line to server:', newLine);
+
+    const data = {
+      type: 'add_page_line',
+      payload: {
+        ...newLine,
+      }
+    };
+
+    sendToServer({ client, data });
+
+  };
+
+  const receiveLineFromServer = (receivedLine) => {
+    // Receive line from server and draw it on the canvas
+    setLines([...lines, receivedLine]);
+  };
 
   return (
-    <>
-      <canvas ref={canvasRef} style={{ width: "100%", height: "100%" }} />
-      {canvas && (
-        <ToolBar
-          canvas={canvas}
-          lineWidth={lineWidth}
-          setLineWidth={setLineWidth}
+    <div style={{ position: 'relative' }}>
+      <canvas
+        ref={canvasRef}
+        width={500}
+        height={500}
+        onMouseDown={startDrawing}
+        onMouseMove={draw}
+        onMouseUp={endDrawing}
+        onMouseLeave={endDrawing}
+        style={{ border: '1px solid black' }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          top: '10px',
+          left: '10px',
+          zIndex: '1',
+        }}
+      >
+        <label>Color:</label>
+        <input
+          type="color"
+          value={color}
+          onChange={(e) => setColor(e.target.value)}
         />
-      )}
-    </>
+        <button onClick={clearCanvas}>Borrar todo</button>
+        <button onClick={sendLineToServer}>Enviar línea</button>
+      </div>
+    </div>
   );
+
 };
 
 export default Canvas;
-
-// import React, { useState, useEffect, useRef } from 'react';
-// import { fabric } from 'fabric';
-
-// export const Canvas = () => {
-
-//   const DEFAULT_BRUSH_WIDTH = 10;
-
-//   const [canvas, setCanvas] = useState(null);
-//   const [canvasDimensions, setCanvasDimensions] = useState({
-//     width: window.innerWidth,
-//     height: window.innerHeight
-//   });
-
-//   const [lineWidth, setLineWidth] = useState(10);
-
-//   const canvasRef = useRef(null);
-//   const fileInputRef = useRef(null);
-
-//   useEffect(() => {
-//     const canvasInstance = new fabric.Canvas(canvasRef.current, {
-//       isDrawingMode: true,
-//       backgroundColor: 'lightgray',
-//       width: canvasDimensions.width,
-//       height: canvasDimensions.height,
-//       freeDrawingBrush: {
-//         width: DEFAULT_BRUSH_WIDTH
-//       }
-//     });
-
-//     setCanvas(canvasInstance);
-
-//     const handleResize = () => {
-//       setCanvasDimensions({
-//         width: window.innerWidth,
-//         height: window.innerHeight
-//       });
-//     };
-
-//     window.addEventListener('resize', handleResize);
-
-//     return () => {
-//       canvasInstance.dispose();
-//       window.removeEventListener('resize', handleResize);
-//     };
-//   }, [canvasDimensions]);
-
-//   const handleClearCanvas = () => {
-//     if (canvas) {
-//       canvas.clear();
-//       canvas.backgroundColor = 'lightgray';
-//       canvas.renderAll();
-//     }
-//   };
-
-//   const handleExport = () => {
-//     if (canvas) {
-//       const jsonData = JSON.stringify(canvas.toJSON());
-//       console.log(jsonData);
-//     }
-//   };
-
-//   const handleImport = (jsonData) => {
-//     if (canvas) {
-//       canvas.loadFromJSON(jsonData, canvas.renderAll.bind(canvas));
-//       fileInputRef.current.value = null; // establecer el valor del input en una cadena vacía
-//     }
-//   };
-
-//   const handleLineWidthChange = (event) => {
-//     setLineWidth(event.target.value);
-//     canvas.freeDrawingBrush.width = lineWidth;
-//   };
-
-//   return (
-//     <>
-//       <canvas
-//         ref={canvasRef}
-//         style={{ width: '100%', height: '100%' }}
-//       />
-//       <button
-//         onClick={handleClearCanvas}
-//         style={{
-//           position: 'absolute',
-//           top: '10px',
-//           left: '10px',
-//           zIndex: 1
-//         }}
-//       >
-//         Clear
-//       </button>
-//       <button
-//         onClick={handleExport}
-//         style={{
-//           position: 'absolute',
-//           top: '10px',
-//           left: '70px',
-//           zIndex: 1
-//         }}
-//       >
-//         Export
-//       </button>
-//       <input
-//         ref={fileInputRef}
-//         type="file"
-//         accept=".json"
-//         onChange={(e) => {
-//           const files = e.target.files;
-//           if (files && files.length > 0) {
-//             const file = files[0];
-//             const reader = new FileReader();
-//             reader.onload = (event) => {
-//               const jsonData = event.target.result;
-//               handleImport(jsonData);
-//             };
-//             reader.readAsText(file);
-//           }
-//         }}
-//         style={{
-//           position: 'absolute',
-//           top: '10px',
-//           left: '130px',
-//           zIndex: 1
-//         }}
-//       />
-
-//       <input
-//         type="range"
-//         min="1"
-//         max="50"
-//         value={lineWidth}
-//         onChange={handleLineWidthChange}
-//         style={{
-//           position: 'absolute',
-//           top: '10px',
-//           left: '60px',
-//           zIndex: 1
-//         }}
-//       />
-//     </>
-//   );
-// };

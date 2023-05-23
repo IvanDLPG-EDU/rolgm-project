@@ -1,8 +1,9 @@
 from django.urls import path, re_path
-from .views import RoomListAPIView, PlayerCharactersAPIView,CharacterCreateView, RoomSearchView,CreateRoomView ,RoomDirectoryAPIView, RoomChatAPIView, DetailedRoomAPIView, UserPlayerAPIView
+from .views import RoomListAPIView, OwnRoomListAPIView,PlayerCharactersAPIView,CharacterCreateView, RoomSearchView,CreateRoomView ,RoomDirectoryAPIView, RoomChatAPIView, DetailedRoomAPIView, UserPlayerAPIView
 
 urlpatterns = [
     path('rooms/', RoomListAPIView.as_view(), name='room_list'),
+    path('own-rooms/', OwnRoomListAPIView.as_view(), name='own_room_list'),
     path('rooms/search/', RoomSearchView.as_view(), name='room_search'),
     path('rooms/create/', CreateRoomView.as_view(), name='room_create'),
     path('character/create/', CharacterCreateView.as_view(), name='character_create'),

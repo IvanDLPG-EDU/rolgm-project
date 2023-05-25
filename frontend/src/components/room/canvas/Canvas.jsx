@@ -56,8 +56,7 @@ const Canvas = () => {
 
   const sendLineToServer = () => {
     const newLine = lines[lines.length - 1];
-    // Send newLine to the server using your preferred method (e.g., fetch)
-    console.log('Sending line to server:', newLine);
+    // console.log('Sending line to server:', newLine);
 
     const data = {
       type: 'add_page_line',

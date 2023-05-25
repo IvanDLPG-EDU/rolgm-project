@@ -58,20 +58,20 @@ const useFormModal = () => {
         const handleErrors = (errors) => {
             let newErrors = {
             };
-            console.log("ERRORS:", errors)
+            
             if (errors) {
                 for (const [key, value] of Object.entries(errors)) {
                     newErrors[key] = value[0];
                 }
             }
-            console.log("newErrors:", newErrors)
+            
             setFormErrors(newErrors);
         };
 
         const handleSubmit = (event) => {
             event.preventDefault();
 
-            console.log("FORM_DATA: ", formData)
+           
 
             fetch(url, {
                 method,
@@ -82,7 +82,7 @@ const useFormModal = () => {
                     return response.json();
                 })
                 .then((data) => {
-                    console.log("data: ", data)
+                    
                     if (data.errors) {
                         handleErrors(data.errors);
                     } else {

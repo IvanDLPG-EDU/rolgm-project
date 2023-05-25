@@ -154,13 +154,6 @@ const MainNavbar = () => {
   const location = useLocation();
   const inHome = location.pathname === "/";
 
-
-  useEffect(() => {
-    console.log(inHome)
-
-  }, [inHome])
-
-
   const handleNavbarToggle = () => {
     setIsExpanded(!isExpanded);
   };

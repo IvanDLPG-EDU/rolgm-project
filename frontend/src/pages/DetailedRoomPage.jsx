@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Row, Col, Image, Button } from 'react-bootstrap';
 
+const backend_url = import.meta.env.VITE_API_URL;
+
 const fetchRoomData = async (roomId, setRoomData) => {
-    const response = await fetch(`http://172.18.0.2:8000/api/room/${roomId}`,
+    const response = await fetch(`${backend_url}/api/room/${roomId}`,
       { headers: { Authorization: `Token ${localStorage.getItem('token')}` } });
     const data = await response.json();
    

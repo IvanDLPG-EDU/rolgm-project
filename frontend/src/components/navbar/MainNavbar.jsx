@@ -4,12 +4,14 @@ import { Navbar, Nav, Container, Button, NavDropdown, Image } from "react-bootst
 import { UserContext } from '../../contexts';
 import { DarkModeSlider, useFormModal } from "../commons";
 
+const backend_url = import.meta.env.VITE_API_URL;
+
 const createRoomFormMetadata = {
   title: "Crear Sala",
   cancelBtn: "Cancelar",
   submitBtn: "Crear",
   fetchMetadata: {
-    url: "http://172.18.0.2:8000/api/rooms/create/",
+    url: backend_url + "/api/rooms/create/",
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -42,7 +44,7 @@ const loginFormMetadata = {
   cancelBtn: "Cancelar",
   submitBtn: "Entrar",
   fetchMetadata: {
-    url: "http://172.18.0.2:8000/auth/login/",
+    url: backend_url + "/auth/login/",
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -55,7 +57,7 @@ const registerFormMetadata = {
   cancelBtn: "Cancelar",
   submitBtn: "Crear",
   fetchMetadata: {
-    url: "http://172.18.0.2:8000/auth/register/",
+    url: backend_url + "/auth/register/",
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -121,7 +123,7 @@ const renderUserImage = (user) => {
 
   return (
     <Image
-      src={"http://172.18.0.2:8000" + user.profile_picture}
+      src={backend_url + user.profile_picture}
       alt="User profile image"
       roundedCircle
       style={{ width: '27px', height: '27px' , marginLeft: '10px' }}

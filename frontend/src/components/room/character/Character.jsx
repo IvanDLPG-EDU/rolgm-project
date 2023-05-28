@@ -3,12 +3,14 @@ import { RoomContext } from "../../../contexts";
 import { ListGroup, Button, Container } from "react-bootstrap";
 import { useFormModal } from "../../commons"
 
+const backend_url = import.meta.env.VITE_API_URL;
+
 const formMetadata = {
   title: "Crear Personaje",
   cancelBtn: "Cancelar",
   submitBtn: "Enviar",
   fetchMetadata: {
-    url: "http://172.18.0.2:8000/api/character/create/",
+    url: backend_url + "/api/character/create/",
     method: "POST",
     headers: {
       "Content-Type": "application/json",

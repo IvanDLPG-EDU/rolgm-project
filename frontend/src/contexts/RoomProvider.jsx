@@ -3,6 +3,9 @@ import { RoomContext, UserContext } from "./allContext";
 import { useReducer } from "react"
 import { roomReducer } from "../components/room/hooks/roomReducer";
 
+const ws_backend_url = import.meta.env.VITE_WS_URL;
+const backend_url = import.meta.env.VITE_API_URL;
+
 export const RoomProvider = ({ children }) => {
   const [activeTab, setActiveTab] = useState("chat-tab");
   const [activeRoom, setActiveRoom] = useState(null);
@@ -59,7 +62,7 @@ export const RoomProvider = ({ children }) => {
     const fetchMessages = async () => {
       try {
         const response = await fetch(
-          `http://172.18.0.2:8000/api/room/${activeRoom.id}/chat/`,
+          `${backend_url}/api/room/${activeRoom.id}/chat/`,
           { headers: { Authorization: `Token ${token}` } }
         );
         const data = await response.json();
@@ -75,7 +78,7 @@ export const RoomProvider = ({ children }) => {
     const fetchOwnPlayer = async () => {
       try {
         const response = await fetch(
-          `http://172.18.0.2:8000/api/room/${activeRoom.id}/my-player/`,
+          `${backend_url}/api/room/${activeRoom.id}/my-player/`,
           { headers: { Authorization: `Token ${token}` } }
         );
         const data = await response.json();
@@ -91,7 +94,7 @@ export const RoomProvider = ({ children }) => {
     const fetchDirectories = async () => {
       try {
         const response = await fetch(
-          `http://172.18.0.2:8000/api/room/${activeRoom.id}/directories/`,
+          `${backend_url}/api/room/${activeRoom.id}/directories/`,
           { headers: { Authorization: `Token ${token}` } }
         );
         const data = await response.json();
@@ -107,7 +110,7 @@ export const RoomProvider = ({ children }) => {
     const getClient = async () => {
       try {
         const newClient = new WebSocket(
-          `ws://172.18.0.2:8000/ws/room/${activeRoom.id}/`
+          `${ws_backend_url}/ws/room/${activeRoom.id}/`
         );
         newClient.onmessage = (returned) => {
           const returnedData = JSON.parse(returned.data);

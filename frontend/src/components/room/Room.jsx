@@ -6,8 +6,10 @@ import { RoomContext, UserContext } from "../../contexts";
 import { Chat } from "./chat";
 import { CharacterMenu } from "./character";
 
+const backend_url = import.meta.env.VITE_API_URL;
+
 const fetchRoomData = async (roomId, setActiveRoom) => {
-  const response = await fetch(`http://172.18.0.2:8000/api/room/${roomId}`,
+  const response = await fetch(`${backend_url}/api/room/${roomId}`,
     { headers: { Authorization: `Token ${localStorage.getItem('token')}` } });
   const data = await response.json();
   setActiveRoom(data);

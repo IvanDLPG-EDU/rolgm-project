@@ -2,10 +2,12 @@ import React, { useState, useEffect, useContext } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { UserContext } from "../contexts";
 
+const backend_url = import.meta.env.VITE_API_URL;
+
 export const RoomListPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [rooms, setRooms] = useState([]);
-  const [url, setUrl] = useState(window.location.pathname === "/mis-partidas" ? "http://172.18.0.2:8000/api/own-rooms/" : "http://172.18.0.2:8000/api/rooms/");
+  const [url, setUrl] = useState(window.location.pathname === "/mis-partidas" ? `${backend_url}/api/own-rooms/` : `${backend_url}/api/rooms/`);
   const { darkMode } = useContext(UserContext);
 
   useEffect(() => {
@@ -34,7 +36,7 @@ export const RoomListPage = () => {
       } else {
         const formattedSearchTerm = searchTerm.replace("#", " ");
         response = await fetch(
-          `http://172.18.0.2:8000/api/rooms/search/?search=${formattedSearchTerm}&ordering=name`,
+          `${backend_url}/api/rooms/search/?search=${formattedSearchTerm}&ordering=name`,
           { headers: { Authorization: `Token ${localStorage.getItem('token')}` } }
         );
       }

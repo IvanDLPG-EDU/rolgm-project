@@ -28,3 +28,5 @@ application = ProtocolTypeRouter({
 
 # Configurar la capa de canales para la aplicación de chat
 channel_layer = get_channel_layer()
+
+app = application

@@ -2,9 +2,16 @@ import { useState, useEffect, useContext } from "react";
 import { RoomContext, UserContext } from "./allContext";
 import { useReducer } from "react"
 import { roomReducer } from "../components/room/hooks/roomReducer";
+import Pusher from 'pusher-js';
 
 const ws_backend_url = import.meta.env.VITE_WS_URL;
 const backend_url = import.meta.env.VITE_API_URL;
+const frontend_url = import.meta.env.VITE_HOST_URL;
+
+const PUSHER_ID = import.meta.env.VITE_PUSHER_ID;
+const PUSHER_KEY = import.meta.env.VITE_PUSHER_KEY;
+const PUSHER_SECRET = import.meta.env.VITE_PUSHER_SECRET;
+const PUSHER_CLUSTER = import.meta.env.VITE_PUSHER_CLUSTER;
 
 export const RoomProvider = ({ children }) => {
   const [activeTab, setActiveTab] = useState("chat-tab");
@@ -107,23 +114,71 @@ export const RoomProvider = ({ children }) => {
       }
     };
 
+    // const getClient = async () => {
+    //   try {
+    //     const newClient = new WebSocket(
+    //       `${ws_backend_url}/ws/room/${activeRoom.id}/`
+    //     );
+    //     newClient.onmessage = (returned) => {
+    //       const returnedData = JSON.parse(returned.data);
+
+    //       if (returnedData.type == 'message') {
+    //         dispatch({ type: 'set_chat_messages', payload: returnedData.text_data || [] });
+    //       }
+
+    //       if (returnedData.type == 'character') {
+    //         dispatch({ type: 'set_character', payload: returnedData.text_data || [] });
+    //       }
+
+    //     };
+    //     dispatch({ type: 'set_chat_client', payload: newClient || null });
+    //   } catch (error) {
+    //     console.error(error);
+    //     dispatch({ type: 'set_chat_client', payload: null });
+    //   } finally {
+    //     dispatch({ type: 'set_chat_client_loading', payload: false });
+    //   }
+    // }
+
+
     const getClient = async () => {
       try {
-        const newClient = new WebSocket(
-          `${ws_backend_url}/ws/room/${activeRoom.id}/`
-        );
-        newClient.onmessage = (returned) => {
-          const returnedData = JSON.parse(returned.data);
+        let newClient;
+        if (PUSHER_ID && PUSHER_KEY && PUSHER_SECRET && PUSHER_CLUSTER) {
 
-          if (returnedData.type == 'message') {
-            dispatch({ type: 'set_chat_messages', payload: returnedData.text_data || [] });
-          }
-
-          if (returnedData.type == 'character') {
-            dispatch({ type: 'set_character', payload: returnedData.text_data || [] });
-          }
+          const pusherClient = new Pusher(PUSHER_KEY, {
+            cluster: PUSHER_CLUSTER,
+            authEndpoint: `${backend_url}/api/pusher/auth/`,
+            auth: {
+              headers: {
+                Authorization: `Token ${token}`, // Utiliza el token de autenticación recibido desde el servidor
+              },
+            },
+          });
           
-        };
+          newClient = pusherClient.subscribe(`private-room-${activeRoom.id}`);
+          newClient.bind('message', (data) => {
+            dispatch({ type: 'set_chat_messages', payload: data.text_data || [] });
+          });
+          // newClient.bind('character', (data) => {
+          //   dispatch({ type: 'set_character', payload: data.text_data || [] });
+          // });
+
+        } else {
+          console.log('No se pudo conectar a Pusher')
+          newClient = new WebSocket(`${ws_backend_url}/ws/room/${activeRoom.id}/`);
+          newClient.onmessage = (returned) => {
+            const returnedData = JSON.parse(returned.data);
+
+            if (returnedData.type === 'message') {
+              dispatch({ type: 'set_chat_messages', payload: returnedData.text_data || [] });
+            }
+
+            if (returnedData.type === 'character') {
+              dispatch({ type: 'set_character', payload: returnedData.text_data || [] });
+            }
+          };
+        }
         dispatch({ type: 'set_chat_client', payload: newClient || null });
       } catch (error) {
         console.error(error);
@@ -131,7 +186,7 @@ export const RoomProvider = ({ children }) => {
       } finally {
         dispatch({ type: 'set_chat_client_loading', payload: false });
       }
-    }
+    };
 
     if (activeRoom) {
       dispatch({ type: 'set_chat_client_loading', payload: true });

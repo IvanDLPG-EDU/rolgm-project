@@ -1,5 +1,10 @@
 from django.shortcuts import get_object_or_404
 
+from django.http import JsonResponse
+from pusher import Pusher
+from django.views import View
+from django.conf import settings
+
 from rest_framework.generics import ListAPIView, CreateAPIView
 from rest_framework import filters, status
 from rest_framework.views import APIView
@@ -11,7 +16,60 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import CharacterSerializer, RoomSerializer, DirectorySerializer, ChatSerializer, PlayerSerializer
 from .models import Room, Player, Character
 
-from django.db.models import Q
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt 
+def pusher_auth_view(request):
+    pusher_app_id=settings.PUSHER_APP_ID,
+    pusher_key=settings.PUSHER_KEY,
+    pusher_secret=settings.PUSHER_SECRET,
+    pusher_cluster=settings.PUSHER_CLUSTER,
+
+    pusher = Pusher(
+        app_id=pusher_app_id[0],
+        key=pusher_key[0],
+        secret=pusher_secret[0],
+        cluster=pusher_cluster[0],
+    )
+
+    # pusher.set_option('allowed_origins', ['http://172.18.0.3:5173',])
+
+    if request.method == 'POST':
+        channel_name = request.POST.get('channel_name')
+        socket_id = request.POST.get('socket_id')
+
+        auth = pusher.authenticate(
+            channel=channel_name,
+            socket_id=socket_id
+        )
+
+        # auth = pusher.authenticate(
+        #     channel='private-room-1',
+        #     socket_id='150579.11173180'
+        # )
+
+        return JsonResponse(auth)
+
+    # En caso de que se reciba una solicitud de otro método que no sea POST
+    return JsonResponse({"error": "Método no permitido"}, status=405)
+
+@csrf_exempt
+def pusher_webhook(request):
+    if request.method == 'POST':
+        channel_name = request.POST.get('channel_name')
+        event_name = request.POST.get('event')
+        data = request.POST.get('data')
+
+        # Realiza el procesamiento de los datos recibidos
+        # Aquí puedes implementar la lógica necesaria para manejar los datos enviados
+
+        # Devuelve una respuesta adecuada al cliente
+        return JsonResponse({'message': 'Datos recibidos correctamente'})
+
+    # Maneja otros métodos HTTP si es necesario
+    return JsonResponse({'message': 'Método no permitido'}, status=405)
+    
 
 class RoomListAPIView(ListAPIView):
     authentication_classes = [TokenAuthentication]

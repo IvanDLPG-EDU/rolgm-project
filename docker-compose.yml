@@ -45,7 +45,11 @@ services:
             DB_PORT: ${DB_PORT}
             SERVER_HOST: ${SERVER_HOST}
             CLIENT_HOST: ${CLIENT_HOST}
-            STATIC_ROOT: /usr/src/app/static/
+            STATIC_ROOT: ${STATIC_ROOT}
+            PUSHER_ID: ${PUSHER_ID}
+            PUSHER_KEY: ${PUSHER_KEY}
+            PUSHER_SECRET: ${PUSHER_SECRET}
+            PUSHER_CLUSTER: ${PUSHER_CLUSTER}
         command: "daphne ${PROJECT_NAME}.asgi:application -b ${SERVER_HOST} -p ${SERVER_PORT}"
         build: docker/django/
 
@@ -65,7 +69,12 @@ services:
             - './frontend/index.html:/app/index.html'
         environment:
             VITE_API_URL: ${API_URL}
+            VITE_HOST_URL: ${HOST_URL}
             VITE_WS_URL: ${WS_URL}
+            VITE_PUSHER_ID: ${PUSHER_ID}
+            VITE_PUSHER_KEY: ${PUSHER_KEY}
+            VITE_PUSHER_SECRET: ${PUSHER_SECRET}
+            VITE_PUSHER_CLUSTER: ${PUSHER_CLUSTER}
         build: docker/react-vite/
 
 

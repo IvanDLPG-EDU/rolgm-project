@@ -89,6 +89,13 @@ CHANNEL_LAYERS = {
     },
 }
 
+
+PUSHER_APP_ID = config("PUSHER_ID", default=None)
+PUSHER_KEY = config("PUSHER_KEY", default=None)
+PUSHER_SECRET = config("PUSHER_SECRET", default=None)
+PUSHER_CLUSTER = config("PUSHER_CLUSTER", default=None)
+
+
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 

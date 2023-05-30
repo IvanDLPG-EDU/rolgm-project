@@ -1,9 +1,14 @@
+import Pusher from 'pusher-js';
+
 export const roomReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'set_chat_client':
       return {
         ...state,
-        client: action.payload
+        chatClients: {
+          ...state.chatClients,
+          [action.payload.roomId]: action.payload && action.payload.client ? action.payload.client : action.payload
+        }
       };
     case 'set_own_player':
       return {
@@ -17,12 +22,25 @@ export const roomReducer = (state = initialState, action) => {
         directories: action.payload
       };
 
-    case 'send_to_server':
-      action.payload.client.send(JSON.stringify({ data: action.payload.data }));
+      case 'send_to_server':
+        const { roomId, data } = action.payload;
+        const client = state.chatClients[roomId];
+  
+        console.log('send_to_server', client)
+        console.log('send_to_server', data)
 
-      return {
-        ...state
-      };
+        if (client instanceof WebSocket) {
+          client.send(JSON.stringify({ data }));
+        } else {
+          const eventName = "client-" + data.type;
+          const eventData = { data };
+          client.trigger(eventName, eventData);
+        }
+
+        return {
+          ...state
+        };
+  
 
     case 'set_chat_messages':
       let newMessages = [];

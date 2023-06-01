@@ -1,54 +1,86 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Image, Button } from 'react-bootstrap';
 
 const backend_url = import.meta.env.VITE_API_URL;
 
 const fetchRoomData = async (roomId, setRoomData) => {
     const response = await fetch(`${backend_url}/api/room/${roomId}`,
-      { headers: { Authorization: `Token ${localStorage.getItem('token')}` } });
+        { headers: { Authorization: `Token ${localStorage.getItem('token')}` } });
     const data = await response.json();
-   
+
     setRoomData(data)
-  };
+};
+
+const fetchJoinRoom = async (roomId) => {
+    const response = await fetch(`${backend_url}/api/room/${roomId}/join/`,
+        {
+            method: 'POST',
+            headers: { Authorization: `Token ${localStorage.getItem('token')}` }
+        });
+    const data = await response.json();
+
+    return data
+}
 
 export const DetailedRoomPage = () => {
+    const navigate = useNavigate();
     const { roomId } = useParams();
     const [roomData, setRoomData] = useState({
-            id: roomId,
-            owner: 'No Owner',
-            name: 'No Name',
-            description: 'No Description',
-            image: 'https://via.placeholder.com/400x300',
-            max_players: -1,
-            room_id: 'No Room ID',
-            created_at: 'No Date',
-            is_private: false,
-            player_count: 0,
-            spectator_count: 0,
-        })
+        id: roomId,
+        owner: 'No Owner',
+        name: 'No Name',
+        description: 'No Description',
+        image: 'https://via.placeholder.com/400x300',
+        max_players: -1,
+        room_id: 'No Room ID',
+        created_at: 'No Date',
+        is_private: false,
+        player_count: 0,
+        spectator_count: 0,
+    })
 
+    const joinRoom = (roomId) => {
 
-      useEffect(() => {
+        fetchJoinRoom(roomId)
+            .then((data) => {
+                if (data['errors']) {
+                    if (data['errors']['user']) {
+                        navigate(`/sala/${roomId}/`)
+                    } else {
+                        console.log(data['errors'])
+                    }
+
+                }
+            })
+    }
+
+    useEffect(() => {
         if (roomId) {
             fetchRoomData(roomId, setRoomData);
         }
-      }, []);
+    }, []);
 
-      const joinRoomButton = () => {
+    const joinRoomButton = () => {
         if (roomData.is_private) {
             return (
-                <Button href={`/sala/${roomId}/`} className="mt-4" variant="primary">
+                // <Button href={`/sala/${roomId}/`} className="mt-4" variant="primary">
+                //     Pedir Invitación
+                // </Button>
+                <Button onClick={() => joinRoom(roomId)} className="mt-4" variant="primary">
                     Pedir Invitación
                 </Button>
             );
         }
         return (
-            <Button href={`/sala/${roomId}/`} className="mt-4" variant="primary">
+            // <Button href={`/sala/${roomId}/`} className="mt-4" variant="primary">
+            //     Unirse a la sala
+            // </Button>
+            <Button onClick={() => joinRoom(roomId)} className="mt-4" variant="primary">
                 Unirse a la sala
             </Button>
         );
-      }
+    }
 
     return (
         <Container className="detailed-room-page mt-5">
@@ -67,7 +99,7 @@ export const DetailedRoomPage = () => {
                     <div className="spectator-count mb-2">Spectator Count: {roomData.spectator_count}</div>
 
                     {joinRoomButton()}
-                    
+
                 </Col>
             </Row>
         </Container>

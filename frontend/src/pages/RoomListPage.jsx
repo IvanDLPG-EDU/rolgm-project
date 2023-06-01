@@ -91,7 +91,7 @@ export const RoomListPage = () => {
                   {room.spectator_count}{" "}
                 </p>
                 <a
-                  href={`/sala/${room.id}/detail`}
+                  href={window.location.pathname === "/mis-partidas" ? `/sala/${room.id}` : `/sala/${room.id}/detail`}
                   className="btn btn-primary"
                 >
                   Ver Sala

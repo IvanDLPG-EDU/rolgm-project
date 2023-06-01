@@ -1,5 +1,5 @@
 from django.urls import path, re_path
-from .views import pusher_auth_view, pusher_webhook, RoomListAPIView, OwnRoomListAPIView,PlayerCharactersAPIView,CharacterCreateView, RoomSearchView,CreateRoomView ,RoomDirectoryAPIView, RoomChatAPIView, DetailedRoomAPIView, UserPlayerAPIView
+from .views import pusher_auth_view, pusher_webhook, RoomListAPIView, OwnRoomListAPIView,PlayerCharactersAPIView,PlayerCreateView,CharacterCreateView, RoomSearchView,CreateRoomView ,RoomDirectoryAPIView, RoomChatAPIView, DetailedRoomAPIView, UserPlayerAPIView
 
 urlpatterns = [
     path('rooms/', RoomListAPIView.as_view(), name='room_list'),
@@ -17,6 +17,8 @@ urlpatterns = [
             UserPlayerAPIView.as_view(), name='user_player'),
     re_path(r'^room/(?P<id>\d+)/chat/$',
             RoomChatAPIView.as_view(), name='room_chat'),
+    re_path(r'^room/(?P<id>\d+)/join/$',
+            PlayerCreateView.as_view(), name='room_join'),
     
     path('pusher/auth/', pusher_auth_view, name='pusher_auth'),
     path('pusher/webhook/', pusher_webhook, name='pusher_webhook'),

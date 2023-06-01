@@ -262,3 +262,28 @@ class PlayerCharactersAPIView(APIView):
         characters = player.characters
         serializer = CharacterSerializer(characters, many=True)
         return Response(serializer.data)
+
+class PlayerCreateView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    allowed_methods = ['POST']
+    
+    def post(self, request, id):
+
+        room = get_object_or_404(Room, id=id)
+        
+        # Validar si el personaje ya existe para ese jugador
+        if Player.objects.filter(user=request.user, room=room).exists():
+            return Response({'errors':{'user': ['El usuario ya existe en esta sala',]}})
+
+        # Crear el player si no existe previamente
+        
+        player = Player.objects.create(
+            user=request.user,
+            room=room,
+            is_gm=False,
+            game_mode='p',
+        )
+
+        serializer = PlayerSerializer(player)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

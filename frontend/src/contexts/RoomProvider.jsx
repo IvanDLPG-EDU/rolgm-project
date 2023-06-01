@@ -158,11 +158,11 @@ export const RoomProvider = ({ children }) => {
           
           newClient = pusherClient.subscribe(`private-room-${activeRoom.id}`);
           newClient.bind('message', (data) => {
-            dispatch({ type: 'set_chat_messages', payload: data.text_data || [] });
+            dispatch({ type: 'set_chat_messages', payload: data || [] });
           });
-          // newClient.bind('character', (data) => {
-          //   dispatch({ type: 'set_character', payload: data.text_data || [] });
-          // });
+          newClient.bind('character', (data) => {
+            dispatch({ type: 'set_character', payload: data || [] });
+          });
 
         } else {
           console.log('No se pudo conectar a Pusher')

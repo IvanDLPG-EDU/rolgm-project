@@ -25,9 +25,6 @@ export const roomReducer = (state = initialState, action) => {
       case 'send_to_server':
         const { roomId, data } = action.payload;
         const client = state.chatClients[roomId];
-  
-        console.log('send_to_server', client)
-        console.log('send_to_server', data)
 
         if (client instanceof WebSocket) {
           client.send(JSON.stringify({ data }));
@@ -49,6 +46,9 @@ export const roomReducer = (state = initialState, action) => {
       } else if (typeof action.payload === 'object' && action.payload !== null) {
         newMessages = [action.payload];
       }
+
+      console.log('message:', newMessages)
+
       return {
         ...state,
         messages: [...state.messages, ...newMessages]

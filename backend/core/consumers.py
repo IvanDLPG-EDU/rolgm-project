@@ -8,21 +8,6 @@ from .serializers import MessageSerializer, CharacterSerializer
 import pusher
 from django.conf import settings
 
-pusher_client = None
-
-pusher_app_id=settings.PUSHER_APP_ID,
-pusher_key=settings.PUSHER_KEY,
-pusher_secret=settings.PUSHER_SECRET,
-pusher_cluster=settings.PUSHER_CLUSTER,
-        
-if all([pusher_app_id[0], pusher_key[0], pusher_secret[0], pusher_cluster[0]]):
-    pusher_client = pusher.Pusher(
-        app_id=pusher_app_id[0],
-        key=pusher_key[0],
-        secret=pusher_secret[0],
-        cluster=pusher_cluster[0],
-    )
-
 class RoomConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_id = self.scope['url_route']['kwargs']['room_id']

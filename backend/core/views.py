@@ -5,8 +5,8 @@ from pusher import Pusher
 from django.views import View
 from django.conf import settings
 
-from rest_framework.generics import ListAPIView, CreateAPIView
-from rest_framework import filters, status
+from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView
+from rest_framework import filters, status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -23,6 +23,16 @@ import json
 
 from .services import create_mensaje, get_character, get_active_page
 
+class IsOwnerOrReadOnly(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        
+        # Verifica si el objeto es una instancia de Room o Character.
+        if isinstance(obj, Room):
+            return obj.owner == request.user
+        elif isinstance(obj, Character):
+            return obj.player.user == request.user
+
+        return False
 
 pusher_app_id=settings.PUSHER_APP_ID,
 pusher_key=settings.PUSHER_KEY,
@@ -287,3 +297,37 @@ class PlayerCreateView(APIView):
 
         serializer = PlayerSerializer(player)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    
+
+class DeleteRoomView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    allowed_methods = ['POST']
+    
+    def post(self, request, id):
+        try:
+            room = Room.objects.get(id=id)
+        except Room.DoesNotExist:
+            return Response({'detail': 'Room not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        self.check_object_permissions(request, room)
+
+        room.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class DeleteCharacterView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    allowed_methods = ['POST']
+
+    def post(self, request, id):
+        try:
+            character = Character.objects.get(id=id)
+        except Character.DoesNotExist:
+            return Response({'detail': 'Character not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        self.check_object_permissions(request, character)
+
+        character.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

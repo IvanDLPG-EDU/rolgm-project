@@ -17,6 +17,24 @@ export const RoomProvider = ({ children }) => {
   const [activeTab, setActiveTab] = useState("chat-tab");
   const [activeRoom, setActiveRoom] = useState(null);
 
+
+  const fetchOwnPlayer = async () => {
+    try {
+      const response = await fetch(
+        `${backend_url}/api/room/${activeRoom.id}/my-player/`,
+        { headers: { Authorization: `Token ${token}` } }
+      );
+      const data = await response.json();
+      dispatch({ type: 'set_own_player', payload: data[0] || null });
+    } catch (error) {
+      console.error(error);
+      dispatch({ type: 'set_own_player', payload: null });
+    } finally {
+      dispatch({ type: 'set_own_player_loading', payload: false });
+    }
+  };
+
+
   const handleTabClick = (tabId) => {
     setActiveTab(tabId);
   };
@@ -35,6 +53,7 @@ export const RoomProvider = ({ children }) => {
     loadingChat: true,
     loadingOwnPlayer: true,
     loadingDirectories: true,
+    roomOwner: activeRoom?.owner,
   };
 
   const [roomData, dispatch] = useReducer(roomReducer, initialState)
@@ -66,6 +85,19 @@ export const RoomProvider = ({ children }) => {
 
 
   useEffect(() => {
+
+    // change room owner with dispatch if not Null and not equal to current owner
+    const changeRoomOwner = () => {
+      if (activeRoom?.owner && activeRoom?.owner != roomData.roomOwner) {
+        const action = {
+          type: 'set_room_owner',
+          payload: activeRoom?.owner
+        }
+        dispatch(action);
+      }
+    }
+
+
     const fetchMessages = async () => {
       try {
         const response = await fetch(
@@ -79,22 +111,6 @@ export const RoomProvider = ({ children }) => {
         dispatch({ type: 'set_chat_messages', payload: [] });
       } finally {
         dispatch({ type: 'set_chat_loading', payload: false });
-      }
-    };
-
-    const fetchOwnPlayer = async () => {
-      try {
-        const response = await fetch(
-          `${backend_url}/api/room/${activeRoom.id}/my-player/`,
-          { headers: { Authorization: `Token ${token}` } }
-        );
-        const data = await response.json();
-        dispatch({ type: 'set_own_player', payload: data[0] || null });
-      } catch (error) {
-        console.error(error);
-        dispatch({ type: 'set_own_player', payload: null });
-      } finally {
-        dispatch({ type: 'set_own_player_loading', payload: false });
       }
     };
 
@@ -198,6 +214,7 @@ export const RoomProvider = ({ children }) => {
       fetchMessages();
       fetchOwnPlayer();
       fetchDirectories();
+      changeRoomOwner()
 
     }
   }, [activeRoom]);
@@ -221,6 +238,7 @@ export const RoomProvider = ({ children }) => {
         activeRoom,
         templateList,
         setTemplateList,
+        fetchOwnPlayer,
         sendToServer,
         setChatMessages,
         setChatClient,

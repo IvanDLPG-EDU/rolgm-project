@@ -4,14 +4,6 @@ import { Container, Row, Col, Image, Button } from 'react-bootstrap';
 
 const backend_url = import.meta.env.VITE_API_URL;
 
-const fetchRoomData = async (roomId, setRoomData) => {
-    const response = await fetch(`${backend_url}/api/room/${roomId}`,
-        { headers: { Authorization: `Token ${localStorage.getItem('token')}` } });
-    const data = await response.json();
-
-    setRoomData(data)
-};
-
 const fetchJoinRoom = async (roomId) => {
     const response = await fetch(`${backend_url}/api/room/${roomId}/join/`,
         {
@@ -39,6 +31,21 @@ export const DetailedRoomPage = () => {
         player_count: 0,
         spectator_count: 0,
     })
+
+
+    const fetchRoomData = async (roomId, setRoomData) => {
+        const response = await fetch(`${backend_url}/api/room/${roomId}`,
+            { headers: { Authorization: `Token ${localStorage.getItem('token')}` } });
+        const data = await response.json();
+
+        if (data.detail) {
+            navigate('/');
+            return;
+        }
+
+        setRoomData(data)
+    };
+
 
     const joinRoom = (roomId) => {
 

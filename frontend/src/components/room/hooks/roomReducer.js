@@ -22,22 +22,22 @@ export const roomReducer = (state = initialState, action) => {
         directories: action.payload
       };
 
-      case 'send_to_server':
-        const { roomId, data } = action.payload;
-        const client = state.chatClients[roomId];
+    case 'send_to_server':
+      const { roomId, data } = action.payload;
+      const client = state.chatClients[roomId];
 
-        if (client instanceof WebSocket) {
-          client.send(JSON.stringify({ data }));
-        } else {
-          const eventName = "client-" + data.type;
-          const eventData = { data };
-          client.trigger(eventName, eventData);
-        }
+      if (client instanceof WebSocket) {
+        client.send(JSON.stringify({ data }));
+      } else {
+        const eventName = "client-" + data.type;
+        const eventData = { data };
+        client.trigger(eventName, eventData);
+      }
 
-        return {
-          ...state
-        };
-  
+      return {
+        ...state
+      };
+
 
     case 'set_chat_messages':
       let newMessages = [];
@@ -71,11 +71,18 @@ export const roomReducer = (state = initialState, action) => {
         ...state,
         loadingOwnPlayer: action.payload
       };
-    
+
     case 'set_room_directories_loading':
       return {
         ...state,
         loadingDirectories: action.payload
+      };
+
+
+    case 'set_room_owner':
+      return {
+        ...state,
+        roomOwner: action.payload
       };
 
     case 'set_character':

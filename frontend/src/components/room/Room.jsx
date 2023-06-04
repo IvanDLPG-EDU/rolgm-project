@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Canvas } from "./canvas";
 import { DirectoryTab, Settings, SideRoomMenu } from "./sidemenu";
 import { RoomContext, UserContext } from "../../contexts";
@@ -8,18 +8,27 @@ import { CharacterMenu } from "./character";
 
 const backend_url = import.meta.env.VITE_API_URL;
 
-const fetchRoomData = async (roomId, setActiveRoom) => {
-  const response = await fetch(`${backend_url}/api/room/${roomId}`,
-    { headers: { Authorization: `Token ${localStorage.getItem('token')}` } });
-  const data = await response.json();
-  setActiveRoom(data);
-};
-
 const Room = () => {
+  const navigate = useNavigate();
   const { setActiveRoom } = useContext(RoomContext);
   const { darkMode } = useContext(UserContext);
   const { roomId } = useParams();
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
+
+
+  const fetchRoomData = async (roomId, setActiveRoom) => {
+    const response = await fetch(`${backend_url}/api/room/${roomId}`,
+      { headers: { Authorization: `Token ${localStorage.getItem('token')}` } });
+    const data = await response.json();
+  
+    if (data.detail) {
+      navigate('/');
+      return;
+    }
+  
+    setActiveRoom(data);
+  };
+
 
   const handleMenuButtonClick = () => setIsSideMenuOpen(!isSideMenuOpen);
 

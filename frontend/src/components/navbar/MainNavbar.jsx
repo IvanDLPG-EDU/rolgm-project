@@ -149,7 +149,7 @@ const MainNavbar = () => {
 
   useEffect(() => {
     if (createdRoom) {
-      window.location.href = "/sala/" + createdRoom.id + "/detail/"
+      window.location.href = "/sala/" + createdRoom.id
     }
   }, [createdRoom])
 

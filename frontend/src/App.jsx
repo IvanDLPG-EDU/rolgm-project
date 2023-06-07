@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { HomePage, RoomListPage } from "./pages";
-import { MainNavbar, Room } from "./components";
+import { ConfirmEmail, MainNavbar, Room } from "./components";
 import { UserContext } from "./contexts";
 import "./styles/rooms.css";
 import "./styles/home.css";
@@ -17,6 +17,7 @@ export const App = () => {
       {shouldRenderNavbar && <MainNavbar />}
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/email-verify/:token/" element={<ConfirmEmail />} />
         {user ? (
           <>
             <Route path="/salas" element={<RoomListPage />} />

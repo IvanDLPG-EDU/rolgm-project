@@ -22,7 +22,12 @@ export const UserProvider = ({ children }) => {
 
   const handleRegister = (data) => {
 
-    console.log("good", data)
+    // mostrar una alerta de que se ha registrado correctamente y hace falta verificar el email
+    // y que se ha enviado un email de verificación
+
+
+    alert("Se ha registrado correctamente, revise su email para verificar su cuenta")
+
 
   }
 

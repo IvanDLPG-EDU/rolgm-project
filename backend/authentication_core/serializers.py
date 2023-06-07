@@ -48,6 +48,9 @@ class LoginSerializer(serializers.Serializer):
         try:
             user = UserModel.objects.get(
                 Q(email=data['username']) | Q(username=data['username']))
+            if not user.is_verified:
+                raise serializers.ValidationError(
+                    {'errors': {'username': ['email is not verified yet'],}})
         except UserModel.DoesNotExist:
             print("NelPastel3")
             raise serializers.ValidationError(

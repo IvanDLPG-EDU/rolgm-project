@@ -44,6 +44,7 @@ services:
             DB_HOST: ${DB_HOST}
             DB_PORT: ${DB_PORT}
             SERVER_HOST: ${SERVER_HOST}
+            DOMAIN_HOST: ${API_URL}
             CLIENT_HOST: ${CLIENT_HOST}
             STATIC_ROOT: ${STATIC_ROOT}
             PUSHER_ID: ${PUSHER_ID}

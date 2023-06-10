@@ -13,7 +13,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     public_name = models.CharField(max_length=50, blank=True)
     bio = models.TextField(max_length=500, blank=True)
     
-    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True, default='profile_pictures/default.png')
 
     objects = CustomUserManager()
 

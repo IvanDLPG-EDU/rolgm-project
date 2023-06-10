@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { HomePage, RoomListPage } from "./pages";
+import { HomePage, RoomListPage, MyProfile } from "./pages";
 import { ConfirmEmail, MainNavbar, Room } from "./components";
 import { UserContext } from "./contexts";
 import "./styles/rooms.css";
@@ -26,6 +26,7 @@ export const App = () => {
             <Route path="/salas" element={<RoomListPage />} />
             <Route path="/mis-partidas" element={<RoomListPage />} />
             <Route path="/sala/:roomId" element={<Room />} />
+            <Route path="/mi-perfil" element={<MyProfile />} />
             <Route path="/sala/:roomId/detail" element={<DetailedRoomPage />} />
           </>
         ) : (

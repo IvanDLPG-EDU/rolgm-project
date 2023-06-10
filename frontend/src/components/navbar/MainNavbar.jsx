@@ -113,7 +113,7 @@ const renderUserImage = (user) => {
   if (user == null || user.profile_picture == null) {
     return (
       <Image
-        src="https://avatars.githubusercontent.com/u/105361339?s=400&v=4"
+        src=""
         alt="Default profile image"
         roundedCircle
         style={{ width: '27px', height: '27px', marginLeft: '10px' }}
@@ -214,7 +214,7 @@ const MainNavbar = () => {
                     <NavDropdown.Item>
                       <div>
 
-                        <NavLink to="/" className={` ${pageAspect.menuItem}`}>Mi Perfil</NavLink>
+                        <NavLink to="/mi-perfil" className={` ${pageAspect.menuItem}`}>Mi Perfil</NavLink>
 
 
                       </div>

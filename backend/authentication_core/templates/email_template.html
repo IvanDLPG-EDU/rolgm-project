@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Verify your email</title>
+    {% load static %}
+    <style>
+        /* Estilos CSS para el marco y el mensaje */
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .message {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .instructions {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .cta-button,
+        .cta-button:visited {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <h2 class="logo">RolGM</h2>
+        <p class="message">Hi {{ user.username }},</p>
+        <p class="message">Please use the link below to verify your email:</p>
+        <p class="message"><a href="{{ absurl }}" class="cta-button">Verify Email</a></p>
+        <p class="instructions">If you did not register on our website, please ignore this email.</p>
+        <p class="instructions">Thank you,</p>
+        <p class="instructions">Ivan De La Poza</p>
+    </div>
+</body>
+</html>

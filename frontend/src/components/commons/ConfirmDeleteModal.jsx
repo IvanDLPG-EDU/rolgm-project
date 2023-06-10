@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { RoomContext } from '../../contexts';
+import { toast } from 'react-toastify';
 
 const backend_url = import.meta.env.VITE_API_URL;
 
@@ -28,6 +29,7 @@ const ConfirmDeleteModal = ({ data }) => {
 
       if (responseData.status == 204) {
         if (data.navigate != null) {
+          toast.success("Sala eliminada correctamente");
           navigate(data.navigate);
         } else {
           onClose();

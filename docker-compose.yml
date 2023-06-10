@@ -45,12 +45,19 @@ services:
             DB_PORT: ${DB_PORT}
             SERVER_HOST: ${SERVER_HOST}
             DOMAIN_HOST: ${API_URL}
+            DOMAIN_CLIENT: ${HOST_URL}
             CLIENT_HOST: ${CLIENT_HOST}
             STATIC_ROOT: ${STATIC_ROOT}
             PUSHER_ID: ${PUSHER_ID}
             PUSHER_KEY: ${PUSHER_KEY}
             PUSHER_SECRET: ${PUSHER_SECRET}
             PUSHER_CLUSTER: ${PUSHER_CLUSTER}
+            EMAIL_BACKEND: ${EMAIL_BACKEND}
+            EMAIL_HOST: ${EMAIL_HOST}
+            EMAIL_PORT: ${EMAIL_PORT}
+            EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+            EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+            EMAIL_USE_TLS: ${EMAIL_USE_TLS}
         command: "daphne ${PROJECT_NAME}.asgi:application -b ${SERVER_HOST} -p ${SERVER_PORT}"
         build: docker/django/
 

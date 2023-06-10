@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { UserContext } from "./allContext";
+import { toast } from 'react-toastify';
 
 export const UserProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
@@ -22,12 +23,7 @@ export const UserProvider = ({ children }) => {
 
   const handleRegister = (data) => {
 
-    // mostrar una alerta de que se ha registrado correctamente y hace falta verificar el email
-    // y que se ha enviado un email de verificación
-
-
-    alert("Se ha registrado correctamente, revise su email para verificar su cuenta")
-
+    toast.success("Se ha registrado correctamente, revise su email para verificar su cuenta");
 
   }
 

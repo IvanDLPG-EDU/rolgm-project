@@ -15,7 +15,7 @@ from rest_framework.exceptions import ValidationError
 
 from django.contrib.sites.shortcuts import get_current_site
 
-from rest_framework import generics
+from rest_framework import generics, authentication, permissions
 from .utils import Util
 
 # Create your views here.
@@ -34,16 +34,15 @@ class RegistrationView(APIView):
 
             token = token.key
 
-            DOMAIN_HOST = settings.DOMAIN_HOST,
-            current_site = DOMAIN_HOST[0]
-            print(current_site, "current_site\n")
-            relativeLink = reverse('email-verify')
-            absurl= str(current_site)+relativeLink+"?token="+str(token)
+            DOMAIN_CLIENT = settings.DOMAIN_CLIENT,
+            current_site = DOMAIN_CLIENT[0]
+            relativeLink = '/email-verify/'
+            absurl= str(current_site)+relativeLink+str(token)
 
             data = {
-                'domain': absurl,
+                'user': user,
+                'absurl': absurl,
                 'subject': 'Verify your email',
-                'body': 'Hi '+user.username+' Please use the link below to verify your email \n'+absurl,
                 'email': user.email
             }
 
@@ -69,18 +68,24 @@ class RegistrationView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class VerifyEmail(generics.GenericAPIView):
+    authentication_classes = []  
+    permission_classes = []  
+
+    def get_queryset(self):
+        return Token.objects.all()  # Reemplaza `Token` con el modelo de token que estás utilizando
+
     def get(self, request):
-        token=request.GET.get('token')
+        token = request.GET.get('token')
         try:
-            token = Token.objects.get(key=token)
+            token_obj = self.get_queryset().get(key=token)
         except Token.DoesNotExist:
-            raise ValidationError('Token is invalid or expired')
-        user = token.user
+            raise ValidationError('El token no es válido o ha expirado')
+        user = token_obj.user
         if user.is_verified:
-            return Response({'message': 'User already verified'})
+            return Response({'message': 'El usuario ya está verificado'})
         user.is_verified = True
         user.save()
-        return Response({'message': 'Successfully activated'})
+        return Response({'message': 'Activación exitosa'})
 
 class AuthenticationView(APIView):
     authentication_classes = []

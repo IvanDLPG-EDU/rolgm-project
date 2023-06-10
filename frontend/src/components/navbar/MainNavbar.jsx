@@ -119,14 +119,14 @@ const renderUserImage = (user) => {
         style={{ width: '27px', height: '27px', marginLeft: '10px' }}
       />
     );
-  } 
+  }
 
   return (
     <Image
       src={backend_url + user.profile_picture}
       alt="User profile image"
       roundedCircle
-      style={{ width: '27px', height: '27px' , marginLeft: '10px' }}
+      style={{ width: '27px', height: '27px', marginLeft: '10px' }}
     />
   );
 
@@ -254,8 +254,12 @@ const MainNavbar = () => {
                 </>
               ) : (
                 <>
-                  <Button variant={pageAspect.general} className="me-3" onClick={() => loginModal.setShowModal(true)}>Login</Button>
-                  <Button variant={pageAspect.general} className="btn-outline-success me-3" onClick={() => registerModal.setShowModal(true)}>Register</Button>
+                  <Button variant="null" className={`nav-link me-3 ${inHome ? 'text-light' : pageAspect.text}`} onClick={() => loginModal.setShowModal(true)}>
+                    <span>Login</span>
+                  </Button>
+                  <Button variant="dark" className={`nav-link me-3 ${inHome ? 'text-light' : pageAspect.text}`} onClick={() => registerModal.setShowModal(true)}>
+                    <span>Register</span>
+                  </Button>
                 </>
               )}
             </Nav>

@@ -53,13 +53,14 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 DOMAIN_HOST = config('DOMAIN_HOST')
+DOMAIN_CLIENT = config('DOMAIN_CLIENT')
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # Reemplaza con el host de tu servidor de correo saliente
-EMAIL_PORT = 587  # Reemplaza con el puerto de tu servidor de correo saliente
-EMAIL_HOST_USER = "confirmemailgm@gmail.com"  # Reemplaza con tu dirección de correo electrónico
-EMAIL_HOST_PASSWORD= "zzfvdenufmuwghcw"  # Reemplaza con la contraseña de tu dirección de correo electrónico
-EMAIL_USE_TLS = True  # Utiliza TLS para la conexión segura
+EMAIL_BACKEND = config('EMAIL_BACKEND')
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT', cast=int)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD= config('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

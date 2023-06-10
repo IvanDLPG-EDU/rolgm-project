@@ -7,10 +7,13 @@ import "./styles/rooms.css";
 import "./styles/home.css";
 import "./styles/nav.css";
 import { DetailedRoomPage } from "./pages/DetailedRoomPage";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const App = () => {
   const location = useLocation();
   const shouldRenderNavbar = !location.pathname.includes("/sala/") || location.pathname.includes("/detail");
+  const shouldRenderToast = !location.pathname.includes("/email-verify/");
   const { user } = useContext(UserContext);
   return (
     <>
@@ -30,6 +33,8 @@ export const App = () => {
         )}
         <Route path="/*" element={<Navigate to="/" />} />
       </Routes>
+      { shouldRenderToast ? <ToastContainer /> : '' }
+    
     </>
   );
 };

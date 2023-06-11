@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Modal, Button, Form } from 'react-bootstrap';
+import { UserContext } from "../../contexts";
 
 
 const useFormModal = () => {
     const [showModal, setShowModal] = useState(false);
     const [formErrors, setFormErrors] = useState("")
-
+    const { darkMode } = useContext(UserContext);
     const FormModal = ({ formMetadata, fields, validators, onHide, onSuccess = null }) => {
         const { title, cancelBtn, submitBtn, fetchMetadata } = formMetadata
         const { url, method, headers } = fetchMetadata
@@ -97,7 +98,7 @@ const useFormModal = () => {
         };
 
         return (
-            <Modal show={showModal} onHide={onHide}>
+            <Modal className={darkMode ? 'dark-modal' : 'light-modal'} show={showModal} onHide={onHide}>
                 <Modal.Header closeButton>
                     <Modal.Title>{title || "Formulario"}</Modal.Title>
                 </Modal.Header>

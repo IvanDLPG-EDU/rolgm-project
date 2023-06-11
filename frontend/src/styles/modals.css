@@ -1,0 +1,142 @@
+/* Estilos para dark-modal */
+.dark-modal .modal-content {
+    background-color: #343a40;
+    color: white;
+  }
+  
+  .dark-modal .modal-header {
+    background-color: #212529;
+    color: white;
+  }
+  
+  .dark-modal .modal-body {
+    background-color: #343a40;
+    color: white;
+  }
+  
+  .dark-modal .form-control {
+    background-color: #495057;
+    color: white;
+  }
+  
+  .dark-modal .form-control:focus {
+    background-color: #495057;
+    color: white;
+  }
+  
+  /* Estilos para dark-modal */
+ .btn-close {
+    background-color: white;
+  }
+
+  .dark-modal .is-invalid {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  /* Estilos para light-modal */
+  .light-modal .modal-content {
+    background-color: #f8f9fa;
+    color: black;
+  }
+  
+  .light-modal .modal-header {
+    background-color: #e9ecef;
+    color: black;
+  }
+  
+  .light-modal .modal-body {
+    background-color: #f8f9fa;
+    color: black;
+  }
+  
+  .light-modal .form-control {
+    background-color: #f8f9fa;
+    color: black;
+  }
+  
+  .light-modal .form-control:focus {
+    background-color: #f8f9fa;
+    color: black;
+  }
+  
+  .light-modal .is-invalid {
+    background-color: #f8d7da;
+    color: black;
+  }
+  
+  /* Estilos para los Cards en light-modal */
+.light-modal .card {
+  background-color: #f8f9fa;
+  color: black;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  margin-bottom: 10px;
+  margin-top: 5px;
+}
+
+.light-modal .card-title {
+  font-weight: bold;
+}
+
+.light-modal .card-text {
+  margin-bottom: 10px;
+}
+
+/* Estilos para los Tabs en light-modal */
+.light-modal .nav-tabs .nav-link {
+  background-color: #f8f9fa;
+  color: black;
+}
+
+.light-modal .nav-tabs .nav-link.active {
+  background-color: #e9ecef;
+  color: black;
+  border-color: rgba(0, 0, 0, 0);
+}
+
+/* Estilos para los Cards en dark-modal */
+.dark-modal .card {
+  background-color: #343a40;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  margin-bottom: 10px;
+  margin-top: 5px;
+}
+
+.dark-modal .card-title {
+  font-weight: bold;
+}
+
+.dark-modal .card-text {
+  margin-bottom: 10px;
+}
+
+/* Estilos para los Tabs en dark-modal */
+.dark-modal .nav-tabs .nav-link {
+  background-color: #343a40;
+  color: white;
+}
+
+.dark-modal .nav-tabs .nav-link.active {
+  background-color: #212529;
+  color: white;
+  border-color: rgba(255, 255, 255, 0);
+}
+
+/* Estilos para el contenedor de las pestañas en light-modal */
+.light-modal .nav-tabs {
+  background-color: #f8f9fa;
+  color: black;
+  border-bottom: 3px solid rgba(0, 0, 0, 0.125);
+  margin-bottom: 5px;
+  padding-bottom: 1px;
+}
+
+/* Estilos para el contenedor de las pestañas en dark-modal */
+.dark-modal .nav-tabs {
+  background-color: #343a40;
+  color: white;
+  border-bottom: 3px solid rgba(255, 255, 255, 0.125);
+  margin-bottom: 5px;
+  padding-bottom: 1px;
+}

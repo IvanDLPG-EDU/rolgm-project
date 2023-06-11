@@ -6,6 +6,7 @@ import { UserContext } from "./contexts";
 import "./styles/rooms.css";
 import "./styles/home.css";
 import "./styles/nav.css";
+import "./styles/modals.css";
 import { DetailedRoomPage } from "./pages/DetailedRoomPage";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

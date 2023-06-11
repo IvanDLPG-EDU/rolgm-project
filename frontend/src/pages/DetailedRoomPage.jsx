@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Image, Button } from 'react-bootstrap';
+import { UserContext } from '../contexts';
 
 const backend_url = import.meta.env.VITE_API_URL;
 
@@ -16,6 +17,7 @@ const fetchJoinRoom = async (roomId) => {
 }
 
 export const DetailedRoomPage = () => {
+    const { darkMode } = useContext(UserContext);
     const navigate = useNavigate();
     const { roomId } = useParams();
     const [roomData, setRoomData] = useState({
@@ -90,9 +92,13 @@ export const DetailedRoomPage = () => {
     }
 
     return (
-        <Container className="detailed-room-page mt-5">
+        <Container
+            fluid
+            className={`detailed-room-page bg-custom-${darkMode ? "dark" : "light"}`}
+            style={{ height: "100vh", padding: "0 30px" }}
+        >
             <h1 className="pt-3">{roomData.name} #{roomData.room_id}</h1>
-            <Row>
+            <Row style={{ paddingTop: "80px" }}>
                 <Col xs={12} md={6}>
                     <Image src={roomData.image || "https://via.placeholder.com/400x300"} alt="Room" fluid />
                 </Col>

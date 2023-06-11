@@ -4,7 +4,7 @@ import { UserContext } from '../contexts';
 const backend_url = import.meta.env.VITE_API_URL;
 
 const MiPerfil = () => {
-    const { user, token } = useContext(UserContext);
+    const { user, darkMode } = useContext(UserContext);
     const [modoEdicion, setModoEdicion] = useState(false);
     const [editedUser, setEditedUser] = useState({
         bio: user.bio || "",
@@ -46,8 +46,12 @@ const MiPerfil = () => {
     };
 
     return (
-        <Container className="mt-5">
-            <Row>
+        <Container
+            fluid
+            className={`bg-custom-${darkMode ? "dark" : "light"}`}
+            style={{ height: "100vh", padding: "0 30px" }}
+        >
+            <Row style={{ paddingTop: "80px" }}>
                 <Col md={6} className="mt-4">
                     {editedUser.profile_picture && (
                         <div className="text-center">

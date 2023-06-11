@@ -5,6 +5,7 @@ import { DirectoryTab, Settings, SideRoomMenu } from "./sidemenu";
 import { RoomContext, UserContext } from "../../contexts";
 import { Chat } from "./chat";
 import { CharacterMenu } from "./character";
+import Character from "./character/Character";
 
 const backend_url = import.meta.env.VITE_API_URL;
 
@@ -34,9 +35,10 @@ const Room = () => {
 
   const tabs = [
     { name: "Chat", icon: "/media/chat-icon.svg", content: <Chat /> },
-    { name: "Character", icon: "/media/character-icon.png", content: <CharacterMenu /> },
-    { name: "Directory", icon: "/media/diary.svg", content: <DirectoryTab /> },
-    { name: "Music", icon: "/media/music.svg", content: <Chat /> },
+    // { name: "Character", icon: "/media/character-icon.png", content: <CharacterMenu /> },
+    { name: "Character", icon: "/media/character-icon.png", content: <Character /> },
+    // { name: "Directory", icon: "/media/diary.svg", content: <DirectoryTab /> },
+    // { name: "Music", icon: "/media/music.svg", content: <Chat /> },
     { name: "Setting", icon: "/media/settings.svg", content: <Settings /> },
   ];
 

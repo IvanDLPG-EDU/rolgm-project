@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import { Navbar, Nav, Container, Button, NavDropdown, Image } from "react-bootstrap";
 import { UserContext } from '../../contexts';
-import { DarkModeSlider, useFormModal } from "../commons";
+import { BuzonModal, useFormModal } from "../commons";
 
 const backend_url = import.meta.env.VITE_API_URL;
 
@@ -95,6 +95,7 @@ const aspects = {
     'general': 'dark',
     'lightBtn': 'outline-light',
     'darkBtn': 'light',
+    'outlineBtn': 'outline-light',
     'nav': 'navbar-dark',
   },
   'light': {
@@ -104,15 +105,25 @@ const aspects = {
     'general': 'light',
     'lightBtn': 'dark',
     'darkBtn': 'outline-dark',
+    'outlineBtn': 'outline-dark',
     'nav': 'navbar-light',
   }
 }
 
-
 const MainNavbar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const { token, handleLogout, handleLogin, handleRegister, darkMode, setDarkMode, user } = useContext(UserContext);
-  const [has_messages, setHasMessages] = useState(true)
+  const [hasMessagesInvitation, setHasMessagesInvitation] = useState(false);
+  const [hasMessagesRequest, setHasMessagesRequest] = useState(false);
+  const [buzonShowModal, setBuzonShowModal] = useState(false);
+  const hasMessages = hasMessagesInvitation || hasMessagesRequest;
+
+  useEffect(() => {
+    if (!hasMessages) {
+      setHasMessagesInvitation(false);
+      setHasMessagesRequest(false);
+    }
+  }, [hasMessages]);
 
   const renderUserImage = (user) => {
     if (user == null) {
@@ -125,7 +136,7 @@ const MainNavbar = () => {
         />
       );
     }
-  
+
     return (
       <div style={{ position: 'relative', display: 'inline-block' }}>
         <Image
@@ -134,7 +145,7 @@ const MainNavbar = () => {
           roundedCircle
           style={{ width: '27px', height: '27px', marginLeft: '10px' }}
         />
-        {has_messages && (
+        {hasMessages && (
           <div
             style={{
               position: 'absolute',
@@ -150,46 +161,36 @@ const MainNavbar = () => {
         )}
       </div>
     );
-  
   };
 
-  const [userImage, setUserImage] = useState(token ? renderUserImage(user) : "")
+  const [userImage, setUserImage] = useState(token ? renderUserImage(user) : '');
 
   useEffect(() => {
     if (user && user.profile_picture) {
-      setUserImage(renderUserImage(user))
+      setUserImage(renderUserImage(user));
     }
-
-  }, [user]);
-
+  }, [user, hasMessages]);
 
   const [createdRoom, setCreatedRoom] = useState(null);
 
   useEffect(() => {
     if (createdRoom) {
-      window.location.href = "/sala/" + createdRoom.id
+      window.location.href = '/sala/' + createdRoom.id;
     }
-  }, [createdRoom])
+  }, [createdRoom]);
 
   const location = useLocation();
-  const inHome = location.pathname === "/";
+  const inHome = location.pathname === '/';
 
   const handleNavbarToggle = () => {
     setIsExpanded(!isExpanded);
   };
 
-  const loginModal = useFormModal()
-  const registerModal = useFormModal()
-  const createRoomModal = useFormModal()
+  const loginModal = useFormModal();
+  const registerModal = useFormModal();
+  const createRoomModal = useFormModal();
 
-
-
-  const [pageAspect, setPageAspect] = useState(darkMode ? aspects['dark'] : aspects['light'])
-  useEffect(() => {
-    setPageAspect(darkMode ? aspects['dark'] : aspects['light'])
-
-  }, [darkMode])
-
+  const pageAspect = darkMode ? aspects['dark'] : aspects['light'];
 
   return (
     <>
@@ -197,61 +198,120 @@ const MainNavbar = () => {
         <Container>
           <NavLink to="/" className={`navbar-brand ${inHome ? 'text-light' : pageAspect.text}`}>RolGM</NavLink>
           <Navbar.Toggle onClick={handleNavbarToggle} className={pageAspect.nav} />
-
-
-          <Navbar.Collapse className={isExpanded ? "justify-content-end" : ""}>
+          <Navbar.Collapse className={isExpanded ? 'justify-content-end' : ''}>
             <Nav className="me-auto">
-
             </Nav>
             <Nav>
-              {token && token !== "null" ? (
+              {token && token !== 'null' ? (
                 <>
-
                   <Nav.Link href="/noticias" className={`nav-link me-3 ${inHome ? 'text-light' : pageAspect.text}`}>Noticias</Nav.Link>
                   <Nav.Link href="/foro" className={`nav-link me-3 ${inHome ? 'text-light' : pageAspect.text}`}>Foro</Nav.Link>
-                  <NavDropdown title="Juegos" id="basic-nav-dropdown" menuVariant={pageAspect.general} className={`custom-dropdown ${inHome ? 'text-light' : pageAspect.text}`} >
+                  <NavDropdown title="Juegos" id="basic-nav-dropdown" menuVariant={pageAspect.general} className={`custom-dropdown ${inHome ? 'text-light' : pageAspect.text}`}>
                     <NavDropdown.Item href="/mis-partidas">Mis Partidas</NavDropdown.Item>
                     <NavDropdown.Divider />
                     <NavDropdown.Item onClick={() => createRoomModal.setShowModal(true)}>
-
                       Crear Sala
-
                     </NavDropdown.Item>
                     <NavDropdown.Item href="/salas">Unirme a Partida</NavDropdown.Item>
                   </NavDropdown>
-                  <NavDropdown title={userImage} id="basic-nav-dropdown" autoClose={"outside"} menuVariant={pageAspect.general} className={`custom-dropdown ${inHome ? 'text-light' : pageAspect.text}`}>
+                  <NavDropdown title={userImage} id="basic-nav-dropdown" autoClose="outside" menuVariant={pageAspect.general} className={`custom-dropdown ${inHome ? 'text-light' : pageAspect.text}`}>
                     <NavDropdown.Item>
                       <div className="user-info">
                         <p className="public-name">{user.public_name}</p>
                         <p className="username">@{user.username}</p>
                       </div>
                     </NavDropdown.Item>
-
                     <NavDropdown.Divider />
+                    <NavDropdown.Item>
+                      <div className="toggle-buttons-container" style={{ display: 'flex' }}>
+                        {hasMessagesInvitation ? (
+                          <div
+                            style={{
+                              position: 'relative',
+                              top: '0',
+                              left: '10px',
+                              width: '10px',
+                              height: '10px',
+                              borderRadius: '50%',
+                              backgroundColor: 'red',
+                              border: '1px solid white',
+                            }}
+                          />
+                        ) : (
+                          <div
+                            style={{
+                              position: 'relative',
+                              top: '0',
+                              left: '10px',
+                              width: '10px',
+                              height: '10px',
+                              borderRadius: '50%',
+                              backgroundColor: 'transparent',
+                              border: '1px solid transparent',
+                            }}
+                          />
+                        )}
+                        <Button
+                          variant={pageAspect.outlineBtn}
+                          onClick={() => {setHasMessagesInvitation(!hasMessagesInvitation); setBuzonShowModal(true)}}
+                          style={{ marginRight: '5px' }}
+                        >
+                          I
+                        </Button>
+                        {hasMessagesRequest ? (
+                          <div
+                            style={{
+                              position: 'relative',
+                              top: '0',
+                              left: '10px',
+                              width: '10px',
+                              height: '10px',
+                              borderRadius: '50%',
+                              backgroundColor: 'red',
+                              border: '1px solid white',
+                            }}
+                          />
+                        ) : (
+                          <div
+                            style={{
+                              position: 'relative',
+                              top: '0',
+                              left: '10px',
+                              width: '10px',
+                              height: '10px',
+                              borderRadius: '50%',
+                              backgroundColor: 'transparent',
+                              border: '1px solid transparent',
+                            }}
+                          />
+                        )}
+                        <Button
+                          variant={pageAspect.outlineBtn}
+                          onClick={() => {setHasMessagesRequest(!hasMessagesRequest); setBuzonShowModal(true)}}
+                        >
+                          R
+                        </Button>
+                      </div>
 
+                    </NavDropdown.Item>
+                    <NavDropdown.Divider />
                     <NavDropdown.Item>
                       <div>
-
-                        <NavLink to="/mi-perfil" className={` ${pageAspect.menuItem}`}>Mi Perfil</NavLink>
-
-
+                        <NavLink to="/mi-perfil" className={pageAspect.menuItem}>Mi Perfil</NavLink>
                       </div>
                     </NavDropdown.Item>
-
                     <NavDropdown.Divider />
-
                     <NavDropdown.Item>
-                      <div className="toggle-buttons-container">
-                        <p>Aspecto:
-                          {darkMode ? (
-                            <Button variant={pageAspect.lightBtn} className="ms-2" onClick={() => setDarkMode(false)}>Oscuro</Button>
-                          ) : (
-                            <Button variant={pageAspect.darkBtn} className="ms-2" onClick={() => setDarkMode(true)}>Claro</Button>
-                          )}
-                        </p>
-
-
+                      <div className="toggle-buttons-container d-flex align-items-center">
+                        <p className="me-2">Aspecto:</p>
+                        <Button
+                          variant={darkMode ? pageAspect.lightBtn : pageAspect.darkBtn}
+                          onClick={() => setDarkMode(!darkMode)}
+                        >
+                          {darkMode ? 'Oscuro' : 'Claro'}
+                        </Button>
                       </div>
+
                     </NavDropdown.Item>
                     <NavDropdown.Item>
                       <div className="d-flex justify-content-between align-items-center">
@@ -261,14 +321,9 @@ const MainNavbar = () => {
                     </NavDropdown.Item>
                     <NavDropdown.Divider />
                     <NavDropdown.Item>
-                      <Button variant="danger" onClick={handleLogout} className="col-12" >LogOut</Button>
+                      <Button variant="danger" onClick={handleLogout} className="col-12">LogOut</Button>
                     </NavDropdown.Item>
                   </NavDropdown>
-
-
-
-
-
                 </>
               ) : (
                 <>
@@ -284,8 +339,7 @@ const MainNavbar = () => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-
-      {token && token !== "null" ? null : (
+      {token && token !== 'null' ? null : (
         <>
           <loginModal.FormModal
             formMetadata={loginFormMetadata}
@@ -300,12 +354,9 @@ const MainNavbar = () => {
             onHide={() => registerModal.setShowModal(false)}
             onSuccess={handleRegister}
           />
-
         </>
       )}
-
-
-      {createRoomModal.showModal ? (
+      {createRoomModal.showModal && (
         <createRoomModal.FormModal
           formMetadata={createRoomFormMetadata}
           fields={createRoomFields}
@@ -313,9 +364,8 @@ const MainNavbar = () => {
           onHide={() => createRoomModal.setShowModal(false)}
           onSuccess={(data) => setCreatedRoom(data)}
         />
-      ) : null}
-
-
+      )}
+      <BuzonModal showModal={buzonShowModal} onHide={() => setBuzonShowModal(false)} />
     </>
   );
 };

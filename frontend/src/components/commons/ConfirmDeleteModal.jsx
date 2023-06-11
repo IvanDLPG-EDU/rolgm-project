@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { RoomContext } from '../../contexts';
+import { RoomContext, UserContext } from '../../contexts';
 import { toast } from 'react-toastify';
 
 const backend_url = import.meta.env.VITE_API_URL;
@@ -9,6 +9,7 @@ const backend_url = import.meta.env.VITE_API_URL;
 const ConfirmDeleteModal = ({ data }) => {
   const { sureText, destroyUrl, show, onClose } = data;
   const { fetchOwnPlayer } = useContext(RoomContext);
+  const { darkMode } = useContext(UserContext);
 
   const navigate = useNavigate();
 
@@ -44,7 +45,7 @@ const ConfirmDeleteModal = ({ data }) => {
   }
 
   return (
-    <Modal show={show} onHide={onClose}>
+    <Modal className={darkMode ? 'dark-modal' : 'light-modal'} show={show} onHide={onClose}>
       <Modal.Header closeButton>
         <Modal.Title>Confirmar eliminación</Modal.Title>
       </Modal.Header>

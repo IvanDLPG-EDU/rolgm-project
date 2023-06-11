@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Room, Player, Image, Audio, Other, Directory, Chat, Message, Player, Character
+from .models import Room, Player, Image, Audio, Other, Directory, Chat, Message, Player, Character, RoomTicket
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth import password_validation
@@ -93,3 +93,8 @@ class ChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chat
         fields = ('id', 'messages')
+
+class RoomTicketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RoomTicket
+        fields = '__all__'

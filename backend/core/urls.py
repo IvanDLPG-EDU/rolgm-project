@@ -1,5 +1,5 @@
 from django.urls import path, re_path
-from .views import DeleteCharacterView,DeleteRoomView, pusher_auth_view, pusher_webhook, RoomListAPIView, OwnRoomListAPIView,PlayerCharactersAPIView,PlayerCreateView,CharacterCreateView, RoomSearchView,CreateRoomView ,RoomDirectoryAPIView, RoomChatAPIView, DetailedRoomAPIView, UserPlayerAPIView
+from .views import UserTicketsView,CreateTicketView,DeleteTicketView, DeleteCharacterView,DeleteRoomView, pusher_auth_view, pusher_webhook, RoomListAPIView, OwnRoomListAPIView,PlayerCharactersAPIView,PlayerCreateView,CharacterCreateView, RoomSearchView,CreateRoomView ,RoomDirectoryAPIView, RoomChatAPIView, DetailedRoomAPIView, UserPlayerAPIView
 
 urlpatterns = [
     path('rooms/', RoomListAPIView.as_view(), name='room_list'),
@@ -26,6 +26,7 @@ urlpatterns = [
     
     path('pusher/auth/', pusher_auth_view, name='pusher_auth'),
     path('pusher/webhook/', pusher_webhook, name='pusher_webhook'),
-
-
+    path('own-tickets/', UserTicketsView.as_view(), name='own_room_tickets'),
+    path('tickets/create/', CreateTicketView.as_view(), name='ticket_create'),
+    path('tickets/delete/', DeleteTicketView.as_view(), name='ticket_delete'),
 ]

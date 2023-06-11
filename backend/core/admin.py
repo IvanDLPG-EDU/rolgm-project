@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from .models import CharacterTemplate, CharacterField, Directory, Image, Audio, Other, Room, Player, Canvas, Page, Chat, Message, Character
+from .models import RoomTicket, CharacterTemplate, CharacterField, Directory, Image, Audio, Other, Room, Player, Canvas, Page, Chat, Message, Character
 
 # Register your models here.
 
@@ -100,3 +100,8 @@ class CharacterTemplateAdmin(admin.ModelAdmin):
 class CharacterFieldAdmin(admin.ModelAdmin):
     list_display = ('character_template', 'type', 'name', 'label', 'placeholder', 'disabled', 'default', 'required')
 
+@admin.register(RoomTicket)
+class RoomTicketAdmin(admin.ModelAdmin):
+    list_display = ('title', 'message', 'petition_time', 'response_time', 'Room', 'gamemode', 'state', 'dest_user', 'origin_user', 'type')
+    list_filter = ('gamemode', 'state', 'type')
+    search_fields = ('title', 'dest_user__username', 'origin_user__username')

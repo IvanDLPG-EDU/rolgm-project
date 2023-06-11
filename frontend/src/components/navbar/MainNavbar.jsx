@@ -109,32 +109,50 @@ const aspects = {
 }
 
 
-const renderUserImage = (user) => {
-  if (user == null || user.profile_picture == null) {
-    return (
-      <Image
-        src=""
-        alt="Default profile image"
-        roundedCircle
-        style={{ width: '27px', height: '27px', marginLeft: '10px' }}
-      />
-    );
-  }
-
-  return (
-    <Image
-      src={backend_url + user.profile_picture}
-      alt="User profile image"
-      roundedCircle
-      style={{ width: '27px', height: '27px', marginLeft: '10px' }}
-    />
-  );
-
-};
-
 const MainNavbar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const { token, handleLogout, handleLogin, handleRegister, darkMode, setDarkMode, user } = useContext(UserContext);
+  const [has_messages, setHasMessages] = useState(true)
+
+  const renderUserImage = (user) => {
+    if (user == null) {
+      return (
+        <Image
+          src=""
+          alt="Error"
+          roundedCircle
+          style={{ width: '27px', height: '27px', marginLeft: '10px' }}
+        />
+      );
+    }
+  
+    return (
+      <div style={{ position: 'relative', display: 'inline-block' }}>
+        <Image
+          src={backend_url + user.profile_picture}
+          alt="User profile image"
+          roundedCircle
+          style={{ width: '27px', height: '27px', marginLeft: '10px' }}
+        />
+        {has_messages && (
+          <div
+            style={{
+              position: 'absolute',
+              top: '-5px',
+              right: '-5px',
+              width: '10px',
+              height: '10px',
+              borderRadius: '50%',
+              backgroundColor: 'red',
+              border: '1px solid white',
+            }}
+          />
+        )}
+      </div>
+    );
+  
+  };
+
   const [userImage, setUserImage] = useState(token ? renderUserImage(user) : "")
 
   useEffect(() => {

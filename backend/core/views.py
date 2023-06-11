@@ -13,12 +13,12 @@ from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-from .serializers import MessageSerializer, CharacterSerializer, RoomSerializer, DirectorySerializer, ChatSerializer, PlayerSerializer
-from .models import Room, Player, Character, Message
+from .serializers import MessageSerializer, CharacterSerializer, RoomSerializer, DirectorySerializer, ChatSerializer, PlayerSerializer, RoomTicketSerializer
+from .models import Room, Player, Character, Message,RoomTicket
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-
+from django.db.models import Q
 import json
 
 from .services import create_mensaje, get_character, get_active_page
@@ -331,3 +331,19 @@ class DeleteCharacterView(APIView):
 
         character.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    
+class UserTicketsView(ListAPIView):
+    serializer_class = RoomTicketSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return RoomTicket.objects.filter(Q(dest_user=user) | Q(origin_user=user))
+
+
+class CreateTicketView(CreateAPIView):
+    serializer_class = RoomTicketSerializer
+
+class DeleteTicketView(DestroyAPIView):
+    serializer_class = RoomTicketSerializer
+    queryset = RoomTicket.objects.all()

@@ -95,11 +95,16 @@ export const DetailedRoomPage = () => {
         <Container
             fluid
             className={`detailed-room-page bg-custom-${darkMode ? "dark" : "light"}`}
-            style={{ height: "100vh", padding: "0 30px" }}
+            style={{ 
+                height: "100vh",
+                padding: "0 30px",
+                paddingLeft: "60px",
+                
+                }}
         >
             <h1 className="pt-3">{roomData.name} #{roomData.room_id}</h1>
             <Row style={{ paddingTop: "80px" }}>
-                <Col xs={12} md={6}>
+                <Col xs={12} md={4} className="mb-4">
                     <Image src={roomData.image || "https://via.placeholder.com/400x300"} alt="Room" fluid />
                 </Col>
                 <Col xs={12} md={6}>

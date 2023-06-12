@@ -90,14 +90,15 @@
   border-color: white;
 }
 
-.bg-custom-dark input, .bg-custom-dark textarea, .bg-custom-dark select {
+.bg-custom-dark input, .bg-custom-dark textarea, .bg-custom-dark select, .bg-dark input {
   background-color: #5f5f5f;
   color: white;
   border-color: #333;
 }
 
+
 /* cambiar los estilos en caso de disabled */
-.bg-custom-dark input:disabled, .bg-custom-dark textarea:disabled, .bg-custom-dark select:disabled {
+.bg-custom-dark input:disabled, .bg-dark input:disabled,.bg-custom-dark textarea:disabled, .bg-custom-dark select:disabled {
   background-color: #333;
   color: rgb(146, 146, 146);
   border-color: white;
@@ -117,11 +118,11 @@ input[type="file"] {
 }
 
 /* change the placeholder color */
-.bg-custom-dark ::placeholder {
+.bg-custom-dark ::placeholder, .bg-dark ::placeholder {
   color: rgb(235, 235, 235);
 }
 
-.bg-custom-dark :focus {
+.bg-custom-dark :focus, .bg-dark :focus {
   background-color: #888;
   color: white;
 }
@@ -139,4 +140,40 @@ input[type="file"] {
   .my-profile{
     height: 117vh;
   }
+}
+
+/* input select dark and light mode */
+.bg-dark select {
+  background-color: #5f5f5f;
+  color: white;
+  border-color: #333;
+  padding: 8px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.bg-dark select:hover {
+  background-color: #555555;
+}
+
+.bg-dark select:focus {
+  background-color: #454545;
+  color: #fff;
+  outline: none
+}
+
+.bg-dark select option {
+  background-color: #5f5f5f;
+  color: white;
+ 
+}
+
+
+
+
+.bg-dark select::-ms-expand {
+  display: none;
+  
 }

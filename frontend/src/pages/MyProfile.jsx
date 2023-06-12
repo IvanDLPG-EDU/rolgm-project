@@ -48,8 +48,8 @@ const MiPerfil = () => {
     return (
         <Container
             fluid
-            className={`bg-custom-${darkMode ? "dark" : "light"}`}
-            style={{ height: "100vh", padding: "0 30px" }}
+            className={`bg-custom-${darkMode ? "dark" : "light"} my-profile`}
+            style={{ padding: "0 30px" }}
         >
             <Row style={{ paddingTop: "80px" }}>
                 <Col md={6} className="mt-4">
@@ -61,8 +61,8 @@ const MiPerfil = () => {
                                 style={{ width: '300px', height: '300px', marginTop: '10px' }}
                             />
                             {modoEdicion && (
-                                <Form.Group className="mt-3">
-                                    <Form.Label>Cambiar imagen de perfil</Form.Label>
+                                <Form.Group className="mt-5 custom-input-file">
+                       
                                     <Form.Control type="file" onChange={handleImageUpload} />
                                 </Form.Group>
                             )}
@@ -70,8 +70,8 @@ const MiPerfil = () => {
                     )}
                 </Col>
                 <Col md={6}>
-                    <div className="p-4">
-                        <h2>Mi Perfil</h2>
+                    <div className="">
+                        <h2 className="pt-4">Mi Perfil</h2>
                         <Form onSubmit={handleSubmit}>
                             <Form.Group className="mb-3">
                                 <Form.Label>Public Name</Form.Label>

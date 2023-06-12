@@ -81,7 +81,7 @@ const Character = () => {
   return (
     <>
       <Container>
-        <h1 className="my-4">Listado de personajes</h1>
+        <h1>Listado de personajes</h1>
         <Button variant="primary" className="mb-4" onClick={() => setShowModal(true)}>Crear personaje</Button>
 
         {/* Paginación */}
@@ -108,7 +108,7 @@ const Character = () => {
         {currentCharacters.length ? (
           <ListGroup>
             {currentCharacters.map((character) => (
-              <ListGroup.Item key={character.id} className="d-flex justify-content-between align-items-center">
+              <ListGroup.Item key={character.id} className="character-card d-flex justify-content-between align-items-center">
                 <span>{character.name}</span>
                 <Button
                   variant="danger"

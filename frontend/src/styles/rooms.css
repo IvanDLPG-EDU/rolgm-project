@@ -37,7 +37,7 @@
   width: 300px;
   min-width: 100px;
   max-width: 400px;
-  height: 100%;
+  height: calc(100vh - 16px);
   transition: right 0.3s ease-in-out;
   z-index: 2;
 }
@@ -47,7 +47,7 @@
 }
 
 .nav-tabs {
-  background-color: rgb(192, 65, 65);
+  background-color: #969494;
   display: flex;
   justify-content: center;
 }
@@ -67,13 +67,76 @@
   background-color: #555;
 }
 
+.room-menu.bg-light .tab-pane  {
+  background-color: #e9e4e4;
+}
 
 
+.room-menu p {
+  background-color: rgb(209, 198, 211);
+  color: black;
+}
+
+.room-menu p.own-message {
+  background-color: #4d4d4d;
+  color: black
+}
 
 
+.room-menu form {
+  position: relative;
+  right: 12px;
+  width: 299px;
+  background-color: #b8b6b6;
+  border-top: 2px solid #ffffff;
+  
+}
 
+.room-menu.bg-dark .tab-pane  {
+  background-color: #363636;
+}
 
+.room-menu.bg-dark form {
+  background-color: #2c2c2c;
+  border-top: 2px solid #ffffff;
+  
+  
+}
+.bg-dark .nav-tabs {
+  background-color: #2c2c2c;
+}
+/* solamente tomar el primer div de room-menu form */
+.room-menu form div:first-child {
+  padding-top: 8px;
+}
 
+.room-menu.bg-dark .nav-tabs .nav-link{
+  background-color: #a1a1a1;
+}
 
+.room-menu.bg-dark .nav-tabs .nav-link.active{
+  background-color: #f5f5f5;
+}
 
+.room-menu .tab-pane{
+  height: calc(100vh - 61.5px);
+}
+
+.chat-list{
+  height: calc(100vh - 108px - 80px);
+}
+
+.tab-pane h1 {
+  margin-top: 0px;
+}
+
+.bg-dark .character-card {
+  background-color: #636363;
+  color: white;
+}
+
+.bg-light .character-card {
+  background-color: #f1f1f1;
+  color: rgb(0, 0, 0);
+}
 

@@ -2,32 +2,32 @@ version: '3.4'
 
 services:
 
-    postgresql-base:
-        container_name: '${PROJECT_NAME}-database'
-        networks:
-          main:
-            ipv4_address: '${DB_HOST}'
-        ports:
-            - '${DB_PORT}:5432'
-        volumes:
-            - './data/:/var/lib/postgresql/data'
-        environment:
-            POSTGRES_DB: ${DB_NAME}
-            PGUSER: ${DB_USER}
-            POSTGRES_USER: ${DB_USER}
-            POSTGRES_PASSWORD: ${DB_PASSWORD}
-        healthcheck:
-            test: ["CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${DB_NAME}", "-h", "localhost", "-p", "5432"]
-            interval: 1s
-            retries: 60
-        image: postgres
+    # postgresql-base:
+    #     container_name: '${PROJECT_NAME}-database'
+    #     networks:
+    #       main:
+    #         ipv4_address: '${DB_HOST}'
+    #     ports:
+    #         - '${DB_PORT}:5432'
+    #     volumes:
+    #         - './data/:/var/lib/postgresql/data'
+    #     environment:
+    #         POSTGRES_DB: ${DB_NAME}
+    #         PGUSER: ${DB_USER}
+    #         POSTGRES_USER: ${DB_USER}
+    #         POSTGRES_PASSWORD: ${DB_PASSWORD}
+    #     healthcheck:
+    #         test: ["CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${DB_NAME}", "-h", "localhost", "-p", "5432"]
+    #         interval: 1s
+    #         retries: 60
+    #     image: postgres
 
 
     django-base:
         container_name: '${PROJECT_NAME}-server'
-        depends_on:
-            postgresql-base:
-                condition: service_healthy
+        # depends_on:
+        #     postgresql-base:
+        #         condition: service_healthy
         networks:
           main:
             ipv4_address: '${SERVER_HOST}'

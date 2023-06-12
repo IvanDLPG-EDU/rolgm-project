@@ -140,3 +140,38 @@
   margin-bottom: 5px;
   padding-bottom: 1px;
 }
+
+/* dark and light modal on buttons primary and secundary */
+.dark-modal .btn-primary {
+  background-color: #343a40;
+  color: white;
+  border: solid 1px white;
+}
+
+.dark-modal .btn-primary:hover {
+  background-color: #212529;
+  color: white;
+}
+
+.dark-modal .btn-secondary {
+  background-color: #292d30;
+  color: white;
+}
+
+.dark-modal .btn-secondary:hover {
+  background-color: #42484e;
+  color: white;
+}
+
+.light-modal .btn-primary{
+  background-color: #444;
+  border-color: #333;
+}
+
+.light-modal .btn-primary:hover{
+  background-color: #666;
+  border-color: #555;
+}
+
+
+

@@ -29,9 +29,8 @@ const MessageList = () => {
   return (
     <div
       ref={messagesEndRef}
-      className="flex-grow-1 p-3 custom-scrollbar"
+      className="flex-grow-1 p-3 custom-scrollbar chat-list"
       style={{
-        height: "calc(100vh - 108px - 60px)",
         overflow: "auto",
       }}
     >

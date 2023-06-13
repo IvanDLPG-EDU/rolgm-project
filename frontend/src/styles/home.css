@@ -127,10 +127,6 @@ input[type="file"] {
   color: white;
 }
 
-.bg-custom-dark.container-fluid {
-  height: 100vh;
-}
-
 .my-profile{
   height: 100vh;
 }

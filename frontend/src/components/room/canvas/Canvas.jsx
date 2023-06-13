@@ -1,5 +1,3 @@
-
-
 import React, { useRef, useLayoutEffect, useState, useContext } from 'react';
 import { RoomContext } from '../../../contexts';
 
@@ -28,7 +26,7 @@ const Canvas = () => {
   };
 
   const startDrawing = (event) => {
-    const { offsetX, offsetY } = event.nativeEvent;
+    const { offsetX, offsetY } = getCoordinates(event);
     ctx.beginPath();
     ctx.moveTo(offsetX, offsetY);
     setDrawing(true);
@@ -36,7 +34,7 @@ const Canvas = () => {
 
   const draw = (event) => {
     if (!drawing) return;
-    const { offsetX, offsetY } = event.nativeEvent;
+    const { offsetX, offsetY } = getCoordinates(event);
     ctx.lineTo(offsetX, offsetY);
     ctx.strokeStyle = color;
     ctx.stroke();
@@ -44,7 +42,7 @@ const Canvas = () => {
 
   const endDrawing = () => {
     setDrawing(false);
-    const canvasData = canvasRef.current.toDataURL(); // Convert canvas to base64 image
+    const canvasData = canvasRef.current.toDataURL();
     const newLine = { color, data: canvasData };
     setLines([...lines, newLine]);
   };
@@ -56,22 +54,30 @@ const Canvas = () => {
 
   const sendLineToServer = () => {
     const newLine = lines[lines.length - 1];
-    // console.log('Sending line to server:', newLine);
-
     const data = {
       type: 'add_page_line',
       payload: {
         ...newLine,
       }
     };
-
     sendToServer({ client, data });
-
   };
 
   const receiveLineFromServer = (receivedLine) => {
-    // Receive line from server and draw it on the canvas
     setLines([...lines, receivedLine]);
+  };
+
+  const getCoordinates = (event) => {
+    let offsetX, offsetY;
+    if (event.type.includes('touch')) {
+      const touch = event.touches[0] || event.changedTouches[0];
+      offsetX = touch.clientX - touch.target.offsetLeft;
+      offsetY = touch.clientY - touch.target.offsetTop;
+    } else {
+      offsetX = event.nativeEvent.offsetX;
+      offsetY = event.nativeEvent.offsetY;
+    }
+    return { offsetX, offsetY };
   };
 
   return (
@@ -84,9 +90,12 @@ const Canvas = () => {
         onMouseMove={draw}
         onMouseUp={endDrawing}
         onMouseLeave={endDrawing}
+        onTouchStart={startDrawing}
+        onTouchMove={draw}
+        onTouchEnd={endDrawing}
         style={{ border: '1px solid black' }}
       />
-      <div
+      <div className="d-flex"
         style={{
           position: 'absolute',
           top: '10px',
@@ -94,18 +103,41 @@ const Canvas = () => {
           zIndex: '1',
         }}
       >
-        <label>Color:</label>
+        
         <input
           type="color"
           value={color}
           onChange={(e) => setColor(e.target.value)}
+          style={{ width: '35px', height: '35px', marginRight: '10px', cursor: 'pointer',}}
+          
         />
-        <button onClick={clearCanvas}>Borrar todo</button>
-        <button onClick={sendLineToServer}>Enviar línea</button>
+        <button
+          onClick={clearCanvas}
+          style={{
+            width: '35px',
+            height: '35px',
+            // borderRadius: '50%',
+            background: 'transparent',
+            border: '1px solid transparent',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            cursor: 'pointer',
+          }}
+        >
+          <span
+            style={{
+              fontSize: '32px',
+              fontWeight: 'bold',
+            }}
+          >
+            ♻
+          </span>
+        </button>
+        {/* <button onClick={sendLineToServer}>Enviar línea</button> */}
       </div>
     </div>
   );
-
 };
 
 export default Canvas;

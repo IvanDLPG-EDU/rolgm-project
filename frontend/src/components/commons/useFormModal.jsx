@@ -13,6 +13,11 @@ const useFormModal = () => {
 
         const [formData, setFormData] = useState({})
 
+        const _onHide = (e) => {
+            setFormErrors("")
+            onHide(e)
+        }
+
         useEffect(() => {
             // Establecer los valores predeterminados del formulario en formData
             const defaultFormData = {};
@@ -88,6 +93,7 @@ const useFormModal = () => {
                         handleErrors(data.errors);
                     } else {
                         setShowModal(false)
+                        setFormErrors("")
                         onSuccess(data)
                     }
 
@@ -98,7 +104,7 @@ const useFormModal = () => {
         };
 
         return (
-            <Modal className={darkMode ? 'dark-modal' : 'light-modal'} show={showModal} onHide={onHide}>
+            <Modal className={darkMode ? 'dark-modal' : 'light-modal'} show={showModal} onHide={_onHide}>
                 <Modal.Header closeButton>
                     <Modal.Title>{title || "Formulario"}</Modal.Title>
                 </Modal.Header>
@@ -137,7 +143,7 @@ const useFormModal = () => {
                             </Form.Group>
                         ))}
                         <div className="d-flex justify-content-end mt-3 gap-3">
-                            <Button variant="secondary" onClick={onHide} className="mr-2">
+                            <Button variant="secondary" onClick={_onHide} className="mr-2">
                                 {cancelBtn || "Cancelar"}
                             </Button>
                             <Button type="submit" variant="primary">

@@ -72,8 +72,8 @@ export const RoomListPage = () => {
   return (
     <Container
       fluid
-      className={`bg-custom-${darkMode ? "dark" : "light"}`}
-      style={{ height: "100vh", padding: "0 30px" }}
+      className={`bg-custom-${darkMode ? "dark" : "light"} custom-height`}
+      style={{ padding: "0 30px" }}
     >
       <Row style={{ paddingTop: "80px" }}>
         <Col>

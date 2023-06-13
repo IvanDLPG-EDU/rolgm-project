@@ -51,9 +51,34 @@ const Room = () => {
   return (
     <div className={`room-wrapper ${isSideMenuOpen ? "room-menu-open" : ""}`}>
       <div className="room-canvas">
-        <button className="room-menu-btn" onClick={handleMenuButtonClick}>
-          {isSideMenuOpen ? ">" : "<"}
-        </button>
+      <button
+        className="room-menu-btn"
+        style={{
+          width: '35px',
+          height: '35px',
+          // borderRadius: '50%',
+          backgroundColor: 'white',
+          justifyContent: 'center',
+          alignItems: 'center',
+          cursor: 'pointer',
+          color: 'black',
+          border: "2px solid black",
+          
+        }}
+        onClick={handleMenuButtonClick}
+      >
+        <span
+          style={{
+            fontSize: '35px',
+            position: 'relative',
+            top: '-13px',
+            left: '-8px',
+            
+          }}
+        >
+          {isSideMenuOpen ? '►' : '◄'}
+        </span>
+      </button>
         <Canvas />
         <div className={`room-menu 
            ${darkMode ? 'bg-dark text-light' : 'bg-light text-dark'}

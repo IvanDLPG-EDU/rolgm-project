@@ -98,7 +98,7 @@ export const DetailedRoomPage = () => {
             style={{ 
                 height: "100vh",
                 padding: "0 30px",
-                paddingLeft: "60px",
+                paddingLeft: "30px",
                 
                 }}
         >

@@ -73,18 +73,18 @@
 }
 
 
-.bg-dark .pagination .page-link, .bg-custom-dark .pagination .page-link {
+ .pagination .page-link {
   background-color: #666;
   color: white;
   border-color: white;
 }
 
-.bg-dark .pagination li.active a, .bg-custom-dark .pagination li.active a {
+ .pagination li.active a {
   background-color: #333;
   border-color: white;
 }
 
-.bg-dark .pagination .page-item.disabled a, .bg-custom-dark .pagination .page-item.disabled a {
+.pagination .page-item.disabled a {
   background-color: #333;
   color: rgb(146, 146, 146);
   border-color: white;
@@ -136,9 +136,46 @@ input[type="file"] {
 }
 
 /* a media that looks if width under 400px */
-@media (max-width: 400px) {
+
+@media (max-height: 577px) {
   .my-profile{
-    height: 117vh;
+    height: 570px;
+  }
+}
+@media (max-width: 768px) {
+  .my-profile{
+    height: 1000px;
+  }
+}
+
+
+.custom-height{
+  height: 100vh;
+}
+
+/* @media (max-height: 577px) {
+  .custom-height{
+    height: 570px;
+  }
+} */
+
+@media (max-height: 740px) {
+  .custom-height{
+    height: 740px;
+  }
+}
+
+@media (max-width: 992px) {
+  .custom-height{
+    height: 950px;
+  
+  }
+}
+
+@media (max-width: 768px) {
+  .custom-height{
+    height: 1600px;
+    
   }
 }
 
@@ -176,4 +213,8 @@ input[type="file"] {
 .bg-dark select::-ms-expand {
   display: none;
   
+}
+
+a {
+  color: inherit;
 }

@@ -62,7 +62,7 @@ const MiPerfil = () => {
                             />
                             {modoEdicion && (
                                 <Form.Group className="mt-5 custom-input-file">
-                       
+
                                     <Form.Control type="file" onChange={handleImageUpload} />
                                 </Form.Group>
                             )}

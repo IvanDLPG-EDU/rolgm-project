@@ -17,10 +17,15 @@ const Settings = () => {
     onClose: () => setModalData(prevData => ({ ...prevData, show: false })),
   })
 
+  const detail = `/sala/${roomId}/detail`
   return (
     <>
-      <button className="btn btn-primary mt-3 mb-3 m-2" onClick={() => navigate(`/`)}>Home</button>
+      {/* <button className="btn btn-primary mt-3 mb-3 m-2" onClick={() => navigate(`/`)}>Home</button>
       <button className="btn btn-primary mt-3 mb-3 m-2" onClick={() => navigate(`/sala/${roomId}/detail`)}>Detail</button>
+       */}
+
+      <button className="btn btn-primary mt-3 mb-3 m-2"><a href="/">Home</a></button>
+      <button className="btn btn-primary mt-3 mb-3 m-2"><a href={detail}>Detail</a></button>
       
       
       {user.id == roomData.roomOwner && <button className="btn btn-danger mt-3 mb-3 m-2" onClick={() => setModalData(prevData => ({ ...prevData, show: true }))}>Borrar Sala</button>
